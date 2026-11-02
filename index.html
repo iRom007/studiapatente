@@ -520,7 +520,7 @@ function saveUsage(u) {
 }
 
 // Premium flag — in production: check subscription status
-let isPremium = false;
+let isPremium = true; // TEST MODE — full access
 
 function canAskQuestion() {
   if (isPremium) return true;
@@ -817,6 +817,7 @@ function toggleTheme() {
 // Premium expiry stored as ISO date string in localStorage key 'premium_expiry'
 // In production: set this from backend on purchase
 function checkRenewal() {
+  isPremium = true; // TEST MODE — always premium
   try {
     const expiry = localStorage.getItem('premium_expiry');
     if (!expiry) return;
