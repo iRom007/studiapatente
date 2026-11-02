@@ -523,7 +523,7 @@ function saveUsage(u) {
 let isPremium = true; // TEST MODE — full access
 
 function canAskQuestion() {
-  if (isPremium) return true;
+  return true; // TEST MODE
   return getUsage().questions < FREE_DAILY;
 }
 
@@ -536,7 +536,7 @@ function useQuestion() {
 }
 
 function canStartExam() {
-  if (isPremium) return true;
+  return true; // TEST MODE
   return getUsage().exams < FREE_EXAMS;
 }
 
@@ -771,7 +771,7 @@ function showScreen(id) {
 
 // ===== PREMIUM MODAL =====
 let selectedPrice = 'quarter';
-function showPremiumModal(source) {
+function showPremiumModal(source) { return; // TEST MODE — disabled
   document.getElementById('premium-modal').classList.add('show');
   updateCtaBtn();
 }
