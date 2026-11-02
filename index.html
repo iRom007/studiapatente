@@ -750,7 +750,7 @@ function pick(sel) {
   if (q.e1) {
     if (currentLang === 'it') {
       document.getElementById('exp-rule').innerHTML =
-        `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Spiegazione in russo:</em>${q.e1}`;
+        `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">📖 Spiegazione (RU):</em>${q.e1}`;
     } else if (currentLang === 'en') {
       document.getElementById('exp-rule').innerHTML =
         `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Explanation in Russian:</em>${q.e1}`;
@@ -908,7 +908,7 @@ function updateExpLang() {
   const expBox = document.getElementById('explanation');
   if (!expBox || !expBox.classList.contains('show')) return;
   if (currentLang === 'it') {
-    expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Spiegazione in russo:</em>${q.e1}`;
+    expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">📖 Spiegazione (RU):</em>${q.e1}`;
   } else if (currentLang === 'en') {
     expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Explanation in Russian:</em>${q.e1}`;
   } else {
