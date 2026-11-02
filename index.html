@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PatenteRU — Итальянские права на русском</title>
+<title>Studiapatente — Preparazione esame patente B</title>
 <style>
   /* === DARK THEME (default) === */
   :root, [data-theme="dark"] {
@@ -59,6 +59,8 @@
   body.lang-it .it-text { display: inline; }
   body.lang-ru .it-text { display: none; }
   body.lang-ru .ru-text { display: inline; }
+  body.lang-en .ru-text { display: none; }
+  body.lang-en .it-text { display: none; }
 
   /* RENEWAL BANNER */
   .renew-banner { background: linear-gradient(90deg, #7c3aed20, #3b82f620);
@@ -278,11 +280,12 @@
 <body>
 
 <nav>
-  <div class="logo">Patente<span>RU</span></div>
+  <div class="logo">Studia<span>Patente</span></div>
   <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">☀️</button>
   <div class="lang-switcher" id="lang-switcher">
-    <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')">RU</button>
     <button class="lang-btn" id="lang-it" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')">RU</button>
   </div>
   <div class="premium-badge" onclick="showPremiumModal('nav')">👑 Premium</div>
 </nav>
@@ -328,15 +331,15 @@
   </div>
 
   <!-- EXAM BUTTONS -->
-  <div class="section-title">🎯 Экзамен</div>
+  <div class="section-title">🎯 Simulazione esame</div>
   <div class="exam-row">
     <div class="exam-btn primary" onclick="startExam()">
-      🎯 Пробный экзамен
-      <span class="sub">30 вопросов · 20 мин</span>
+      🎯 Inizia simulazione
+      <span class="sub">30 вопр · 20 мин · макс. 3 ошибки</span>
     </div>
-    <div class="exam-btn premium" onclick="startExamFull()">
-      🏆 Полный экзамен
-      <span class="sub">Все темы · без лимита</span>
+    <div class="exam-btn" onclick="startExamRandom()">
+      🔀 Тренировка
+      <span class="sub">30 вопросов · без таймера</span>
     </div>
   </div>
 
@@ -429,6 +432,7 @@
     <div class="answers">
       <button class="ans-btn" id="btn-v" onclick="pick('vero')">✅ VERO — Верно</button>
       <button class="ans-btn" id="btn-f" onclick="pick('falso')">❌ FALSO — Ложно</button>
+      <!-- texts updated dynamically by renderQ() based on currentLang -->
     </div>
 
     <div class="explanation" id="explanation">
@@ -476,8 +480,8 @@
 <!-- ====== PREMIUM MODAL ====== -->
 <div class="modal-overlay" id="premium-modal" onclick="closePremiumOnBg(event)">
   <div class="modal">
-    <h2>👑 PatenteRU Premium</h2>
-    <p class="subtitle">Полноценная подготовка к итальянским правам. 7 079 вопросов, объяснения на русском, без ограничений.</p>
+    <h2>👑 Studiapatente Premium</h2>
+    <p class="subtitle">Полноценная подготовка к итальянским правам. 6 832 вопроса, объяснения на трёх языках, без ограничений.</p>
     <ul class="features">
       <li>Все вопросы без дневного лимита</li>
       <li>Полные объяснения на русском к каждому вопросу</li>
@@ -641,10 +645,9 @@ function startExam() {
   beginSession(qs, '🎯 Пробный экзамен');
 }
 
-function startExamFull() {
-  if (!isPremium) { showPremiumModal('exam-full'); return; }
-  const qs = shuffleArr([...QUESTIONS]).slice(0, 40);
-  beginSession(qs, '🏆 Полный экзамен');
+function startExamRandom() {
+  const qs = shuffleArr([...QUESTIONS]).slice(0, 30);
+  beginSession(qs, '🔀 Тренировка');
 }
 
 function beginSession(qs, title) {
@@ -680,8 +683,10 @@ function renderQ() {
   const total = session.qs.length;
   document.getElementById('q-counter').textContent = `${session.idx+1} / ${total}`;
   document.getElementById('progress-bar').style.width = `${session.idx/total*100}%`;
-  document.getElementById('q-num').textContent = currentLang === 'it'
-    ? `Domanda #${q.n||q.id}` : `Вопрос #${q.n||q.id}`;
+  document.getElementById('q-num').textContent =
+    currentLang === 'it' ? `Domanda #${q.n||q.id}` :
+    currentLang === 'en' ? `Question #${q.n||q.id}` :
+    `Вопрос #${q.n||q.id}`;
   document.getElementById('q-text').textContent = q.t;
 
   // Sign visual
@@ -693,6 +698,15 @@ function renderQ() {
     b.className = 'ans-btn';
     b.disabled = false;
   });
+  // Update button labels based on language
+  document.getElementById('btn-v').textContent =
+    currentLang === 'it' ? '✅ VERO — Vero' :
+    currentLang === 'en' ? '✅ VERO — True' :
+    '✅ VERO — Верно';
+  document.getElementById('btn-f').textContent =
+    currentLang === 'it' ? '❌ FALSO — Falso' :
+    currentLang === 'en' ? '❌ FALSO — False' :
+    '❌ FALSO — Ложно';
   document.getElementById('explanation').className = 'explanation';
   document.getElementById('next-btn').className = 'next-btn';
   document.getElementById('exp-verdict').innerHTML = '';
@@ -726,15 +740,20 @@ function pick(sel) {
 
   // EXPLANATION
   const color = isRight ? '#4ade80' : '#f87171';
-  const verdictText = isRight ? '✅ Правильно!' : '❌ Неверно';
+  const verdictText = isRight
+    ? (currentLang === 'it' ? '✅ Corretto!' : currentLang === 'en' ? '✅ Correct!' : '✅ Правильно!')
+    : (currentLang === 'it' ? '❌ Sbagliato' : currentLang === 'en' ? '❌ Wrong' : '❌ Неверно');
   document.getElementById('exp-verdict').innerHTML =
     `<span style="color:${color}">${verdictText}</span>`;
 
-  // e1 = explanation (Russian by default, Italian question shown in IT mode)
+  // e1 = explanation in Russian; show label when not in RU mode
   if (q.e1) {
     if (currentLang === 'it') {
       document.getElementById('exp-rule').innerHTML =
-        `<em style="color:var(--blue);font-size:11px;display:block;margin-bottom:6px">🇮🇹 Domanda originale · 🇷🇺 Spiegazione in russo:</em>${q.e1}`;
+        `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Spiegazione in russo:</em>${q.e1}`;
+    } else if (currentLang === 'en') {
+      document.getElementById('exp-rule').innerHTML =
+        `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Explanation in Russian:</em>${q.e1}`;
     } else {
       document.getElementById('exp-rule').innerHTML = q.e1;
     }
@@ -750,7 +769,9 @@ function pick(sel) {
   const remaining = session.qs.length - session.idx - 1;
   document.getElementById('next-btn').className = 'next-btn show';
   document.getElementById('next-btn').textContent =
-    remaining > 0 ? 'Следующий вопрос →' : '📊 Показать результаты';
+    remaining > 0
+      ? (currentLang === 'it' ? 'Domanda successiva →' : currentLang === 'en' ? 'Next question →' : 'Следующий вопрос →')
+      : (currentLang === 'it' ? '📊 Mostra risultati' : currentLang === 'en' ? '📊 Show results' : '📊 Показать результаты');
 }
 
 function nextQ() {
@@ -869,6 +890,7 @@ function setLang(lang) {
   document.body.classList.add('lang-' + lang);
   document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
   document.getElementById('lang-it').classList.toggle('active', lang === 'it');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
   // Re-render current question if in quiz
   if (session && session.qs && session.idx < session.qs.length) {
     renderQ();
@@ -881,13 +903,42 @@ function updateExpLang() {
   const expEl = document.getElementById('exp-rule');
   if (!expEl || !session || !session.qs) return;
   const q = session.qs[session.idx];
-  if (!q) return;
+  if (!q || !q.e1) return;
+  // Only update if explanation is currently visible
+  const expBox = document.getElementById('explanation');
+  if (!expBox || !expBox.classList.contains('show')) return;
   if (currentLang === 'it') {
-    // Show italian question text as explanation header
-    expEl.innerHTML = `<em style="color:var(--blue);font-size:11px">🇮🇹 Domanda originale:</em><br>${q.t}<br><br>${q.e1||''}`;
+    expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Spiegazione in russo:</em>${q.e1}`;
+  } else if (currentLang === 'en') {
+    expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Explanation in Russian:</em>${q.e1}`;
   } else {
-    expEl.innerHTML = q.e1 || '';
+    expEl.innerHTML = q.e1;
   }
+  // Also update verdict text
+  const verdEl = document.getElementById('exp-verdict');
+  if (verdEl && verdEl.innerHTML) {
+    const isRight = verdEl.querySelector('span')?.style.color?.includes('4ade80');
+    if (isRight !== undefined) {
+      const color = isRight ? '#4ade80' : '#f87171';
+      const vt = isRight
+        ? (currentLang === 'it' ? '✅ Corretto!' : currentLang === 'en' ? '✅ Correct!' : '✅ Правильно!')
+        : (currentLang === 'it' ? '❌ Sbagliato' : currentLang === 'en' ? '❌ Wrong' : '❌ Неверно');
+      verdEl.innerHTML = `<span style="color:${color}">${vt}</span>`;
+    }
+  }
+  // Update next button text
+  const nextBtn = document.getElementById('next-btn');
+  if (nextBtn && nextBtn.classList.contains('show')) {
+    const remaining = session.qs.length - session.idx - 1;
+    nextBtn.textContent = remaining > 0
+      ? (currentLang === 'it' ? 'Domanda successiva →' : currentLang === 'en' ? 'Next question →' : 'Следующий вопрос →')
+      : (currentLang === 'it' ? '📊 Mostra risultati' : currentLang === 'en' ? '📊 Show results' : '📊 Показать результаты');
+  }
+  // Update answer button labels
+  document.getElementById('btn-v').textContent =
+    currentLang === 'it' ? '✅ VERO — Vero' : currentLang === 'en' ? '✅ VERO — True' : '✅ VERO — Верно';
+  document.getElementById('btn-f').textContent =
+    currentLang === 'it' ? '❌ FALSO — Falso' : currentLang === 'en' ? '❌ FALSO — False' : '❌ FALSO — Ложно';
 }
 
 // ===== INIT =====
@@ -895,6 +946,7 @@ checkRenewal();
 document.body.classList.add('lang-' + currentLang);
 document.getElementById('lang-ru').classList.toggle('active', currentLang === 'ru');
 document.getElementById('lang-it').classList.toggle('active', currentLang === 'it');
+document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
 renderHome();
 </script>
 </body>
