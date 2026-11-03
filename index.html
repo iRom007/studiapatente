@@ -822,20 +822,27 @@ const EXP = {
 };
 
 // Returns explanation text for a question in the current language
-function getExplanation(q, lang) {
+// lang = 'it'|'en'|'ru'
+// isRight = true if the user answered correctly
+function getExplanation(q, lang, isRight) {
   const tid = q.tid || '';
-  const isCorrect = q.c === 'vero';
   const expObj = EXP[tid];
   if (expObj && expObj[lang]) {
-    return expObj[lang][isCorrect ? 'ok' : 'no'];
+    return expObj[lang][isRight ? 'ok' : 'no'];
   }
-  // fallback to Russian e1 with label
-  if (q.e1) {
-    if (lang === 'it') return `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:4px">📖 Spiegazione (RU):</em>${q.e1}`;
-    if (lang === 'en') return `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:4px">🇷🇺 Spiegazione in russo:</em>${q.e1}`;
-    return q.e1;
+  // generic fallback in IT/EN (no Russian shown!)
+  if (lang === 'it') {
+    return isRight
+      ? '✅ Esatto. La risposta corrisponde al Codice della Strada italiano.'
+      : '❌ Sbagliato. La risposta non corrisponde al Codice della Strada italiano.';
   }
-  return '';
+  if (lang === 'en') {
+    return isRight
+      ? '✅ Correct. The answer matches the Italian Highway Code.'
+      : '❌ Wrong. The answer does not match the Italian Highway Code.';
+  }
+  // RU fallback — use e1
+  return q.e1 || '';
 }
 
 function tr(key, vars) {
@@ -1225,10 +1232,11 @@ function pick(sel) {
   document.getElementById('exp-verdict').innerHTML =
     `<span style="color:${color}">${verdictText}</span>`;
 
-  // Show explanation in the current language
-  const expText = getExplanation(q, currentLang);
+  // Show explanation in the current language (coloured)
+  const expText = getExplanation(q, currentLang, isRight);
   if (expText) {
-    document.getElementById('exp-rule').innerHTML = expText;
+    document.getElementById('exp-rule').innerHTML =
+      `<span style="color:${color}">${expText}</span>`;
   }
 
   if (!isPremium) {
@@ -1389,20 +1397,25 @@ function updateExpLang() {
   // Only update if explanation is currently visible
   const expBox = document.getElementById('explanation');
   if (!expBox || !expBox.classList.contains('show')) return;
-  const expText = getExplanation(q, currentLang);
-  if (expText) expEl.innerHTML = expText;
-  // Also update verdict text
+
+  // Determine if user answered correctly from verdict colour (green = correct)
   const verdEl = document.getElementById('exp-verdict');
-  if (verdEl && verdEl.innerHTML) {
-    const isRight = verdEl.querySelector('span')?.style.color?.includes('4ade80');
-    if (isRight !== undefined) {
-      const color = isRight ? '#4ade80' : '#f87171';
-      const vt = isRight
-        ? (currentLang === 'it' ? '✅ Corretto!' : currentLang === 'en' ? '✅ Correct!' : '✅ Правильно!')
-        : (currentLang === 'it' ? '❌ Sbagliato' : currentLang === 'en' ? '❌ Wrong' : '❌ Неверно');
-      verdEl.innerHTML = `<span style="color:${color}">${vt}</span>`;
-    }
+  const isRight = verdEl?.querySelector('span')?.style.color?.includes('4ade80') ?? true;
+
+  // Update explanation text in new language (coloured)
+  const expColor = isRight ? '#4ade80' : '#f87171';
+  const expText = getExplanation(q, currentLang, isRight);
+  if (expText) expEl.innerHTML = `<span style="color:${expColor}">${expText}</span>`;
+
+  // Update verdict text
+  if (verdEl) {
+    const color = isRight ? '#4ade80' : '#f87171';
+    const vt = isRight
+      ? (currentLang === 'it' ? '✅ Corretto!' : currentLang === 'en' ? '✅ Correct!' : '✅ Правильно!')
+      : (currentLang === 'it' ? '❌ Sbagliato' : currentLang === 'en' ? '❌ Wrong' : '❌ Неверно');
+    verdEl.innerHTML = `<span style="color:${color}">${vt}</span>`;
   }
+
   // Update next button text
   const nextBtn = document.getElementById('next-btn');
   if (nextBtn && nextBtn.classList.contains('show')) {
