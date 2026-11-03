@@ -867,319 +867,692 @@ function getExplanation(q, lang, isRight) {
 // Questions are always stored in Italian (official MIT bank).
 function translateQ(t, lang) {
   if (lang === 'it') return t;
-
-  // ── helper: map common Italian phrases at end of sentence ──
-  function tail(s, lng) {
-    if (lng === 'ru') {
-      return s
-        .replace(/il transito/gi, 'проезд')
-        .replace(/il sorpasso/gi, 'обгон')
-        .replace(/la sosta/gi, 'стоянку')
-        .replace(/la fermata/gi, 'остановку')
-        .replace(/la velocità/gi, 'скорость')
-        .replace(/l'accesso/gi, 'въезд')
-        .replace(/i pedoni/gi, 'пешеходы')
-        .replace(/dei pedoni/gi, 'пешеходов')
-        .replace(/la precedenza/gi, 'приоритет')
-        .replace(/la corsia/gi, 'полосу')
-        .replace(/le corsie/gi, 'полосы')
-        .replace(/la carreggiata/gi, 'проезжую часть')
-        .replace(/l'autostrada/gi, 'автостраду')
-        .replace(/l'incrocio/gi, 'перекрёсток')
-        .replace(/il veicolo ([A-Z])/g, 'транспортное средство $1')
-        .replace(/il conducente/gi, 'водитель')
-        .replace(/i veicoli/gi, 'транспортные средства')
-        .replace(/un veicolo/gi, 'транспортное средство')
-        .replace(/a senso unico/gi, 'с односторонним движением')
-        .replace(/a doppio senso/gi, 'с двусторонним движением')
-        .replace(/in curva/gi, 'на повороте')
-        .replace(/nelle gallerie/gi, 'в тоннелях')
-        .replace(/sulle strisce pedonali/gi, 'на пешеходных переходах')
-        .replace(/agli incroci/gi, 'на перекрёстках')
-        .replace(/in salita/gi, 'на подъёме')
-        .replace(/in discesa/gi, 'на спуске');
-    } else {
-      return s
-        .replace(/il transito/gi, 'traffic flow')
-        .replace(/il sorpasso/gi, 'overtaking')
-        .replace(/la sosta/gi, 'parking')
-        .replace(/la fermata/gi, 'stopping')
-        .replace(/la velocità/gi, 'speed')
-        .replace(/l'accesso/gi, 'access')
-        .replace(/i pedoni/gi, 'pedestrians')
-        .replace(/dei pedoni/gi, 'of pedestrians')
-        .replace(/la precedenza/gi, 'right of way')
-        .replace(/la corsia/gi, 'lane')
-        .replace(/le corsie/gi, 'lanes')
-        .replace(/la carreggiata/gi, 'carriageway')
-        .replace(/l'autostrada/gi, 'motorway')
-        .replace(/l'incrocio/gi, 'the junction')
-        .replace(/il veicolo ([A-Z])/g, 'vehicle $1')
-        .replace(/il conducente/gi, 'driver')
-        .replace(/i veicoli/gi, 'vehicles')
-        .replace(/un veicolo/gi, 'a vehicle')
-        .replace(/a senso unico/gi, 'with one-way traffic')
-        .replace(/a doppio senso/gi, 'with two-way traffic')
-        .replace(/in curva/gi, 'on a bend')
-        .replace(/nelle gallerie/gi, 'in tunnels')
-        .replace(/sulle strisce pedonali/gi, 'at pedestrian crossings')
-        .replace(/agli incroci/gi, 'at junctions')
-        .replace(/in salita/gi, 'on an uphill slope')
-        .replace(/in discesa/gi, 'on a downhill slope');
-    }
-  }
-
   const ru = lang === 'ru';
 
-  // ── SEGNALE RAFFIGURATO ──────────────────────────────────────────────
+  // ── HELPER: translate common Italian phrases ──────────────────────────
+  function w(s) {
+    if (!s) return s;
+    if (ru) return s
+      .replace(/il transito/gi,'проезд').replace(/il sorpasso/gi,'обгон')
+      .replace(/la sosta/gi,'стоянка').replace(/la fermata/gi,'остановка')
+      .replace(/la velocità/gi,'скорость').replace(/l'accesso/gi,'въезд')
+      .replace(/i pedoni/gi,'пешеходы').replace(/dei pedoni/gi,'пешеходов')
+      .replace(/ai pedoni/gi,'пешеходам').replace(/la precedenza/gi,'приоритет')
+      .replace(/la corsia/gi,'полоса').replace(/le corsie/gi,'полосы')
+      .replace(/la carreggiata/gi,'проезжая часть').replace(/l'autostrada/gi,'автострада')
+      .replace(/l'incrocio/gi,'перекрёсток').replace(/gli incroci/gi,'перекрёстки')
+      .replace(/il veicolo ([A-Z])/g,'транспортное средство $1')
+      .replace(/i veicoli/gi,'транспортные средства').replace(/un veicolo/gi,'транспортное средство')
+      .replace(/il conducente/gi,'водитель').replace(/i conducenti/gi,'водители')
+      .replace(/a senso unico/gi,'с односторонним движением')
+      .replace(/a doppio senso/gi,'с двусторонним движением')
+      .replace(/in curva/gi,'на повороте').replace(/nelle gallerie/gi,'в тоннелях')
+      .replace(/sulle strisce pedonali/gi,'на пешеходных переходах')
+      .replace(/agli incroci/gi,'на перекрёстках').replace(/in salita/gi,'на подъёме')
+      .replace(/in discesa/gi,'на спуске').replace(/in autostrada/gi,'на автостраде')
+      .replace(/in città/gi,'в городе').replace(/fuori città/gi,'за городом')
+      .replace(/nei centri abitati/gi,'в населённых пунктах')
+      .replace(/fuori dei centri abitati/gi,'вне населённых пунктов')
+      .replace(/sul marciapiede/gi,'на тротуаре').replace(/sulla strada/gi,'на дороге')
+      .replace(/sul lato destro/gi,'с правой стороны').replace(/sul lato sinistro/gi,'с левой стороны')
+      .replace(/a destra/gi,'вправо').replace(/a sinistra/gi,'влево')
+      .replace(/diritto/gi,'прямо').replace(/al centro/gi,'по центру');
+    else return s
+      .replace(/il transito/gi,'traffic flow').replace(/il sorpasso/gi,'overtaking')
+      .replace(/la sosta/gi,'parking').replace(/la fermata/gi,'stopping')
+      .replace(/la velocità/gi,'speed').replace(/l'accesso/gi,'access')
+      .replace(/i pedoni/gi,'pedestrians').replace(/dei pedoni/gi,'of pedestrians')
+      .replace(/ai pedoni/gi,'to pedestrians').replace(/la precedenza/gi,'right of way')
+      .replace(/la corsia/gi,'lane').replace(/le corsie/gi,'lanes')
+      .replace(/la carreggiata/gi,'carriageway').replace(/l'autostrada/gi,'motorway')
+      .replace(/l'incrocio/gi,'junction').replace(/gli incroci/gi,'junctions')
+      .replace(/il veicolo ([A-Z])/g,'vehicle $1')
+      .replace(/i veicoli/gi,'vehicles').replace(/un veicolo/gi,'a vehicle')
+      .replace(/il conducente/gi,'driver').replace(/i conducenti/gi,'drivers')
+      .replace(/a senso unico/gi,'one-way').replace(/a doppio senso/gi,'two-way')
+      .replace(/in curva/gi,'on a bend').replace(/nelle gallerie/gi,'in tunnels')
+      .replace(/sulle strisce pedonali/gi,'at pedestrian crossings')
+      .replace(/agli incroci/gi,'at junctions').replace(/in salita/gi,'uphill')
+      .replace(/in discesa/gi,'downhill').replace(/in autostrada/gi,'on the motorway')
+      .replace(/in città/gi,'in town').replace(/fuori città/gi,'outside town')
+      .replace(/nei centri abitati/gi,'in built-up areas')
+      .replace(/fuori dei centri abitati/gi,'outside built-up areas')
+      .replace(/sul marciapiede/gi,'on the pavement').replace(/sulla strada/gi,'on the road')
+      .replace(/sul lato destro/gi,'on the right side').replace(/sul lato sinistro/gi,'on the left side')
+      .replace(/a destra/gi,'to the right').replace(/a sinistra/gi,'to the left')
+      .replace(/diritto/gi,'straight ahead').replace(/al centro/gi,'in the centre');
+  }
+
   let m;
+
+  // ── SEGNALE RAFFIGURATO ──────────────────────────────────────────────
   if ((m = t.match(/^Il segnale raffigurato indica (.+)$/i)))
-    return ru ? `Изображённый знак указывает: ${tail(m[1],lang)}`
-              : `The sign shown indicates: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак указывает: ${w(m[1])}` : `The sign shown indicates: ${w(m[1])}`;
   if ((m = t.match(/^Il segnale raffigurato preannuncia (.+)$/i)))
-    return ru ? `Изображённый знак предупреждает о: ${tail(m[1],lang)}`
-              : `The sign shown gives advance warning of: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак предупреждает: ${w(m[1])}` : `The sign shown warns of: ${w(m[1])}`;
   if ((m = t.match(/^Il segnale raffigurato vieta (.+)$/i)))
-    return ru ? `Изображённый знак запрещает: ${tail(m[1],lang)}`
-              : `The sign shown prohibits: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак запрещает: ${w(m[1])}` : `The sign shown prohibits: ${w(m[1])}`;
   if ((m = t.match(/^Il segnale raffigurato (obbliga|impone|prescrive) (.+)$/i)))
-    return ru ? `Изображённый знак обязывает: ${tail(m[2],lang)}`
-              : `The sign shown requires: ${tail(m[2],lang)}`;
-
+    return ru ? `Изображённый знак обязывает: ${w(m[2])}` : `The sign shown requires: ${w(m[2])}`;
   if ((m = t.match(/^Il segnale raffigurato consente (.+)$/i)))
-    return ru ? `Изображённый знак разрешает: ${tail(m[1],lang)}`
-              : `The sign shown permits: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак разрешает: ${w(m[1])}` : `The sign shown permits: ${w(m[1])}`;
+  if ((m = t.match(/^Il segnale raffigurato è un segnale di (.+)$/i)))
+    return ru ? `Изображённый знак является знаком: ${w(m[1])}` : `The sign shown is a sign of: ${w(m[1])}`;
   if ((m = t.match(/^Il segnale raffigurato è (.+)$/i)))
-    return ru ? `Изображённый знак является: ${tail(m[1],lang)}`
-              : `The sign shown is: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак является: ${w(m[1])}` : `The sign shown is: ${w(m[1])}`;
   if ((m = t.match(/^Il segnale raffigurato preavvisa (.+)$/i)))
-    return ru ? `Изображённый знак заблаговременно сообщает: ${tail(m[1],lang)}`
-              : `The sign shown gives prior notice of: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак заблаговременно сообщает: ${w(m[1])}` : `The sign shown gives prior notice of: ${w(m[1])}`;
   if ((m = t.match(/^Il segnale raffigurato si trova (.+)$/i)))
-    return ru ? `Изображённый знак расположен: ${tail(m[1],lang)}`
-              : `The sign shown is located: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Il segnale raffigurato può essere (.+)$/i)))
-    return ru ? `Изображённый знак может быть: ${tail(m[1],lang)}`
-              : `The sign shown can be: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Il segnale raffigurato non (.+)$/i)))
-    return ru ? `Изображённый знак не ${tail(m[1],lang)}`
-              : `The sign shown does not ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый знак расположен: ${w(m[1])}` : `The sign shown is located: ${w(m[1])}`;
+  if ((m = t.match(/^Il segnale raffigurato abbinato (.+)$/i)))
+    return ru ? `Изображённый знак в сочетании с: ${w(m[1])}` : `The sign shown combined with: ${w(m[1])}`;
   if (t.match(/^Il segnale raffigurato/i))
-    return ru ? `Изображённый знак: ${tail(t.replace(/^Il segnale raffigurato\s*/i,''),lang)}`
-              : `The sign shown: ${tail(t.replace(/^Il segnale raffigurato\s*/i,''),lang)}`;
+    return ru ? `Изображённый знак: ${w(t.replace(/^Il segnale raffigurato\s*/i,''))}` : `The sign shown: ${w(t.replace(/^Il segnale raffigurato\s*/i,''))}`;
 
-  // ── PRESENZA DEL SEGNALE ─────────────────────────────────────────────
+  // ── IL SEGNALE (A/B/C) ────────────────────────────────────────────────
+  if ((m = t.match(/^Il segnale \(([A-Z])\)[,]? (.+)$/i)))
+    return ru ? `Знак (${m[1]}): ${w(m[2])}` : `Sign (${m[1]}): ${w(m[2])}`;
+
+  // ── IN PRESENZA DEL SEGNALE ──────────────────────────────────────────
   if ((m = t.match(/^In presenza del segnale raffigurato (.+)$/i)))
-    return ru ? `При наличии изображённого знака: ${tail(m[1],lang)}`
-              : `In the presence of the sign shown: ${tail(m[1],lang)}`;
+    return ru ? `При наличии изображённого знака: ${w(m[1])}` : `In the presence of the sign shown: ${w(m[1])}`;
+  if ((m = t.match(/^In presenza di (.+)$/i)))
+    return ru ? `При наличии: ${w(m[1])}` : `In the presence of: ${w(m[1])}`;
 
-  // ── PANNELLI / DELINEATORE ───────────────────────────────────────────
+  // ── PANNELLO ─────────────────────────────────────────────────────────
   if ((m = t.match(/^Il pannello integrativo raffigurato (.+)$/i)))
-    return ru ? `Изображённая дополнительная табличка: ${tail(m[1],lang)}`
-              : `The supplementary panel shown: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённая дополнительная табличка: ${w(m[1])}` : `The supplementary panel shown: ${w(m[1])}`;
+  if ((m = t.match(/^Il pannello raffigurato (.+)$/i)))
+    return ru ? `Изображённая табличка: ${w(m[1])}` : `The panel shown: ${w(m[1])}`;
   if ((m = t.match(/^I pannelli raffigurati (.+)$/i)))
-    return ru ? `Изображённые таблички: ${tail(m[1],lang)}`
-              : `The panels shown: ${tail(m[1],lang)}`;
+    return ru ? `Изображённые таблички: ${w(m[1])}` : `The panels shown: ${w(m[1])}`;
+  if ((m = t.match(/^I pannelli integrativi (.+)$/i)))
+    return ru ? `Дополнительные таблички: ${w(m[1])}` : `Supplementary panels: ${w(m[1])}`;
 
+  // ── DELINEATORI ─────────────────────────────────────────────────────
   if ((m = t.match(/^Il delineatore raffigurato (.+)$/i)))
-    return ru ? `Изображённый деlineator: ${tail(m[1],lang)}`
-              : `The delineator shown: ${tail(m[1],lang)}`;
+    return ru ? `Изображённый дорожный маркер: ${w(m[1])}` : `The delineator shown: ${w(m[1])}`;
+  if ((m = t.match(/^I delineatori raffigurati (.+)$/i)))
+    return ru ? `Изображённые дорожные маркеры: ${w(m[1])}` : `The delineators shown: ${w(m[1])}`;
 
-  // ── INCROCIO / PRECEDENZA ────────────────────────────────────────────
+  // ── INCROCIO / INTERSEZIONE ──────────────────────────────────────────
   if ((m = t.match(/^Nell'incrocio rappresentato (?:nella|in) figura (.+)$/i)))
-    return ru ? `На изображённом перекрёстке: ${tail(m[1],lang)}`
-              : `At the junction shown in the figure: ${tail(m[1],lang)}`;
-
+    return ru ? `На изображённом перекрёстке: ${w(m[1])}` : `At the junction shown: ${w(m[1])}`;
+  if ((m = t.match(/^Nell'intersezione (?:di figura|rappresentata) (.+)$/i)))
+    return ru ? `На изображённом перекрёстке: ${w(m[1])}` : `At the intersection shown: ${w(m[1])}`;
+  if ((m = t.match(/^L'intersezione \(incrocio\) (.+)$/i)))
+    return ru ? `Перекрёсток (пересечение): ${w(m[1])}` : `The intersection (junction): ${w(m[1])}`;
   if ((m = t.match(/^Nella situazione rappresentata in figura (.+)$/i)))
-    return ru ? `В изображённой ситуации: ${tail(m[1],lang)}`
-              : `In the situation shown in the figure: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Giungendo all'incrocio rappresentato in figura (.+)$/i)))
-    return ru ? `Подъезжая к изображённому перекрёстку: ${tail(m[1],lang)}`
-              : `Approaching the junction shown: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Dovendo attraversare l'incrocio rappresentato (.+)$/i)))
-    return ru ? `Проезжая изображённый перекрёсток: ${tail(m[1],lang)}`
-              : `When crossing the junction shown: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Secondo le norme di precedenza (.+)$/i)))
-    return ru ? `Согласно правилам приоритета: ${tail(m[1],lang)}`
-              : `According to right-of-way rules: ${tail(m[1],lang)}`;
+    return ru ? `В изображённой ситуации: ${w(m[1])}` : `In the situation shown: ${w(m[1])}`;
+  if ((m = t.match(/^Giungendo all'incrocio rappresentato (.+)$/i)))
+    return ru ? `Подъезжая к изображённому перекрёстку: ${w(m[1])}` : `Approaching the junction shown: ${w(m[1])}`;
+  if ((m = t.match(/^Dovendo attraversare (.+)$/i)))
+    return ru ? `При проезде через: ${w(m[1])}` : `When crossing: ${w(m[1])}`;
+  if ((m = t.match(/^Quando, giunti (.+)$/i)))
+    return ru ? `При приближении к: ${w(m[1])}` : `When reaching: ${w(m[1])}`;
 
   // ── SEMAFORO ─────────────────────────────────────────────────────────
   if ((m = t.match(/^Il semaforo (?:in figura|raffigurato) (.+)$/i)))
-    return ru ? `Светофор на рисунке: ${tail(m[1],lang)}`
-              : `The traffic light shown: ${tail(m[1],lang)}`;
-
+    return ru ? `Светофор на рисунке: ${w(m[1])}` : `The traffic light shown: ${w(m[1])}`;
   if ((m = t.match(/^Il semaforo (.+)$/i)))
-    return ru ? `Светофор: ${tail(m[1],lang)}`
-              : `The traffic light: ${tail(m[1],lang)}`;
+    return ru ? `Светофор: ${w(m[1])}` : `The traffic light: ${w(m[1])}`;
+  if ((m = t.match(/^La luce gialla (.+)$/i)))
+    return ru ? `Жёлтый сигнал светофора: ${w(m[1])}` : `The amber light: ${w(m[1])}`;
+  if ((m = t.match(/^Quando il vigile (.+)$/i)))
+    return ru ? `Когда регулировщик: ${w(m[1])}` : `When the traffic officer: ${w(m[1])}`;
+
+  // ── SEGNALETICA ORIZZONTALE / STRISCE ────────────────────────────────
+  if ((m = t.match(/^La striscia (.+)$/i)))
+    return ru ? `Дорожная линия: ${w(m[1])}` : `The road marking line: ${w(m[1])}`;
+  if ((m = t.match(/^Le strisce (.+)$/i)))
+    return ru ? `Дорожная разметка: ${w(m[1])}` : `The road markings: ${w(m[1])}`;
+  if ((m = t.match(/^La doppia striscia (.+)$/i)))
+    return ru ? `Двойная линия разметки: ${w(m[1])}` : `The double line marking: ${w(m[1])}`;
+  if ((m = t.match(/^La segnaletica (.+)$/i)))
+    return ru ? `Дорожная разметка/знаки: ${w(m[1])}` : `Road markings/signs: ${w(m[1])}`;
+  if ((m = t.match(/^La figura (.+)$/i)))
+    return ru ? `На рисунке изображено: ${w(m[1])}` : `The figure shows: ${w(m[1])}`;
+
+  // ── ISOLA / CORSIA ───────────────────────────────────────────────────
+  if ((m = t.match(/^L'isola di traffico (.+)$/i)))
+    return ru ? `Направляющий островок: ${w(m[1])}` : `The traffic island: ${w(m[1])}`;
+  if ((m = t.match(/^La corsia (?:di )?(.+)$/i)))
+    return ru ? `Полоса движения: ${w(m[1])}` : `The lane: ${w(m[1])}`;
+  if ((m = t.match(/^Le frecce direzionali (.+)$/i)))
+    return ru ? `Стрелки направления движения: ${w(m[1])}` : `Directional arrows: ${w(m[1])}`;
 
   // ── SOSTA / FERMATA ───────────────────────────────────────────────────
-  if ((m = t.match(/^La sosta è vietata (.+)$/i)))
-    return ru ? `Стоянка запрещена: ${tail(m[1],lang)}`
-              : `Parking is prohibited: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^La fermata è vietata (.+)$/i)))
-    return ru ? `Остановка запрещена: ${tail(m[1],lang)}`
-              : `Stopping is prohibited: ${tail(m[1],lang)}`;
-
+  if ((m = t.match(/^La sosta (.+)$/i)))
+    return ru ? `Стоянка: ${w(m[1])}` : `Parking: ${w(m[1])}`;
+  if ((m = t.match(/^La fermata (.+)$/i)))
+    return ru ? `Остановка: ${w(m[1])}` : `Stopping: ${w(m[1])}`;
   if ((m = t.match(/^Durante la sosta (.+)$/i)))
-    return ru ? `Во время стоянки: ${tail(m[1],lang)}`
-              : `During parking: ${tail(m[1],lang)}`;
+    return ru ? `Во время стоянки: ${w(m[1])}` : `During parking: ${w(m[1])}`;
+  if ((m = t.match(/^Nelle aree pedonali (.+)$/i)))
+    return ru ? `В пешеходных зонах: ${w(m[1])}` : `In pedestrian areas: ${w(m[1])}`;
 
   // ── PATENTE ───────────────────────────────────────────────────────────
-  if ((m = t.match(/^La patente di categoria (.+?) (consente|permette|abilita|è necessaria) (.+)$/i)))
-    return ru ? `Водительское удостоверение категории ${m[1]} разрешает: ${tail(m[3],lang)}`
-              : `Driving licence category ${m[1]} allows: ${tail(m[3],lang)}`;
-
-  if ((m = t.match(/^La patente di (?:guida |categoria )?(.+)$/i)))
-    return ru ? `Водительское удостоверение: ${tail(m[1],lang)}`
-              : `The driving licence: ${tail(m[1],lang)}`;
-
+  if ((m = t.match(/^La patente di categoria (.+?) (consente|permette|abilita) (.+)$/i)))
+    return ru ? `Водительское удостоверение категории ${m[1]} позволяет: ${w(m[3])}` : `Driving licence category ${m[1]} allows: ${w(m[3])}`;
+  if ((m = t.match(/^La patente di (.+)$/i)))
+    return ru ? `Водительское удостоверение: ${w(m[1])}` : `The driving licence: ${w(m[1])}`;
   if ((m = t.match(/^Con la patente di (.+)$/i)))
-    return ru ? `С водительским удостоверением: ${tail(m[1],lang)}`
-              : `With a driving licence: ${tail(m[1],lang)}`;
-
+    return ru ? `С водительским удостоверением: ${w(m[1])}` : `With a driving licence: ${w(m[1])}`;
   if ((m = t.match(/^La sospensione della patente (.+)$/i)))
-    return ru ? `Приостановление удостоверения: ${tail(m[1],lang)}`
-              : `Suspension of the driving licence: ${tail(m[1],lang)}`;
+    return ru ? `Приостановление водительского удостоверения: ${w(m[1])}` : `Suspension of the driving licence: ${w(m[1])}`;
+  if ((m = t.match(/^La revoca della patente (.+)$/i)))
+    return ru ? `Отзыв водительского удостоверения: ${w(m[1])}` : `Revocation of the driving licence: ${w(m[1])}`;
+  if ((m = t.match(/^La revisione della patente (.+)$/i)))
+    return ru ? `Пересмотр водительского удостоверения: ${w(m[1])}` : `Review of the driving licence: ${w(m[1])}`;
+  if ((m = t.match(/^La responsabilità penale (.+)$/i)))
+    return ru ? `Уголовная ответственность: ${w(m[1])}` : `Criminal liability: ${w(m[1])}`;
+  if ((m = t.match(/^La responsabilità (.+)$/i)))
+    return ru ? `Ответственность: ${w(m[1])}` : `Liability: ${w(m[1])}`;
+
+  // ── CHI GUIDA / ALLA GUIDA ────────────────────────────────────────────
+  if ((m = t.match(/^Chi guida (.+)$/i)))
+    return ru ? `Тот, кто управляет: ${w(m[1])}` : `A person driving: ${w(m[1])}`;
+  if ((m = t.match(/^Chi è (.+)$/i)))
+    return ru ? `Тот, кто: ${w(m[1])}` : `A person who: ${w(m[1])}`;
+  if ((m = t.match(/^Alla guida di (.+)$/i)))
+    return ru ? `За рулём: ${w(m[1])}` : `When driving: ${w(m[1])}`;
+  if ((m = t.match(/^Sui motocicli (.+)$/i)))
+    return ru ? `На мотоциклах: ${w(m[1])}` : `On motorcycles: ${w(m[1])}`;
 
   // ── CONDUCENTE ───────────────────────────────────────────────────────
   if ((m = t.match(/^Il conducente (.+)$/i)))
-    return ru ? `Водитель: ${tail(m[1],lang)}`
-              : `The driver: ${tail(m[1],lang)}`;
+    return ru ? `Водитель: ${w(m[1])}` : `The driver: ${w(m[1])}`;
 
   // ── SORPASSO ─────────────────────────────────────────────────────────
   if ((m = t.match(/^Il sorpasso (.+)$/i)))
-    return ru ? `Обгон: ${tail(m[1],lang)}`
-              : `Overtaking: ${tail(m[1],lang)}`;
-
+    return ru ? `Обгон: ${w(m[1])}` : `Overtaking: ${w(m[1])}`;
   if ((m = t.match(/^È (vietato|consentito|obbligatorio) il sorpasso (.+)$/i))) {
     const act = ru ? (m[1]==='vietato'?'запрещён':m[1]==='consentito'?'разрешён':'обязателен')
                    : (m[1]==='vietato'?'prohibited':m[1]==='consentito'?'permitted':'required');
-    return ru ? `Обгон ${act}: ${tail(m[2],lang)}`
-              : `Overtaking is ${act}: ${tail(m[2],lang)}`;
+    return ru ? `Обгон ${act}: ${w(m[2])}` : `Overtaking is ${act}: ${w(m[2])}`;
   }
 
-  // ── DISTANZA DI SICUREZZA ─────────────────────────────────────────────
+  // ── DISTANZA / SPAZIO ────────────────────────────────────────────────
   if ((m = t.match(/^La distanza di sicurezza (.+)$/i)))
-    return ru ? `Дистанция безопасности: ${tail(m[1],lang)}`
-              : `The safe following distance: ${tail(m[1],lang)}`;
-
+    return ru ? `Дистанция безопасности: ${w(m[1])}` : `The safe following distance: ${w(m[1])}`;
   if ((m = t.match(/^Lo spazio di frenatura (.+)$/i)))
-    return ru ? `Тормозной путь: ${tail(m[1],lang)}`
-              : `The braking distance: ${tail(m[1],lang)}`;
+    return ru ? `Тормозной путь: ${w(m[1])}` : `The braking distance: ${w(m[1])}`;
+  if ((m = t.match(/^Lo spazio totale di arresto (.+)$/i)))
+    return ru ? `Полный тормозной путь: ${w(m[1])}` : `The total stopping distance: ${w(m[1])}`;
+  if ((m = t.match(/^La distanza (.+)$/i)))
+    return ru ? `Расстояние: ${w(m[1])}` : `The distance: ${w(m[1])}`;
+  if ((m = t.match(/^Rispetto al veicolo (.+)$/i)))
+    return ru ? `По отношению к транспортному средству: ${w(m[1])}` : `With respect to the vehicle: ${w(m[1])}`;
+  if ((m = t.match(/^Circolando dietro (.+)$/i)))
+    return ru ? `Следуя за: ${w(m[1])}` : `When travelling behind: ${w(m[1])}`;
 
-  // ── SEGNALETICA ORIZZONTALE ───────────────────────────────────────────
-  if ((m = t.match(/^La segnaletica (?:orizzontale |verticale |in figura )?(.+)$/i)))
-    return ru ? `Дорожная разметка/знаки: ${tail(m[1],lang)}`
-              : `Road markings/signs: ${tail(m[1],lang)}`;
-
-  // ── SIMBOLO / SPIA ───────────────────────────────────────────────────
+  // ── SIMBOLO / SPIA / LUCI ────────────────────────────────────────────
   if ((m = t.match(/^Il simbolo raffigurato (.+)$/i)))
-    return ru ? `Изображённый символ: ${tail(m[1],lang)}`
-              : `The symbol shown: ${tail(m[1],lang)}`;
-
+    return ru ? `Изображённый символ: ${w(m[1])}` : `The symbol shown: ${w(m[1])}`;
   if ((m = t.match(/^Una spia di colore (.+)$/i)))
-    return ru ? `Контрольная лампа: ${tail(m[1],lang)}`
-              : `A warning light: ${tail(m[1],lang)}`;
+    return ru ? `Контрольная лампа цвета: ${w(m[1])}` : `A warning light: ${w(m[1])}`;
+  if ((m = t.match(/^La spia (.+)$/i)))
+    return ru ? `Контрольная лампа: ${w(m[1])}` : `The warning light: ${w(m[1])}`;
+  if ((m = t.match(/^Le luci (.+)$/i)))
+    return ru ? `Световые приборы: ${w(m[1])}` : `The lights: ${w(m[1])}`;
+  if ((m = t.match(/^Le macchine di lavoro (.+)$/i)))
+    return ru ? `Строительная/дорожная техника: ${w(m[1])}` : `Work vehicles: ${w(m[1])}`;
 
-  // ── CONO / DELINEATORE STRADALE ────────────────────────────────────────
-  if ((m = t.match(/^Il cono raffigurato (.+)$/i)))
-    return ru ? `Изображённый конус: ${tail(m[1],lang)}`
-              : `The cone shown: ${tail(m[1],lang)}`;
-
-  // ── VEICOLO / PNEUMATICI ─────────────────────────────────────────────
+  // ── VEICOLO / CARICO ─────────────────────────────────────────────────
   if ((m = t.match(/^In un veicolo a motore[,]? (.+)$/i)))
-    return ru ? `В автомобиле: ${tail(m[1],lang)}`
-              : `In a motor vehicle: ${tail(m[1],lang)}`;
-
+    return ru ? `В автомобиле: ${w(m[1])}` : `In a motor vehicle: ${w(m[1])}`;
   if ((m = t.match(/^Nei veicoli a motore (.+)$/i)))
-    return ru ? `В автомобилях: ${tail(m[1],lang)}`
-              : `In motor vehicles: ${tail(m[1],lang)}`;
+    return ru ? `В автомобилях: ${w(m[1])}` : `In motor vehicles: ${w(m[1])}`;
+  if ((m = t.match(/^Il carico (.+)$/i)))
+    return ru ? `Груз: ${w(m[1])}` : `The load: ${w(m[1])}`;
+  if ((m = t.match(/^Il veicolo (.+)$/i)))
+    return ru ? `Транспортное средство: ${w(m[1])}` : `The vehicle: ${w(m[1])}`;
+  if ((m = t.match(/^I veicoli (.+)$/i)))
+    return ru ? `Транспортные средства: ${w(m[1])}` : `Vehicles: ${w(m[1])}`;
 
-  if ((m = t.match(/^La corretta pressione di gonfiaggio (.+)$/i)))
-    return ru ? `Правильное давление в шинах: ${tail(m[1],lang)}`
-              : `The correct tyre inflation pressure: ${tail(m[1],lang)}`;
-
+  // ── PNEUMATICI / TECNICA ─────────────────────────────────────────────
+  if ((m = t.match(/^La corretta pressione (.+)$/i)))
+    return ru ? `Правильное давление в шинах: ${w(m[1])}` : `The correct tyre pressure: ${w(m[1])}`;
   if ((m = t.match(/^Il coefficiente di aderenza (.+)$/i)))
-    return ru ? `Коэффициент сцепления: ${tail(m[1],lang)}`
-              : `The grip coefficient: ${tail(m[1],lang)}`;
+    return ru ? `Коэффициент сцепления: ${w(m[1])}` : `The grip coefficient: ${w(m[1])}`;
+  if ((m = t.match(/^La forza (?:di )?aderente (.+)$/i)))
+    return ru ? `Сила сцепления с дорогой: ${w(m[1])}` : `The road grip force: ${w(m[1])}`;
+  if ((m = t.match(/^Le sospensioni (.+)$/i)))
+    return ru ? `Подвеска: ${w(m[1])}` : `The suspension: ${w(m[1])}`;
+  if ((m = t.match(/^Una frenatura (.+)$/i)))
+    return ru ? `Торможение: ${w(m[1])}` : `Braking: ${w(m[1])}`;
+  if ((m = t.match(/^Il valore della (.+)$/i)))
+    return ru ? `Значение: ${w(m[1])}` : `The value of: ${w(m[1])}`;
+  if ((m = t.match(/^Lo stato di (.+)$/i)))
+    return ru ? `Состояние: ${w(m[1])}` : `The condition of: ${w(m[1])}`;
+  if ((m = t.match(/^I catadiottri (.+)$/i)))
+    return ru ? `Световозвращатели (катафоты): ${w(m[1])}` : `Reflectors: ${w(m[1])}`;
+  if ((m = t.match(/^Gli specchi retrovisori (.+)$/i)))
+    return ru ? `Зеркала заднего вида: ${w(m[1])}` : `Rear-view mirrors: ${w(m[1])}`;
+  if ((m = t.match(/^Gli specchi (.+)$/i)))
+    return ru ? `Зеркала: ${w(m[1])}` : `Mirrors: ${w(m[1])}`;
+  if ((m = t.match(/^Lo specchio retrovisore (.+)$/i)))
+    return ru ? `Зеркало заднего вида: ${w(m[1])}` : `The rear-view mirror: ${w(m[1])}`;
+
+  // ── CASCO / CINTURE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Il casco (.+)$/i)))
+    return ru ? `Шлем: ${w(m[1])}` : `The helmet: ${w(m[1])}`;
+  if ((m = t.match(/^I guanti (.+)$/i)))
+    return ru ? `Перчатки: ${w(m[1])}` : `Gloves: ${w(m[1])}`;
+  if ((m = t.match(/^Le cinture di sicurezza (.+)$/i)))
+    return ru ? `Ремни безопасности: ${w(m[1])}` : `Seat belts: ${w(m[1])}`;
+  if ((m = t.match(/^Le cinture (.+)$/i)))
+    return ru ? `Ремни безопасности: ${w(m[1])}` : `Seat belts: ${w(m[1])}`;
 
   // ── ALCOOL / DROGHE ───────────────────────────────────────────────────
   if (t.match(/alcolemia|tasso alcolemico|alcolico|alcool/i))
-    return ru ? `🍷 [Алкоголь] ${t}`
-              : `🍷 [Alcohol] ${t}`;
+    return (ru ? '🍷 Алкоголь за рулём: ' : '🍷 Drink-driving: ') + w(t);
 
   // ── INCIDENTE / SOCCORSO ─────────────────────────────────────────────
   if ((m = t.match(/^(?:Dopo|In caso di) un incidente stradale[,]? (.+)$/i)))
-    return ru ? `После дорожного происшествия: ${tail(m[1],lang)}`
-              : `After a road accident: ${tail(m[1],lang)}`;
-
+    return ru ? `После ДТП: ${w(m[1])}` : `After a road accident: ${w(m[1])}`;
+  if ((m = t.match(/^Dopo il sorpasso (.+)$/i)))
+    return ru ? `После обгона: ${w(m[1])}` : `After overtaking: ${w(m[1])}`;
   if ((m = t.match(/^Se un infortunato (.+)$/i)))
-    return ru ? `Если пострадавший: ${tail(m[1],lang)}`
-              : `If an injured person: ${tail(m[1],lang)}`;
+    return ru ? `Если пострадавший: ${w(m[1])}` : `If an injured person: ${w(m[1])}`;
+  if ((m = t.match(/^Causa probabile di (.+)$/i)))
+    return ru ? `Вероятная причина: ${w(m[1])}` : `Probable cause of: ${w(m[1])}`;
 
   // ── ASSICURAZIONE ────────────────────────────────────────────────────
   if (t.match(/assicurazione|RC auto|responsabilità civile/i))
-    return ru ? `🛡️ [Страховка] ${t}`
-              : `🛡️ [Insurance] ${t}`;
+    return (ru ? '🛡️ Страхование: ' : '🛡️ Insurance: ') + w(t);
 
   // ── AMBIENTE / CONSUMI ───────────────────────────────────────────────
-  if ((m = t.match(/^Per diminuire l'inquinamento (.+)$/i)))
-    return ru ? `Для снижения загрязнения воздуха: ${tail(m[1],lang)}`
-              : `To reduce air pollution: ${tail(m[1],lang)}`;
+  if ((m = t.match(/^(?:Per diminuire|Per ridurre) l'inquinamento (.+)$/i)))
+    return ru ? `Для снижения загрязнения: ${w(m[1])}` : `To reduce pollution: ${w(m[1])}`;
+  if ((m = t.match(/^L'inquinamento dell'aria (.+)$/i)))
+    return ru ? `Загрязнение воздуха от транспорта: ${w(m[1])}` : `Air pollution from vehicles: ${w(m[1])}`;
+  if ((m = t.match(/^Il numero di giri (.+)$/i)))
+    return ru ? `Количество оборотов двигателя: ${w(m[1])}` : `Engine revs: ${w(m[1])}`;
+  if ((m = t.match(/^L'uso corretto (.+)$/i)))
+    return ru ? `Правильное использование: ${w(m[1])}` : `The correct use of: ${w(m[1])}`;
 
-  // ── GENERIC QUESTIONS ────────────────────────────────────────────────
-  if ((m = t.match(/^È (?:consentito|vietato|obbligatorio) (.+)$/i))) {
-    const v = t.match(/^È consentito/i) ? (ru?'Разрешено':'Permitted')
-            : t.match(/^È vietato/i)    ? (ru?'Запрещено':'Prohibited')
-                                        : (ru?'Обязательно':'Required');
-    return `${v}: ${tail(m[1],lang)}`;
-  }
-
-  if ((m = t.match(/^Si può (.+)$/i)))
-    return ru ? `Можно ли: ${tail(m[1],lang)}`
-              : `Is it possible to: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Fuori dei centri abitati[,]? (.+)$/i)))
-    return ru ? `Вне населённых пунктов: ${tail(m[1],lang)}`
-              : `Outside built-up areas: ${tail(m[1],lang)}`;
-
-  if ((m = t.match(/^Nei centri abitati[,]? (.+)$/i)))
-    return ru ? `В населённых пунктах: ${tail(m[1],lang)}`
-              : `In built-up areas: ${tail(m[1],lang)}`;
-
+  // ── AUTOSTRADA ───────────────────────────────────────────────────────
+  if ((m = t.match(/^Sulle autostrade e (.+)$/i)))
+    return ru ? `На автострадах и дорогах: ${w(m[1])}` : `On motorways and roads: ${w(m[1])}`;
+  if ((m = t.match(/^Sulle autostrade (.+)$/i)))
+    return ru ? `На автострадах: ${w(m[1])}` : `On motorways: ${w(m[1])}`;
+  if ((m = t.match(/^Sulle strade (.+)$/i)))
+    return ru ? `На дорогах: ${w(m[1])}` : `On roads: ${w(m[1])}`;
+  if ((m = t.match(/^Sulle carreggiate[,]? (.+)$/i)))
+    return ru ? `На проезжей части: ${w(m[1])}` : `On carriageways: ${w(m[1])}`;
   if ((m = t.match(/^In autostrada[,]? (.+)$/i)))
-    return ru ? `На автостраде: ${tail(m[1],lang)}`
-              : `On the motorway: ${tail(m[1],lang)}`;
+    return ru ? `На автостраде: ${w(m[1])}` : `On the motorway: ${w(m[1])}`;
+  if ((m = t.match(/^In una carreggiata (.+)$/i)))
+    return ru ? `На проезжей части: ${w(m[1])}` : `On a carriageway: ${w(m[1])}`;
+  if ((m = t.match(/^La carreggiata (.+)$/i)))
+    return ru ? `Проезжая часть: ${w(m[1])}` : `The carriageway: ${w(m[1])}`;
+  if ((m = t.match(/^In una strada (.+)$/i)))
+    return ru ? `На дороге: ${w(m[1])}` : `On a road: ${w(m[1])}`;
+  if ((m = t.match(/^Su strade (.+)$/i)))
+    return ru ? `На дорогах: ${w(m[1])}` : `On roads: ${w(m[1])}`;
+  if ((m = t.match(/^Su una strada (.+)$/i)))
+    return ru ? `На дороге: ${w(m[1])}` : `On a road: ${w(m[1])}`;
+  if ((m = t.match(/^La strada (.+)$/i)))
+    return ru ? `Дорога: ${w(m[1])}` : `The road: ${w(m[1])}`;
+  if ((m = t.match(/^Nelle strade (.+)$/i)))
+    return ru ? `На дорогах: ${w(m[1])}` : `On roads: ${w(m[1])}`;
+  if ((m = t.match(/^Su strada (.+)$/i)))
+    return ru ? `На дороге: ${w(m[1])}` : `On the road: ${w(m[1])}`;
+  if ((m = t.match(/^In vicinanza di (.+)$/i)))
+    return ru ? `Вблизи: ${w(m[1])}` : `Near: ${w(m[1])}`;
+  if ((m = t.match(/^In vicinanza (.+)$/i)))
+    return ru ? `Вблизи: ${w(m[1])}` : `Near: ${w(m[1])}`;
+  if ((m = t.match(/^Avvicinandosi (a|ad) (.+)$/i)))
+    return ru ? `При приближении к: ${w(m[2])}` : `When approaching: ${w(m[2])}`;
+  if ((m = t.match(/^In un centro abitato (.+)$/i)))
+    return ru ? `В населённом пункте: ${w(m[1])}` : `In a built-up area: ${w(m[1])}`;
 
-  if ((m = t.match(/^Lo specchio retrovisore (.+)$/i)))
-    return ru ? `Зеркало заднего вида: ${tail(m[1],lang)}`
-              : `The rear-view mirror: ${tail(m[1],lang)}`;
+  // ── MANOVRE ─────────────────────────────────────────────────────────
+  if ((m = t.match(/^Quando si vuole (.+)$/i)))
+    return ru ? `Когда водитель хочет: ${w(m[1])}` : `When the driver wants to: ${w(m[1])}`;
+  if ((m = t.match(/^Prima di iniziare (.+)$/i)))
+    return ru ? `Перед началом: ${w(m[1])}` : `Before starting: ${w(m[1])}`;
+  if ((m = t.match(/^Prima di (.+)$/i)))
+    return ru ? `Перед: ${w(m[1])}` : `Before: ${w(m[1])}`;
+  if ((m = t.match(/^La manovra di (.+)$/i)))
+    return ru ? `Манёвр: ${w(m[1])}` : `The manoeuvre of: ${w(m[1])}`;
+  if ((m = t.match(/^La posizione (.+)$/i)))
+    return ru ? `Положение: ${w(m[1])}` : `The position: ${w(m[1])}`;
+  if ((m = t.match(/^Si devono (.+)$/i)))
+    return ru ? `Необходимо: ${w(m[1])}` : `It is necessary to: ${w(m[1])}`;
+  if ((m = t.match(/^Bisogna usare (.+)$/i)))
+    return ru ? `Необходимо использовать: ${w(m[1])}` : `It is necessary to use: ${w(m[1])}`;
 
-  if ((m = t.match(/^L'uso degli indicatori di direzione (.+)$/i)))
-    return ru ? `Использование указателей поворота: ${tail(m[1],lang)}`
-              : `The use of direction indicators: ${tail(m[1],lang)}`;
+  // ── IN CASO / NEL CASO ───────────────────────────────────────────────
+  if ((m = t.match(/^In caso di (.+)$/i)))
+    return ru ? `В случае: ${w(m[1])}` : `In the event of: ${w(m[1])}`;
+  if ((m = t.match(/^Nel caso (?:in cui|di) (.+)$/i)))
+    return ru ? `В случае: ${w(m[1])}` : `In the case of: ${w(m[1])}`;
+  if ((m = t.match(/^Se il (.+)$/i)))
+    return ru ? `Если: ${w(m[1])}` : `If the: ${w(m[1])}`;
+  if ((m = t.match(/^Se si (.+)$/i)))
+    return ru ? `Если: ${w(m[1])}` : `If: ${w(m[1])}`;
+  if ((m = t.match(/^Se un (.+)$/i)))
+    return ru ? `Если: ${w(m[1])}` : `If a: ${w(m[1])}`;
+  if ((m = t.match(/^Quando si (.+)$/i)))
+    return ru ? `Когда: ${w(m[1])}` : `When: ${w(m[1])}`;
+  if ((m = t.match(/^Quando il (.+)$/i)))
+    return ru ? `Когда: ${w(m[1])}` : `When the: ${w(m[1])}`;
+  if ((m = t.match(/^Quando è (.+)$/i)))
+    return ru ? `Когда: ${w(m[1])}` : `When: ${w(m[1])}`;
+  if ((m = t.match(/^Quando, in (.+)$/i)))
+    return ru ? `В ситуации, когда: ${w(m[1])}` : `When, in a situation: ${w(m[1])}`;
+  if ((m = t.match(/^Quando le (.+)$/i)))
+    return ru ? `Когда: ${w(m[1])}` : `When the: ${w(m[1])}`;
 
+  // ── È CONSENTITO / VIETATO / OBBLIGATORIO ────────────────────────────
+  if ((m = t.match(/^È consentito (.+)$/i)))
+    return ru ? `Разрешается: ${w(m[1])}` : `It is permitted to: ${w(m[1])}`;
+  if ((m = t.match(/^È vietato (.+)$/i)))
+    return ru ? `Запрещается: ${w(m[1])}` : `It is prohibited to: ${w(m[1])}`;
+  if ((m = t.match(/^È obbligatorio (.+)$/i)))
+    return ru ? `Обязательно: ${w(m[1])}` : `It is compulsory to: ${w(m[1])}`;
+  if ((m = t.match(/^È regolamentare (.+)$/i)))
+    return ru ? `Соответствует ПДД: ${w(m[1])}` : `It is in accordance with the rules: ${w(m[1])}`;
+  if ((m = t.match(/^E' consentito (.+)$/i)))
+    return ru ? `Разрешается: ${w(m[1])}` : `It is permitted to: ${w(m[1])}`;
+  if ((m = t.match(/^E' vietato (.+)$/i)))
+    return ru ? `Запрещается: ${w(m[1])}` : `It is prohibited to: ${w(m[1])}`;
+  if ((m = t.match(/^E' obbligatorio (.+)$/i)))
+    return ru ? `Обязательно: ${w(m[1])}` : `It is compulsory to: ${w(m[1])}`;
+  if ((m = t.match(/^E' regolamentare (.+)$/i)))
+    return ru ? `Соответствует ПДД: ${w(m[1])}` : `It is in accordance with the rules: ${w(m[1])}`;
+
+  // ── SI PUÒ / FUORI / NEI ────────────────────────────────────────────
+  if ((m = t.match(/^Si può (.+)$/i)))
+    return ru ? `Можно ли: ${w(m[1])}` : `Is it possible to: ${w(m[1])}`;
+  if ((m = t.match(/^Fuori dei centri abitati[,]? (.+)$/i)))
+    return ru ? `Вне населённых пунктов: ${w(m[1])}` : `Outside built-up areas: ${w(m[1])}`;
+  if ((m = t.match(/^Nei centri abitati[,]? (.+)$/i)))
+    return ru ? `В населённых пунктах: ${w(m[1])}` : `In built-up areas: ${w(m[1])}`;
+
+  // ── INDICATORI / TAMPONAMENTI ────────────────────────────────────────
+  if ((m = t.match(/^L'uso degli indicatori (.+)$/i)))
+    return ru ? `Использование указателей поворота: ${w(m[1])}` : `The use of direction indicators: ${w(m[1])}`;
   if ((m = t.match(/^I tamponamenti stradali (.+)$/i)))
-    return ru ? `Дорожные столкновения: ${tail(m[1],lang)}`
-              : `Rear-end collisions: ${tail(m[1],lang)}`;
+    return ru ? `Дорожные столкновения сзади: ${w(m[1])}` : `Rear-end collisions: ${w(m[1])}`;
 
-  // ── FALLBACK: show IT text with small label ───────────────────────────
-  return t;  // keep Italian — always readable for exam practice
+  // ── PRECEDENZA ──────────────────────────────────────────────────────
+  if ((m = t.match(/^Secondo le norme di precedenza (.+)$/i)))
+    return ru ? `Согласно правилам приоритета: ${w(m[1])}` : `According to right-of-way rules: ${w(m[1])}`;
+
+  // ── CONO / BARRIERA / SEGNALE MOBILE ────────────────────────────────
+  if ((m = t.match(/^Il cono raffigurato (.+)$/i)))
+    return ru ? `Изображённый конус: ${w(m[1])}` : `The cone shown: ${w(m[1])}`;
+  if ((m = t.match(/^La barriera raffigurata (.+)$/i)))
+    return ru ? `Изображённый барьер: ${w(m[1])}` : `The barrier shown: ${w(m[1])}`;
+  if ((m = t.match(/^Il segnale mobile (.+)$/i)))
+    return ru ? `Мобильный знак: ${w(m[1])}` : `The mobile sign: ${w(m[1])}`;
+  if ((m = t.match(/^Il pannello in figura (.+)$/i)))
+    return ru ? `Табличка на рисунке: ${w(m[1])}` : `The panel in the figure: ${w(m[1])}`;
+  if ((m = t.match(/^Il pannello (.+)$/i)))
+    return ru ? `Табличка: ${w(m[1])}` : `The panel: ${w(m[1])}`;
+
+  // ── PUNTEGGIO PATENTE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Il punteggio sulla patente (.+)$/i)))
+    return ru ? `Баллы водительского удостоверения: ${w(m[1])}` : `The driving licence points: ${w(m[1])}`;
+  if ((m = t.match(/^Il punteggio (.+)$/i)))
+    return ru ? `Баллы: ${w(m[1])}` : `The points: ${w(m[1])}`;
+
+  // ── ABBIGLIAMENTO / EQUIPAGGIAMENTO MOTOCICLISTICO ──────────────────
+  if ((m = t.match(/^Gli stivali (.+)$/i)))
+    return ru ? `Сапоги/ботинки для мотоциклистов: ${w(m[1])}` : `Boots: ${w(m[1])}`;
+  if ((m = t.match(/^Le giacche (.+)$/i)))
+    return ru ? `Мотоциклетные куртки: ${w(m[1])}` : `Jackets: ${w(m[1])}`;
+  if ((m = t.match(/^I pantaloni (.+)$/i)))
+    return ru ? `Мотоциклетные брюки: ${w(m[1])}` : `Trousers: ${w(m[1])}`;
+  if ((m = t.match(/^L'equipaggiamento (.+)$/i)))
+    return ru ? `Снаряжение водителя: ${w(m[1])}` : `The equipment: ${w(m[1])}`;
+  if ((m = t.match(/^L'ABS|l'ABS (.+)$/i)))
+    return ru ? `Система ABS: ${w(m[1])}` : `The ABS: ${w(m[1])}`;
+  if (t.match(/^L'A\.B\.S\./i))
+    return ru ? `Система ABS: ${w(t.replace(/^L'A\.B\.S\.\s*/i,''))}` : `ABS: ${w(t.replace(/^L'A\.B\.S\.\s*/i,''))}`;
+  if (t.match(/^L'abs /i))
+    return ru ? `Система ABS: ${w(t.replace(/^L'abs\s*/i,''))}` : `ABS: ${w(t.replace(/^L'abs\s*/i,''))}`;
+
+  // ── VIETATO CON COMMA ─────────────────────────────────────────────────
+  if ((m = t.match(/^E' vietato, (.+)$/i)))
+    return ru ? `Запрещается: ${w(m[1])}` : `It is prohibited: ${w(m[1])}`;
+  if ((m = t.match(/^È vietato, (.+)$/i)))
+    return ru ? `Запрещается: ${w(m[1])}` : `It is prohibited: ${w(m[1])}`;
+
+  // ── DISTRAZIONE / AFFATICAMENTO / IDONEITÀ ───────────────────────────
+  if ((m = t.match(/^La distrazione del conducente (.+)$/i)))
+    return ru ? `Отвлечение водителя: ${w(m[1])}` : `Driver distraction: ${w(m[1])}`;
+  if ((m = t.match(/^L'idoneità alla guida (.+)$/i)))
+    return ru ? `Пригодность к управлению транспортным средством: ${w(m[1])}` : `Fitness to drive: ${w(m[1])}`;
+  if ((m = t.match(/^L'affaticamento (.+)$/i)))
+    return ru ? `Усталость за рулём: ${w(m[1])}` : `Driver fatigue: ${w(m[1])}`;
+
+  // ── PASSO CARRABILE ───────────────────────────────────────────────────
+  if ((m = t.match(/^Il passo carrabile (.+)$/i)))
+    return ru ? `Въезд в гараж/на парковку: ${w(m[1])}` : `The vehicle access point: ${w(m[1])}`;
+
+  // ── RIBALTAMENTO ──────────────────────────────────────────────────────
+  if ((m = t.match(/^Il ribaltamento (.+)$/i)))
+    return ru ? `Опрокидывание транспортного средства: ${w(m[1])}` : `Vehicle rollover: ${w(m[1])}`;
+
+  // ── DURANTE (LA GUIDA / LA MARCIA) ───────────────────────────────────
+  if ((m = t.match(/^Durante la guida[,]? (.+)$/i)))
+    return ru ? `Во время вождения: ${w(m[1])}` : `While driving: ${w(m[1])}`;
+  if ((m = t.match(/^Durante la marcia[,]? (.+)$/i)))
+    return ru ? `Во время движения: ${w(m[1])}` : `While moving: ${w(m[1])}`;
+  if ((m = t.match(/^Durante la sosta[,]? (.+)$/i)))
+    return ru ? `Во время стоянки: ${w(m[1])}` : `During parking: ${w(m[1])}`;
+  if ((m = t.match(/^Allorché di notte[,]? (.+)$/i)))
+    return ru ? `В ночное время: ${w(m[1])}` : `At night: ${w(m[1])}`;
+  if ((m = t.match(/^Se ad un (.+)$/i)))
+    return ru ? `Если к: ${w(m[1])}` : `If at a: ${w(m[1])}`;
+
+  // ── VIGILE / AGENTE ───────────────────────────────────────────────────
+  if ((m = t.match(/^Il vigile (.+)$/i)))
+    return ru ? `Регулировщик: ${w(m[1])}` : `The traffic officer: ${w(m[1])}`;
+  if ((m = t.match(/^L'agente (.+)$/i)))
+    return ru ? `Сотрудник полиции: ${w(m[1])}` : `The officer: ${w(m[1])}`;
+
+  // ── NELL'ATTRAVERSARE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Nell'attraversare (.+)$/i)))
+    return ru ? `При пересечении: ${w(m[1])}` : `When crossing: ${w(m[1])}`;
+
+  // ── AQUAPLANING / FENOMENI TECNICI ────────────────────────────────────
+  if ((m = t.match(/^Il fenomeno dell'aquaplaning (.+)$/i)))
+    return ru ? `Явление аквапланирования: ${w(m[1])}` : `Aquaplaning: ${w(m[1])}`;
+  if ((m = t.match(/^Il fenomeno (.+)$/i)))
+    return ru ? `Явление: ${w(m[1])}` : `The phenomenon of: ${w(m[1])}`;
+
+  // ── STRADE EXTRAURBANE / STRADE URBANE ───────────────────────────────
+  if ((m = t.match(/^Le strade extraurbane (.+)$/i)))
+    return ru ? `Загородные дороги: ${w(m[1])}` : `Rural roads: ${w(m[1])}`;
+  if ((m = t.match(/^Le strade urbane (.+)$/i)))
+    return ru ? `Городские дороги: ${w(m[1])}` : `Urban roads: ${w(m[1])}`;
+
+  // ── PROIETTORI / LUCI ABBAGLIANTI ─────────────────────────────────────
+  if ((m = t.match(/^L'uso dei proiettori (.+)$/i)))
+    return ru ? `Использование фар: ${w(m[1])}` : `Use of headlights: ${w(m[1])}`;
+  if ((m = t.match(/^I proiettori (.+)$/i)))
+    return ru ? `Фары: ${w(m[1])}` : `Headlights: ${w(m[1])}`;
+  if ((m = t.match(/^In caso di nebbia (.+)$/i)))
+    return ru ? `В условиях тумана: ${w(m[1])}` : `In foggy conditions: ${w(m[1])}`;
+  if ((m = t.match(/^In presenza di nebbia (.+)$/i)))
+    return ru ? `При наличии тумана: ${w(m[1])}` : `In the presence of fog: ${w(m[1])}`;
+
+  // ── AQUAPLANING / SULLA DISTANZA ──────────────────────────────────────
+  if ((m = t.match(/^Sulla distanza di sicurezza (.+)$/i)))
+    return ru ? `О дистанции безопасности: ${w(m[1])}` : `On the safe distance: ${w(m[1])}`;
+
+  // ── PER SMONTARE / PER SOSTITUIRE ────────────────────────────────────
+  if ((m = t.match(/^Per smontare (.+)$/i)))
+    return ru ? `Для снятия: ${w(m[1])}` : `To remove: ${w(m[1])}`;
+  if ((m = t.match(/^Per sostituire (.+)$/i)))
+    return ru ? `Для замены: ${w(m[1])}` : `To replace: ${w(m[1])}`;
+  if ((m = t.match(/^Per la sostituzione (.+)$/i)))
+    return ru ? `Для замены: ${w(m[1])}` : `For the replacement of: ${w(m[1])}`;
+
+  // ── IN UN SECONDO ─────────────────────────────────────────────────────
+  if ((m = t.match(/^In un secondo[,]? (.+)$/i)))
+    return ru ? `За одну секунду: ${w(m[1])}` : `In one second: ${w(m[1])}`;
+
+  // ── I TRICICLI ────────────────────────────────────────────────────────
+  if ((m = t.match(/^I tricicli (.+)$/i)))
+    return ru ? `Трёхколёсные транспортные средства: ${w(m[1])}` : `Three-wheeled vehicles: ${w(m[1])}`;
+  if ((m = t.match(/^I ciclomotori (.+)$/i)))
+    return ru ? `Мопеды: ${w(m[1])}` : `Mopeds: ${w(m[1])}`;
+  if ((m = t.match(/^I motocicli (.+)$/i)))
+    return ru ? `Мотоциклы: ${w(m[1])}` : `Motorcycles: ${w(m[1])}`;
+  if ((m = t.match(/^I motoveicoli (.+)$/i)))
+    return ru ? `Мототранспортные средства: ${w(m[1])}` : `Powered two-wheelers: ${w(m[1])}`;
+
+  // ── IN UN CENTRO / IN UN TUNNEL ───────────────────────────────────────
+  if ((m = t.match(/^In un centro abitato (.+)$/i)))
+    return ru ? `В населённом пункте: ${w(m[1])}` : `In a built-up area: ${w(m[1])}`;
+  if ((m = t.match(/^In un tunnel (.+)$/i)))
+    return ru ? `В тоннеле: ${w(m[1])}` : `In a tunnel: ${w(m[1])}`;
+  if ((m = t.match(/^In galleria (.+)$/i)))
+    return ru ? `В тоннеле: ${w(m[1])}` : `In a tunnel: ${w(m[1])}`;
+  if ((m = t.match(/^Nelle gallerie (.+)$/i)))
+    return ru ? `В тоннелях: ${w(m[1])}` : `In tunnels: ${w(m[1])}`;
+
+  // ── QUANDO LA CARREGGIATA ─────────────────────────────────────────────
+  if ((m = t.match(/^Quando la carreggiata (.+)$/i)))
+    return ru ? `Когда проезжая часть: ${w(m[1])}` : `When the carriageway: ${w(m[1])}`;
+
+  // ── AUTOCARRI / TRASPORTI ─────────────────────────────────────────────
+  if ((m = t.match(/^Autocarri[,]? (.+)$/i)))
+    return ru ? `Грузовые автомобили: ${w(m[1])}` : `Lorries: ${w(m[1])}`;
+  if ((m = t.match(/^Gli autoarticolati (.+)$/i)))
+    return ru ? `Автопоезда: ${w(m[1])}` : `Articulated lorries: ${w(m[1])}`;
+  if ((m = t.match(/^Gli autobus (.+)$/i)))
+    return ru ? `Автобусы: ${w(m[1])}` : `Buses: ${w(m[1])}`;
+
+  // ── IN PRESENZA DEL SEGNALE (with article) ───────────────────────────
+  if ((m = t.match(/^In presenza del segnale (.+)$/i)))
+    return ru ? `При наличии знака: ${w(m[1])}` : `In the presence of the sign: ${w(m[1])}`;
+  if ((m = t.match(/^In presenza dell'isola (.+)$/i)))
+    return ru ? `При наличии направляющего островка: ${w(m[1])}` : `In the presence of a traffic island: ${w(m[1])}`;
+
+  // ── IN UN CENTRO ABITATO (with comma) ────────────────────────────────
+  if ((m = t.match(/^In un centro abitato, (.+)$/i)))
+    return ru ? `В населённом пункте: ${w(m[1])}` : `In a built-up area: ${w(m[1])}`;
+
+  // ── SEGNALI LUMINOSI ──────────────────────────────────────────────────
+  if ((m = t.match(/^I segnali luminosi (.+)$/i)))
+    return ru ? `Световые сигналы: ${w(m[1])}` : `Light signals: ${w(m[1])}`;
+  if ((m = t.match(/^Il segnale luminoso (.+)$/i)))
+    return ru ? `Световой сигнал: ${w(m[1])}` : `The light signal: ${w(m[1])}`;
+  if ((m = t.match(/^Incontrando il semaforo (.+)$/i)))
+    return ru ? `При встрече со светофором: ${w(m[1])}` : `When encountering a traffic light: ${w(m[1])}`;
+  if ((m = t.match(/^Quando ad un incrocio (.+)$/i)))
+    return ru ? `Когда на перекрёстке: ${w(m[1])}` : `When at an intersection: ${w(m[1])}`;
+
+  // ── I SEGNI GIALLI / SEGNALETICA ────────────────────────────────────
+  if ((m = t.match(/^I segni gialli (.+)$/i)))
+    return ru ? `Жёлтые знаки: ${w(m[1])}` : `Yellow markings: ${w(m[1])}`;
+
+  // ── PER DIMINUIRE / PER NON COSTITUIRE ──────────────────────────────
+  if ((m = t.match(/^Per diminuire (.+)$/i)))
+    return ru ? `Для уменьшения: ${w(m[1])}` : `To reduce: ${w(m[1])}`;
+  if ((m = t.match(/^Per non costituire (.+)$/i)))
+    return ru ? `Чтобы не создавать: ${w(m[1])}` : `To avoid creating: ${w(m[1])}`;
+  if ((m = t.match(/^Per evitare (.+)$/i)))
+    return ru ? `Чтобы избежать: ${w(m[1])}` : `To avoid: ${w(m[1])}`;
+
+  // ── IL SUONO ───────────────────────────────────────────────────────
+  if ((m = t.match(/^Il suono (.+)$/i)))
+    return ru ? `Звуковой сигнал: ${w(m[1])}` : `The sound/horn: ${w(m[1])}`;
+
+  // ── IN UN PASSAGGIO ───────────────────────────────────────────────
+  if ((m = t.match(/^In un passaggio a livello (.+)$/i)))
+    return ru ? `На железнодорожном переезде: ${w(m[1])}` : `At a level crossing: ${w(m[1])}`;
+  if ((m = t.match(/^In un passaggio (.+)$/i)))
+    return ru ? `На переезде/переходе: ${w(m[1])}` : `At a crossing: ${w(m[1])}`;
+
+  // ── FANNO PARTE ────────────────────────────────────────────────────
+  if ((m = t.match(/^Fanno parte della carreggiata (.+)$/i)))
+    return ru ? `Являются частью проезжей части: ${w(m[1])}` : `Are part of the carriageway: ${w(m[1])}`;
+  if ((m = t.match(/^Fanno parte (.+)$/i)))
+    return ru ? `Являются частью: ${w(m[1])}` : `Are part of: ${w(m[1])}`;
+
+  // ── UNA ZONA ──────────────────────────────────────────────────────
+  if ((m = t.match(/^Una zona a traffico limitato (.+)$/i)))
+    return ru ? `Зона ограниченного движения: ${w(m[1])}` : `A restricted traffic zone: ${w(m[1])}`;
+  if ((m = t.match(/^Una zona (.+)$/i)))
+    return ru ? `Зона: ${w(m[1])}` : `A zone: ${w(m[1])}`;
+
+  // ── GIUNGENDO IN VICINANZA ────────────────────────────────────────
+  if ((m = t.match(/^Giungendo in vicinanza (.+)$/i)))
+    return ru ? `При приближении к: ${w(m[1])}` : `When approaching: ${w(m[1])}`;
+
+  // ── QUANDO VI SONO BAMBINI ────────────────────────────────────────
+  if ((m = t.match(/^Quando vi sono bambini (.+)$/i)))
+    return ru ? `Когда рядом дети: ${w(m[1])}` : `When children are present: ${w(m[1])}`;
+
+  // ── LA PERICOLOSITÀ ───────────────────────────────────────────────
+  if ((m = t.match(/^La pericolosità del sorpasso (.+)$/i)))
+    return ru ? `Опасность обгона: ${w(m[1])}` : `The danger of overtaking: ${w(m[1])}`;
+  if ((m = t.match(/^La pericolosità (.+)$/i)))
+    return ru ? `Опасность: ${w(m[1])}` : `The danger of: ${w(m[1])}`;
+
+  // ── IL BORDO / IL MARCIAPIEDE ─────────────────────────────────────
+  if ((m = t.match(/^Il bordo del marciapiede (.+)$/i)))
+    return ru ? `Край тротуара: ${w(m[1])}` : `The kerb: ${w(m[1])}`;
+  if ((m = t.match(/^Il marciapiede (.+)$/i)))
+    return ru ? `Тротуар: ${w(m[1])}` : `The pavement: ${w(m[1])}`;
+
+  // ── GLI ORGANI DI TRAINO ──────────────────────────────────────────
+  if ((m = t.match(/^Gli organi di traino (.+)$/i)))
+    return ru ? `Прицепное устройство: ${w(m[1])}` : `Towing equipment: ${w(m[1])}`;
+
+  // ── IL NUMERO DI PERSONE ──────────────────────────────────────────
+  if ((m = t.match(/^Il numero di persone (.+)$/i)))
+    return ru ? `Количество пассажиров: ${w(m[1])}` : `The number of passengers: ${w(m[1])}`;
+
+  // ── LE AUTOCARAVAN ────────────────────────────────────────────────
+  if ((m = t.match(/^Le autocaravan (.+)$/i)))
+    return ru ? `Автокемперы (кемпинг-кары): ${w(m[1])}` : `Motorhomes (campervans): ${w(m[1])}`;
+
+  // ── È OPPORTUNO / DURANTE ─────────────────────────────────────────
+  if ((m = t.match(/^È opportuno (.+)$/i)))
+    return ru ? `Рекомендуется: ${w(m[1])}` : `It is advisable to: ${w(m[1])}`;
+  if ((m = t.match(/^Durante le operazioni (.+)$/i)))
+    return ru ? `Во время операций: ${w(m[1])}` : `During operations: ${w(m[1])}`;
+  if ((m = t.match(/^Durante la fermata (.+)$/i)))
+    return ru ? `Во время остановки: ${w(m[1])}` : `During a stop: ${w(m[1])}`;
+
+  // ── LA PRESSIONE / IL SOVRACCARICO ───────────────────────────────
+  if ((m = t.match(/^La pressione di gonfiaggio (.+)$/i)))
+    return ru ? `Давление в шинах: ${w(m[1])}` : `Tyre inflation pressure: ${w(m[1])}`;
+  if ((m = t.match(/^Il sovraccarico (.+)$/i)))
+    return ru ? `Перегрузка: ${w(m[1])}` : `Overloading: ${w(m[1])}`;
+
+  // ── CHI INTENDE CAMBIARE ──────────────────────────────────────────
+  if ((m = t.match(/^Chi intende cambiare corsia (.+)$/i)))
+    return ru ? `Водитель, намеревающийся сменить полосу: ${w(m[1])}` : `A driver intending to change lane: ${w(m[1])}`;
+  if ((m = t.match(/^Chi intende (.+)$/i)))
+    return ru ? `Водитель, намеревающийся: ${w(m[1])}` : `A driver intending to: ${w(m[1])}`;
+
+  // ── NELLE AREE DI SERVIZIO ────────────────────────────────────────
+  if ((m = t.match(/^Nelle aree di servizio (.+)$/i)))
+    return ru ? `На площадках отдыха: ${w(m[1])}` : `At service areas: ${w(m[1])}`;
+  if ((m = t.match(/^Nelle aree (.+)$/i)))
+    return ru ? `В зонах: ${w(m[1])}` : `In areas: ${w(m[1])}`;
+
+  // ── GENERIC CATCHALLS ────────────────────────────────────────────────
+  if ((m = t.match(/^L'(.+)$/i)))
+    return ru ? `${w(m[1])}` : `${w(m[1])}`;
+  if ((m = t.match(/^Lo (.+)$/i)))
+    return ru ? `${w(m[1])}` : `${w(m[1])}`;
+
+  // ── FALLBACK: show original Italian ─────────────────────────────────
+  return t;
 }
+
+
 
 function tr(key, vars) {
   const lang = T[currentLang] || T.ru;
