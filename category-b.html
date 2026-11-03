@@ -42,7 +42,9 @@
         position: sticky; top: 0; z-index: 100;
         box-shadow: var(--shadow); }
   nav .logo { font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 6px; }
-  nav .logo span { color: var(--green); }
+  nav .logo .w-studia  { color: var(--text); }
+  nav .logo .w-patente { color: #16a34a; }
+  nav .logo .w-tld     { color: var(--muted); font-weight: 500; font-size: 15px; }
   nav .logo .cat-label { background: var(--green); color: #000; font-size: 12px; font-weight: 800; padding: 2px 7px; border-radius: 6px; line-height: 1.4; }
   .back-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 18px; text-decoration: none; transition: 0.15s; flex-shrink: 0; }
   .back-btn:hover { background: var(--border); }
@@ -296,7 +298,7 @@
 
 <nav>
   <a href="index.html" class="back-btn" id="back-btn" title="Выбор категории">←</a>
-  <div class="logo">Studia<span>patente</span> <span class="cat-label">B</span></div>
+  <div class="logo"><span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span> <span class="cat-label">B</span></div>
   <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">☀️</button>
   <div class="lang-switcher" id="lang-switcher">
     <button class="lang-btn" id="lang-it" onclick="setLang('it')">IT</button>
