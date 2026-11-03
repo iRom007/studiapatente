@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studiapatente — Категория B · Автомобиль</title>
+<meta name="description" content="6832 вопроса официальной базы MIT для категории B. Подготовка к итальянским правам на русском, итальянском и английском языках.">
+<link rel="canonical" href="https://studiapatente.it/category-b.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studiapatente.it/category-b.html">
+<meta property="og:title" content="StudiaPatente — Категория B · Подготовка к экзамену">
+<meta property="og:description" content="6832 вопроса категории B из официальной базы MIT. Тренировка по темам и симуляция экзамена.">
+<meta property="og:image" content="https://studiapatente.it/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<!-- Anti-FOUC: применяем тему до рендера страницы -->
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
 <style>
   /* === DARK THEME (default) === */
   :root, [data-theme="dark"] {
@@ -18,7 +33,7 @@
     --text: #e2e8f0;
     --muted: #94a3b8;
     --premium: #7c3aed;
-    --theme-icon: '☀️';
+    --theme-icon: '☀';
     --shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
   /* === LIGHT THEME === */
@@ -29,7 +44,7 @@
     --border: #cbd5e1;
     --text: #0f172a;
     --muted: #64748b;
-    --theme-icon: '🌙';
+    --theme-icon: '☾';
     --shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -181,6 +196,10 @@
   .back-btn:hover { background: var(--card); }
   .quiz-title { font-weight: 600; flex: 1; font-size: 14px; }
   .q-counter { color: var(--muted); font-size: 13px; white-space: nowrap; }
+  .exam-timer { font-size: 13px; font-weight: 700; color: var(--green); white-space: nowrap; }
+  .exam-timer.warn { color: var(--orange, #f97316); }
+  .exam-timer.danger { color: var(--red); animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0.4; } }
   .progress-bar-wrap { background: var(--border); border-radius: 4px; height: 5px;
     margin-bottom: 18px; overflow: hidden; }
   .progress-bar { height: 100%; background: var(--green); transition: width 0.3s; }
@@ -299,7 +318,7 @@
 <nav>
   <a href="index.html" class="back-btn" id="back-btn" title="Выбор категории">←</a>
   <div class="logo"><span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span> <span class="cat-label">B</span></div>
-  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">☀️</button>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">☀</button>
   <div class="lang-switcher" id="lang-switcher">
     <button class="lang-btn" id="lang-it" onclick="setLang('it')">IT</button>
     <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
@@ -377,6 +396,7 @@
     <button class="back-btn" id="back-btn" onclick="goHome()">← Назад</button>
     <div class="quiz-title" id="quiz-title">Тема</div>
     <div class="q-counter" id="q-counter">1 / 30</div>
+    <div class="exam-timer" id="exam-timer" style="display:none">⏱ <span id="timer-display">30:00</span></div>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
 
@@ -1587,11 +1607,10 @@ function saveUsage(u) {
   try { localStorage.setItem('usage', JSON.stringify(u)); } catch(e) {}
 }
 
-// Premium flag — in production: check subscription status
-let isPremium = true; // TEST MODE — full access
+// Premium flag — set to true by checkRenewal() if active subscription
+let isPremium = false;
 
 function canAskQuestion() {
-  return true; // TEST MODE
   return getUsage().questions < FREE_DAILY;
 }
 
@@ -1604,7 +1623,6 @@ function useQuestion() {
 }
 
 function canStartExam() {
-  return true; // TEST MODE
   return getUsage().exams < FREE_EXAMS;
 }
 
@@ -1624,7 +1642,10 @@ function updateDailyUI() {
     el.textContent = remaining;
     el.className = 'count ' + (remaining > 10 ? 'ok' : remaining > 3 ? 'warn' : 'out');
   }
-  if (bannerEl) bannerEl.textContent = `осталось ${remaining}`;
+  if (bannerEl) {
+    const label = currentLang === 'it' ? `rimasti ${remaining}` : currentLang === 'en' ? `${remaining} left` : `осталось ${remaining}`;
+    bannerEl.textContent = label;
+  }
 }
 
 // ===== PROGRESS =====
@@ -1838,7 +1859,7 @@ function startExam() {
   useExam();
   const qs = shuffleArr([...QUESTIONS]).slice(0, 30);
   const examTitle = currentLang === 'it' ? '🎯 Simulazione esame' : currentLang === 'en' ? '🎯 Exam simulation' : '🎯 Пробный экзамен';
-  beginSession(qs, examTitle);
+  beginSession(qs, examTitle, true); // true = isExam → запускает таймер 30 мин
 }
 
 function startExamRandom() {
@@ -1847,12 +1868,54 @@ function startExamRandom() {
   beginSession(qs, practiceTitle);
 }
 
-function beginSession(qs, title) {
-  session = { qs, idx: 0, correct: 0, wrong: 0, started: Date.now(), title, limitHit: false };
+// ===== EXAM TIMER =====
+let examTimerInterval = null;
+const EXAM_DURATION = 30 * 60; // 30 minutes in seconds
+
+function startExamTimer() {
+  clearExamTimer();
+  let remaining = EXAM_DURATION;
+  const timerEl = document.getElementById('exam-timer');
+  const displayEl = document.getElementById('timer-display');
+  if (!timerEl || !displayEl) return;
+  timerEl.style.display = '';
+  timerEl.className = 'exam-timer';
+
+  function updateTimer() {
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    displayEl.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    if (remaining <= 60) {
+      timerEl.className = 'exam-timer danger';
+    } else if (remaining <= 300) {
+      timerEl.className = 'exam-timer warn';
+    }
+    if (remaining <= 0) {
+      clearExamTimer();
+      // Time's up — force show stats
+      showStats(true);
+      return;
+    }
+    remaining--;
+  }
+  updateTimer();
+  examTimerInterval = setInterval(updateTimer, 1000);
+}
+
+function clearExamTimer() {
+  if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+  const timerEl = document.getElementById('exam-timer');
+  if (timerEl) timerEl.style.display = 'none';
+}
+
+function beginSession(qs, title, isExam) {
+  clearExamTimer();
+  session = { qs, idx: 0, correct: 0, wrong: 0, started: Date.now(), title, limitHit: false, isExam: !!isExam };
   document.getElementById('quiz-title').textContent = title;
   document.getElementById('quiz-content').style.display = '';
   document.getElementById('limit-overlay').style.display = 'none';
   showScreen('s-quiz');
+  if (isExam) startExamTimer();
   renderQ();
 }
 
@@ -1882,7 +1945,8 @@ function renderQ() {
   const sv = document.getElementById('sign-visual');
   if (q.img) {
     const imgBase = 'https://raw.githubusercontent.com/iRom007/studiapatente/main';
-    sv.innerHTML = `<img src="${imgBase}${q.img}" alt="Рисунок к вопросу" loading="lazy" onerror="this.parentElement.classList.add('empty')">`;
+    const imgAlt = currentLang === 'it' ? 'Immagine alla domanda' : currentLang === 'en' ? 'Question image' : 'Рисунок к вопросу';
+    sv.innerHTML = `<img src="${imgBase}${q.img}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.classList.add('empty')">`;
     sv.classList.remove('empty');
   } else {
     sv.innerHTML = '';
@@ -1970,8 +2034,14 @@ function nextQ() {
   else renderQ();
 }
 
-function showStats() {
+function showStats(timeUp) {
+  clearExamTimer();
   const total = session.qs.length;
+  // If time ran out, count remaining as wrong
+  if (timeUp && session.isExam) {
+    const answered = session.correct + session.wrong;
+    session.wrong += Math.max(0, total - answered);
+  }
   const pct = Math.round(session.correct / total * 100);
   const mins = Math.round((Date.now()-session.started)/60000);
   const pass = pct >= 87; // 26/30
@@ -1986,7 +2056,10 @@ function showStats() {
   document.getElementById('r-sub').textContent = pass ? subPass : subFail;
   document.getElementById('r-correct').textContent = session.correct;
   document.getElementById('r-wrong').textContent = session.wrong;
-  document.getElementById('r-time').textContent = mins || '<1';
+  const timeLabel = timeUp
+    ? (currentLang === 'it' ? '⏱ Tempo scaduto' : currentLang === 'en' ? '⏱ Time up' : '⏱ Время вышло')
+    : (mins || '<1');
+  document.getElementById('r-time').textContent = timeLabel;
   showScreen('s-stats');
 }
 
@@ -1994,7 +2067,7 @@ function repeatSession() {
   beginSession(shuffleArr([...session.qs]), session.title);
 }
 
-function goHome() { renderHome(); showScreen('s-home'); }
+function goHome() { clearExamTimer(); renderHome(); showScreen('s-home'); }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -2003,7 +2076,7 @@ function showScreen(id) {
 
 // ===== PREMIUM MODAL =====
 let selectedPrice = 'quarter';
-function showPremiumModal(source) { return; // TEST MODE — disabled
+function showPremiumModal(source) {
   document.getElementById('premium-modal').classList.add('show');
   updateCtaBtn();
 }
@@ -2032,7 +2105,7 @@ function toggleTheme() {
   const isDark = html.getAttribute('data-theme') === 'dark';
   const next = isDark ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
-  document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-btn').textContent = isDark ? '☾' : '☀';
   try { localStorage.setItem('theme', next); } catch(e) {}
 }
 
@@ -2040,7 +2113,7 @@ function toggleFont() {
   const body = document.body;
   const isLg = body.classList.toggle('font-lg');
   const btn = document.getElementById('font-btn');
-  if (btn) btn.textContent = isLg ? 'Аа▲' : 'Аа';
+  if (btn) btn.textContent = isLg ? 'Aa+' : 'Aa';
   try { localStorage.setItem('fontLg', isLg ? '1' : '0'); } catch(e) {}
 }
 // Restore saved theme
@@ -2049,7 +2122,7 @@ function toggleFont() {
     const saved = localStorage.getItem('theme');
     if (saved === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
-      document.getElementById('theme-btn').textContent = '🌙';
+      document.getElementById('theme-btn').textContent = '☾';
     }
   } catch(e) {}
 })();
@@ -2060,7 +2133,7 @@ function toggleFont() {
     if (localStorage.getItem('fontLg') === '1') {
       document.body.classList.add('font-lg');
       const btn = document.getElementById('font-btn');
-      if (btn) btn.textContent = 'Аа▲';
+      if (btn) btn.textContent = 'Aa+';
     }
   } catch(e) {}
 })();
@@ -2069,7 +2142,7 @@ function toggleFont() {
 // Premium expiry stored as ISO date string in localStorage key 'premium_expiry'
 // In production: set this from backend on purchase
 function checkRenewal() {
-  isPremium = true; // TEST MODE — always premium
+  isPremium = false; // default: free tier
   try {
     const expiry = localStorage.getItem('premium_expiry');
     if (!expiry) return;
@@ -2098,6 +2171,7 @@ let currentLang = localStorage.getItem('lang') || 'ru';
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang; // BUG-06: update html lang attr for SEO/accessibility
   document.body.className = document.body.className.replace(/lang-\w+/g, '').trim();
   document.body.classList.add('lang-' + lang);
   document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');

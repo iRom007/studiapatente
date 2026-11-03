@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studiapatente — Подготовка к итальянским правам</title>
 <meta name="description" content="Подготовка к экзамену на итальянские водительские права. Категории A1, A2, A, B. Вопросы на русском, итальянском и английском языках.">
+<link rel="canonical" href="https://studiapatente.it/">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studiapatente.it/">
+<meta property="og:title" content="StudiaPatente — Подготовка к итальянским правам">
+<meta property="og:description" content="6832 вопроса официальной базы MIT. Категории A, A1, A2, B. Русский · Italiano · English.">
+<meta property="og:image" content="https://studiapatente.it/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<!-- Anti-FOUC: применяем тему до рендера страницы -->
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
 <style>
   /* ===== TOKENS ===== */
   :root, [data-theme="dark"] {
@@ -837,7 +851,7 @@ let lang = 'ru';
 
 function setLang(l) {
   lang = l;
-  try { localStorage.setItem('sp_home_lang', l); } catch(e) {}
+  try { localStorage.setItem('lang', l); } catch(e) {}
   applyLang();
 }
 
@@ -891,7 +905,7 @@ function toggleTheme() {
   const newTheme = isDark ? 'light' : 'dark';
   html.setAttribute('data-theme', newTheme);
   document.getElementById('theme-btn').textContent = isDark ? '☾' : '☀';
-  try { localStorage.setItem('sp_theme', newTheme); } catch(e) {}
+  try { localStorage.setItem('theme', newTheme); } catch(e) {}
 }
 
 // ===== FONT SIZE =====
@@ -902,7 +916,7 @@ function cycleFont() {
   fontIdx = (fontIdx + 1) % FONT_SIZES.length;
   document.body.style.fontSize = FONT_SIZES[fontIdx] + 'px';
   document.getElementById('font-size-btn').textContent = FONT_LABELS[fontIdx];
-  try { localStorage.setItem('sp_font', fontIdx); } catch(e) {}
+  try { localStorage.setItem('sp_font', fontIdx); localStorage.setItem('fontLg', fontIdx > 0 ? '1' : '0'); } catch(e) {}
 }
 
 // ===== MODAL =====
@@ -925,7 +939,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 (function() {
   // Restore theme
   try {
-    const t = localStorage.getItem('sp_theme');
+    const t = localStorage.getItem('theme');
     if (t) {
       document.documentElement.setAttribute('data-theme', t);
       document.getElementById('theme-btn').textContent = t === 'light' ? '☾' : '☀';
@@ -942,9 +956,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
     }
   } catch(e) {}
 
-  // Restore lang — inherit from category-b.html if visited
+  // Restore lang — unified key 'lang' shared with category-b.html
   try {
-    const saved = localStorage.getItem('lang') || localStorage.getItem('sp_home_lang') || 'ru';
+    const saved = localStorage.getItem('lang') || 'ru';
     lang = ['ru','it','en'].includes(saved) ? saved : 'ru';
   } catch(e) {}
 
