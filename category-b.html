@@ -583,6 +583,15 @@
         <div class="t-sub" id="th-tips-sub">лайфхаки и стратегии</div>
       </div>
     </div>
+    <!-- commands -->
+    <div class="theory-card wide" onclick="showTheoryCommands()">
+      <span class="t-icon">🎤</span>
+      <div class="t-info">
+        <div class="t-name" id="th-commands-name">Команды инструктора</div>
+        <div class="t-sub" id="th-commands-sub">Comandi dell'esaminatore · фразы на практическом экзамене · с озвучкой 🔊</div>
+      </div>
+      <span style="color:var(--muted);font-size:16px">›</span>
+    </div>
   </div>
 
   <!-- TOPICS -->
@@ -4050,51 +4059,211 @@ const THEORY_HANDBOOK = [
 ];
 
 const THEORY_GLOSSARY = [
-  { it: 'Carreggiata', ru: 'Проезжая часть дороги', en: 'Carriageway' },
-  { it: 'Corsia', ru: 'Полоса движения', en: 'Lane' },
-  { it: 'Precedenza', ru: 'Преимущество / приоритет', en: 'Right of way' },
-  { it: 'Sorpasso', ru: 'Обгон', en: 'Overtaking' },
-  { it: 'Distanza di sicurezza', ru: 'Безопасная дистанция', en: 'Safe following distance' },
-  { it: 'Spazio di frenatura', ru: 'Тормозной путь', en: 'Braking distance' },
-  { it: 'Spazio di arresto', ru: 'Остановочный путь', en: 'Stopping distance' },
-  { it: 'Fermata', ru: 'Кратковременная остановка (≤1 мин, водитель в ТС)', en: 'Brief stop (≤1 min, driver present)' },
-  { it: 'Sosta', ru: 'Стоянка', en: 'Parking / prolonged stop' },
-  { it: 'Svolta', ru: 'Поворот', en: 'Turn' },
-  { it: 'Inversione di marcia', ru: 'Разворот', en: 'U-turn' },
-  { it: 'Incrocio', ru: 'Перекрёсток', en: 'Intersection / crossroads' },
-  { it: 'Rotatoria', ru: 'Кольцевой перекрёсток', en: 'Roundabout' },
-  { it: 'Passaggio a livello', ru: 'Железнодорожный переезд', en: 'Level crossing' },
-  { it: 'Autostrada', ru: 'Автомагистраль', en: 'Motorway / highway' },
-  { it: 'Strada extraurbana principale', ru: 'Главная внегородская дорога', en: 'Main extra-urban road' },
-  { it: 'Centro abitato', ru: 'Населённый пункт', en: 'Built-up area' },
-  { it: 'Aderenza', ru: 'Сцепление с дорогой', en: 'Road grip / traction' },
-  { it: 'Aquaplaning', ru: 'Аквапланирование', en: 'Aquaplaning' },
-  { it: 'ABS', ru: 'Антиблокировочная система тормозов', en: 'Anti-lock braking system' },
-  { it: 'ESP / ESC', ru: 'Система курсовой устойчивости', en: 'Electronic stability control' },
-  { it: 'Cintura di sicurezza', ru: 'Ремень безопасности', en: 'Seatbelt' },
-  { it: 'Airbag', ru: 'Подушка безопасности', en: 'Airbag' },
-  { it: 'Pneumatico', ru: 'Шина / покрышка', en: 'Tyre' },
-  { it: 'Ammortizzatore', ru: 'Амортизатор', en: 'Shock absorber' },
-  { it: 'Revisione (ITV)', ru: 'Технический осмотр', en: 'Vehicle inspection / MOT' },
-  { it: 'Patente a punti', ru: 'Балльная система прав', en: 'Points-based licence' },
-  { it: 'Tasso alcolemico', ru: 'Уровень алкоголя в крови', en: 'Blood alcohol level' },
-  { it: 'Nebbia', ru: 'Туман', en: 'Fog' },
-  { it: 'Abbaglianti', ru: 'Дальний свет фар', en: 'High beams / full beam' },
-  { it: 'Anabbaglianti', ru: 'Ближний свет фар', en: 'Low beams / dipped headlights' },
-  { it: 'Freccia / indicatore', ru: 'Указатель поворота', en: 'Turn signal / indicator' },
-  { it: 'Triangolo di emergenza', ru: 'Аварийный треугольник', en: 'Warning triangle' },
-  { it: 'Giubbotto catarifrangente', ru: 'Светоотражающий жилет', en: 'Reflective vest / hi-vis jacket' },
+  { it: 'Carreggiata', ru: 'Проезжая часть', en: 'Carriageway',
+    def_it: 'Parte della strada normalmente destinata alla circolazione dei veicoli.',
+    def_ru: 'Часть дороги, предназначенная для движения транспортных средств.',
+    def_en: 'The part of the road normally used for vehicle traffic.' },
+  { it: 'Corsia', ru: 'Полоса движения', en: 'Lane',
+    def_it: 'Parte della carreggiata destinata al transito di una sola fila di veicoli.',
+    def_ru: 'Часть проезжей части для движения одного ряда транспортных средств.',
+    def_en: 'A strip of the carriageway wide enough for a single line of vehicles.' },
+  { it: 'Precedenza', ru: 'Преимущество проезда', en: 'Right of way',
+    def_it: 'Diritto di un utente della strada di transitare prima degli altri.',
+    def_ru: 'Право участника дорожного движения проехать раньше других.',
+    def_en: 'The right of a road user to proceed before others.' },
+  { it: 'Sorpasso', ru: 'Обгон', en: 'Overtaking',
+    def_it: 'Manovra con cui un veicolo supera un altro veicolo che lo precede nella stessa corsia.',
+    def_ru: 'Манёвр, при котором одно ТС обгоняет другое, движущееся впереди в той же полосе.',
+    def_en: 'A manoeuvre in which a vehicle passes another vehicle ahead in the same lane.' },
+  { it: 'Distanza di sicurezza', ru: 'Безопасная дистанция', en: 'Safe following distance',
+    def_it: 'Spazio necessario per fermarsi senza investire il veicolo che precede in caso di frenata improvvisa.',
+    def_ru: 'Расстояние, необходимое для остановки без столкновения с впереди идущим ТС при экстренном торможении.',
+    def_en: 'The gap needed to stop safely if the vehicle ahead brakes suddenly.' },
+  { it: 'Spazio di frenatura', ru: 'Тормозной путь', en: 'Braking distance',
+    def_it: 'Spazio percorso dal veicolo dal momento in cui vengono azionati i freni fino all\'arresto completo.',
+    def_ru: 'Расстояние, пройденное ТС с момента нажатия на тормоз до полной остановки.',
+    def_en: 'The distance a vehicle travels from the moment the brakes are applied until it stops.' },
+  { it: 'Spazio di arresto', ru: 'Остановочный путь', en: 'Stopping distance',
+    def_it: 'Somma dello spazio di reazione e dello spazio di frenatura.',
+    def_ru: 'Сумма пути реакции и тормозного пути.',
+    def_en: 'The sum of the reaction distance and the braking distance.' },
+  { it: 'Fermata', ru: 'Остановка', en: 'Brief stop',
+    def_it: 'Sosta di breve durata (non superiore a un minuto) per far salire o scendere persone o caricare/scaricare cose, con conducente presente.',
+    def_ru: 'Кратковременное прекращение движения (не более 1 мин) для посадки/высадки, при присутствии водителя.',
+    def_en: 'A brief stop (≤1 min) to pick up or drop off people or goods, driver remaining present.' },
+  { it: 'Sosta', ru: 'Стоянка', en: 'Parking',
+    def_it: 'Sosta di durata superiore a un minuto, oppure fermata in assenza del conducente.',
+    def_ru: 'Остановка продолжительностью более 1 минуты или остановка в отсутствие водителя.',
+    def_en: 'Any stop longer than one minute, or a stop with the driver absent.' },
+  { it: 'Svolta', ru: 'Поворот', en: 'Turn',
+    def_it: 'Manovra con cui il veicolo cambia direzione di marcia verso destra o sinistra.',
+    def_ru: 'Манёвр изменения направления движения направо или налево.',
+    def_en: 'A manoeuvre in which the vehicle changes its direction of travel left or right.' },
+  { it: 'Inversione di marcia', ru: 'Разворот', en: 'U-turn',
+    def_it: 'Manovra con cui il veicolo inverte il senso di marcia.',
+    def_ru: 'Манёвр, при котором ТС меняет направление движения на противоположное.',
+    def_en: 'A manoeuvre in which the vehicle reverses its direction of travel.' },
+  { it: 'Incrocio', ru: 'Перекрёсток', en: 'Intersection',
+    def_it: 'Punto in cui due o più strade si intersecano o si immettono l\'una nell\'altra.',
+    def_ru: 'Место пересечения или соединения двух и более дорог.',
+    def_en: 'A point where two or more roads cross or meet.' },
+  { it: 'Rotatoria', ru: 'Кольцевой перекрёсток', en: 'Roundabout',
+    def_it: 'Incrocio con circolazione rotatoria attorno a un\'isola centrale; i veicoli in rotatoria hanno la precedenza.',
+    def_ru: 'Перекрёсток с круговым движением вокруг центрального островка; ТС на кольце имеют приоритет.',
+    def_en: 'An intersection with circular traffic around a central island; vehicles on the roundabout have priority.' },
+  { it: 'Passaggio a livello', ru: 'Железнодорожный переезд', en: 'Level crossing',
+    def_it: 'Intersezione tra una strada e una linea ferroviaria sullo stesso piano.',
+    def_ru: 'Пересечение дороги и железнодорожных путей на одном уровне.',
+    def_en: 'A crossing where a road intersects a railway track at the same level.' },
+  { it: 'Autostrada', ru: 'Автомагистраль', en: 'Motorway',
+    def_it: 'Strada a carreggiate separate con almeno due corsie per senso di marcia, senza incroci a raso e con accesso limitato.',
+    def_ru: 'Дорога с разделёнными проезжими частями, не менее двух полос в каждом направлении, без одноуровневых пересечений.',
+    def_en: 'A divided road with at least two lanes in each direction, no at-grade crossings, and controlled access.' },
+  { it: 'Centro abitato', ru: 'Населённый пункт', en: 'Built-up area',
+    def_it: 'Insieme di edifici con strade di collegamento delimitate da appositi segnali di inizio e fine.',
+    def_ru: 'Застроенная территория, ограниченная соответствующими знаками начала и конца.',
+    def_en: 'A group of buildings with connecting roads, delimited by the appropriate start and end signs.' },
+  { it: 'Aderenza', ru: 'Сцепление с дорогой', en: 'Road grip',
+    def_it: 'Forza di attrito tra gli pneumatici e il fondo stradale che permette al veicolo di frenare, accelerare e curvare.',
+    def_ru: 'Сила трения между шинами и дорогой, обеспечивающая торможение, разгон и прохождение поворотов.',
+    def_en: 'The friction between tyres and road surface that enables braking, acceleration and cornering.' },
+  { it: 'Aquaplaning', ru: 'Аквапланирование', en: 'Aquaplaning',
+    def_it: 'Fenomeno per cui gli pneumatici perdono il contatto con l\'asfalto a causa di uno strato d\'acqua interposto.',
+    def_ru: 'Явление, при котором шины теряют контакт с асфальтом из-за слоя воды между ними.',
+    def_en: 'A phenomenon where tyres lose contact with the road due to a layer of water between them.' },
+  { it: 'ABS', ru: 'Антиблокировочная система', en: 'Anti-lock braking system',
+    def_it: 'Sistema che impedisce il bloccaggio delle ruote durante la frenata, mantenendo la sterzabilità.',
+    def_ru: 'Система, предотвращающая блокировку колёс при торможении и сохраняющая управляемость.',
+    def_en: 'A system that prevents wheel lock-up during braking, maintaining steering control.' },
+  { it: 'Cintura di sicurezza', ru: 'Ремень безопасности', en: 'Seatbelt',
+    def_it: 'Dispositivo di ritenuta che trattiene il conducente e i passeggeri al sedile in caso di urto.',
+    def_ru: 'Удерживающее устройство, которое фиксирует водителя и пассажиров на сиденье при столкновении.',
+    def_en: 'A restraint device that keeps the driver and passengers in their seat during a collision.' },
+  { it: 'Patente a punti', ru: 'Балльная система прав', en: 'Points-based licence',
+    def_it: 'Sistema in cui il titolare della patente dispone di un punteggio iniziale (20 punti) che diminuisce a ogni infrazione.',
+    def_ru: 'Система, при которой водитель начинает с 20 баллов, которые уменьшаются при каждом нарушении.',
+    def_en: 'A system where the licence holder starts with 20 points, which decrease with each offence.' },
+  { it: 'Tasso alcolemico', ru: 'Уровень алкоголя в крови', en: 'Blood alcohol level',
+    def_it: 'Quantità di alcol presente nel sangue, misurata in grammi per litro (g/l). Il limite legale è 0,5 g/l.',
+    def_ru: 'Количество алкоголя в крови, измеряемое в г/л. Законный предел — 0,5 г/л.',
+    def_en: 'The amount of alcohol in the blood, measured in grams per litre. The legal limit is 0.5 g/l.' },
+  { it: 'Abbaglianti', ru: 'Дальний свет фар', en: 'High beams',
+    def_it: 'Fari anteriori ad alta intensità che illuminano a distanza. Vietati in centro abitato e con veicoli in senso opposto.',
+    def_ru: 'Мощные передние фары дальнего света. Запрещены в населённых пунктах и при встречном транспорте.',
+    def_en: 'High-intensity headlights for long-range visibility. Prohibited in built-up areas and with oncoming traffic.' },
+  { it: 'Anabbaglianti', ru: 'Ближний свет фар', en: 'Low beams',
+    def_it: 'Fari anteriori a bassa intensità. Obbligatori in galleria, in centro abitato di notte e con scarsa visibilità.',
+    def_ru: 'Передние фары ближнего света. Обязательны в тоннелях, ночью в населённых пунктах и при плохой видимости.',
+    def_en: 'Low-intensity headlights. Mandatory in tunnels, at night in built-up areas and in poor visibility.' },
+  { it: 'Triangolo di emergenza', ru: 'Аварийный треугольник', en: 'Warning triangle',
+    def_it: 'Segnale rifrangente a forma triangolare da posizionare a 50 m dal veicolo in panne su strade ordinarie.',
+    def_ru: 'Светоотражающий треугольник, устанавливаемый в 50 м от сломавшегося ТС на обычных дорогах.',
+    def_en: 'A reflective triangular sign placed 50 m behind a broken-down vehicle on ordinary roads.' },
 ];
 
 const THEORY_FINES = [
-  { icon: '📱', name: { ru: 'Телефон за рулём', en: 'Phone while driving' }, detail: '€250–1.000', desc: { ru: 'Первый раз. При повторном — немедленное лишение прав', en: 'First offence. Repeat: immediate licence suspension' } },
-  { icon: '🍺', name: { ru: 'Алкоголь > 0,5 г/л', en: 'Alcohol > 0.5 g/l' }, detail: '€543–2.170 + лишение', desc: { ru: 'Для новичков (до 3 лет) и профессионалов — нулевой лимит', en: 'For new drivers (<3 years) and professionals: zero tolerance' } },
-  { icon: '🚀', name: { ru: 'Превышение > 40 км/ч', en: 'Speeding > 40 km/h' }, detail: '€543–2.170 + -10 баллов', desc: { ru: 'Превышение > 60 км/ч — лишение прав до 12 месяцев', en: 'Exceeding limit by >60 km/h: suspension up to 12 months' } },
-  { icon: '🔴', name: { ru: 'Проезд на красный', en: 'Running a red light' }, detail: '€167–665 + -6 баллов', desc: { ru: 'При ДТП — уголовная ответственность', en: 'If accident caused: criminal liability' } },
-  { icon: '🅿️', name: { ru: 'Стоянка под знаком', en: 'Parking under sign' }, detail: '€42–173', desc: { ru: 'На месте для инвалидов — €80–318', en: 'Disabled bay: €80–318' } },
-  { icon: '💺', name: { ru: 'Непристёгнутый ремень', en: 'No seatbelt' }, detail: '€83–333', desc: { ru: 'Штраф на водителе, даже если не пристёгнут пассажир', en: 'Driver fined even if it\'s a passenger who isn\'t belted' } },
-  { icon: '🌙', name: { ru: 'Нет ближнего света', en: 'No headlights on' }, detail: '€42–173', desc: { ru: 'Обязателен в населённых пунктах и ночью', en: 'Mandatory in built-up areas and at night' } },
-  { icon: '⭐', name: { ru: 'Потеря всех баллов', en: 'All points lost' }, detail: 'Экзамен заново', desc: { ru: 'Новые водители начинают с 18 баллов, остальные — с 20', en: 'New drivers start with 18 points, others with 20' } },
+  { icon: '📱',
+    it: 'Uso del cellulare alla guida',
+    name: { ru: 'Телефон за рулём', en: 'Phone while driving' },
+    detail: '€250–1.000 · −5 punti',
+    desc_it: 'In caso di recidiva nel biennio: sospensione immediata della patente da 1 a 3 mesi.',
+    desc: { ru: 'При повторном нарушении в течение 2 лет — немедленное лишение прав на 1–3 месяца.', en: 'Repeat offence within 2 years: immediate licence suspension for 1–3 months.' } },
+  { icon: '🍺',
+    it: 'Guida in stato di ebbrezza (oltre 0,5 g/l)',
+    name: { ru: 'Алкоголь > 0,5 г/л', en: 'Alcohol > 0.5 g/l' },
+    detail: '€543–2.170 · −10 punti · sospensione',
+    desc_it: 'Per neopatentati (nei 3 anni dal rilascio), minori di 21 anni e conducenti professionali: tasso zero (0,0 g/l).',
+    desc: { ru: 'Для новичков (первые 3 года), водителей до 21 года и профессиональных водителей — нулевой лимит (0,0 г/л).', en: 'New drivers (first 3 years), under-21s and professional drivers: zero tolerance (0.0 g/l).' } },
+  { icon: '🚀',
+    it: 'Eccesso di velocità (oltre 40 km/h)',
+    name: { ru: 'Превышение > 40 км/ч', en: 'Speeding > 40 km/h' },
+    detail: '€543–2.170 · −10 punti',
+    desc_it: 'Superamento di oltre 60 km/h: sospensione della patente da 6 a 12 mesi.',
+    desc: { ru: 'Превышение более чем на 60 км/ч: лишение прав на 6–12 месяцев.', en: 'Exceeding the limit by more than 60 km/h: suspension for 6–12 months.' } },
+  { icon: '🔴',
+    it: 'Passaggio con semaforo rosso',
+    name: { ru: 'Проезд на красный', en: 'Running a red light' },
+    detail: '€167–665 · −6 punti',
+    desc_it: 'Se il comportamento causa un incidente stradale, si configura il reato penale.',
+    desc: { ru: 'Если нарушение стало причиной ДТП — уголовная ответственность.', en: 'If the behaviour causes an accident, criminal liability applies.' } },
+  { icon: '💺',
+    it: 'Mancato uso della cintura di sicurezza',
+    name: { ru: 'Непристёгнутый ремень', en: 'No seatbelt' },
+    detail: '€83–333 · −5 punti',
+    desc_it: 'La multa è a carico del conducente anche se è un passeggero a non indossare la cintura.',
+    desc: { ru: 'Штраф налагается на водителя, даже если не пристёгнут пассажир.', en: 'The driver is fined even if it is a passenger who is not wearing the seatbelt.' } },
+  { icon: '🅿️',
+    it: 'Sosta vietata',
+    name: { ru: 'Стоянка под знаком', en: 'Illegal parking' },
+    detail: '€42–173',
+    desc_it: 'Sosta in spazi riservati ai disabili: €80–318 e rimozione del veicolo.',
+    desc: { ru: 'На месте для инвалидов: €80–318 и эвакуация.', en: 'In disabled bays: €80–318 and vehicle removal.' } },
+  { icon: '🌙',
+    it: 'Mancato uso dei fari (anabbaglianti)',
+    name: { ru: 'Нет ближнего света', en: 'No headlights' },
+    detail: '€42–173',
+    desc_it: 'Obbligatori in galleria in qualsiasi condizione, in centro abitato di notte e con scarsa visibilità.',
+    desc: { ru: 'Обязательны в тоннелях всегда, ночью и при плохой видимости.', en: 'Mandatory in tunnels at all times, at night and in poor visibility.' } },
+  { icon: '⭐',
+    it: 'Esaurimento del punteggio (patente a punti)',
+    name: { ru: 'Потеря всех баллов', en: 'All points lost' },
+    detail: 'Revoca + nuovo esame',
+    desc_it: 'I neopatentati partono con 18 punti; gli altri con 20. Azzeramento = esame teorico e pratico obbligatori.',
+    desc: { ru: 'Новички начинают с 18 баллов, остальные — с 20. Обнуление = обязательный теоретический и практический экзамен.', en: 'New drivers start with 18 points, others with 20. Zero points = mandatory theory and practical tests.' } },
+];
+
+// Speed fine calculator data
+const SPEED_LIMITS = [30, 50, 70, 90, 110, 130];
+const SPEED_TABLE = [
+  { over: 10, fine: '€42–173',   discount: '€21–86',   points: 0,  label_it: 'fino a +10 km/h' },
+  { over: 10, over_max: 40, fine: '€173–695',  discount: '€86–347',  points: 3,  label_it: '+10 a +40 km/h' },
+  { over: 40, over_max: 60, fine: '€543–2.170', discount: '€271–1.085', points: 10, label_it: '+40 a +60 km/h' },
+  { over: 60, fine: '€845–3.382', discount: '€422–1.691', points: 10, label_it: 'oltre +60 km/h', suspension: true },
+];
+
+// Instructor commands data
+const THEORY_COMMANDS = [
+  { group: { it: 'Direzione di marcia', ru: 'Куда ехать', en: 'Direction of travel' }, items: [
+    { it: 'Vada dritto', ru: 'Езжайте прямо', en: 'Go straight ahead' },
+    { it: 'Giri a destra', ru: 'Повернёт направо', en: 'Turn right' },
+    { it: 'Giri a sinistra', ru: 'Повернёт налево', en: 'Turn left' },
+    { it: 'Segua la strada', ru: 'Следуйте по дороге', en: 'Follow the road' },
+    { it: 'Alla prossima a destra', ru: 'На следующем направо', en: 'Take the next right' },
+    { it: 'Alla prossima a sinistra', ru: 'На следующем налево', en: 'Take the next left' },
+    { it: 'Faccia inversione di marcia', ru: 'Разверните', en: 'Make a U-turn' },
+    { it: 'Cambi corsia', ru: 'Смените полосу', en: 'Change lane' },
+    { it: 'Superi il veicolo', ru: 'Обгоните машину', en: 'Overtake the vehicle' },
+    { it: 'Entri in autostrada', ru: 'Въезжайте на автомагистраль', en: 'Enter the motorway' },
+    { it: 'Esca dall\'autostrada', ru: 'Съезжайте с автомагистрали', en: 'Exit the motorway' },
+  ]},
+  { group: { it: 'Fermata e parcheggio', ru: 'Остановка и парковка', en: 'Stop and parking' }, items: [
+    { it: 'Si fermi', ru: 'Остановитесь', en: 'Stop' },
+    { it: 'Parcheggi qui', ru: 'Припаркуйтесь здесь', en: 'Park here' },
+    { it: 'Accosti a destra', ru: 'Прижмитесь вправо', en: 'Pull over to the right' },
+    { it: 'Immobilizzi il veicolo', ru: 'Обездвижьте машину', en: 'Immobilise the vehicle' },
+    { it: 'Spenga il motore', ru: 'Заглушите двигатель', en: 'Turn off the engine' },
+  ]},
+  { group: { it: 'Velocità e distanza', ru: 'Скорость и дистанция', en: 'Speed and distance' }, items: [
+    { it: 'Acceleri', ru: 'Ускорьтесь', en: 'Accelerate' },
+    { it: 'Rallenti', ru: 'Замедлитесь', en: 'Slow down' },
+    { it: 'Mantenga la velocità', ru: 'Держите скорость', en: 'Maintain speed' },
+    { it: 'Aumenti la distanza di sicurezza', ru: 'Увеличьте дистанцию', en: 'Increase the following distance' },
+    { it: 'Tenga la destra', ru: 'Держитесь правее', en: 'Keep to the right' },
+  ]},
+  { group: { it: 'Manovre specifiche', ru: 'Специальные манёвры', en: 'Specific manoeuvres' }, items: [
+    { it: 'Inserisca la retromarcia', ru: 'Включите задний ход', en: 'Engage reverse gear' },
+    { it: 'Faccia manovra di parcheggio', ru: 'Выполните манёвр парковки', en: 'Perform a parking manoeuvre' },
+    { it: 'Inserisca l\'indicatore', ru: 'Включите указатель поворота', en: 'Put on the indicator' },
+    { it: 'Ceda la precedenza', ru: 'Уступите дорогу', en: 'Give way' },
+    { it: 'Dia la precedenza ai pedoni', ru: 'Пропустите пешеходов', en: 'Give way to pedestrians' },
+  ]},
+  { group: { it: 'Comunicazione', ru: 'Общение с экзаменатором', en: 'Communication' }, items: [
+    { it: 'Ripeta, per favore', ru: 'Повторите, пожалуйста', en: 'Please repeat' },
+    { it: 'Non ho capito', ru: 'Я не понял', en: 'I did not understand' },
+    { it: 'Può parlare più lentamente?', ru: 'Вы можете говорить медленнее?', en: 'Can you speak more slowly?' },
+    { it: 'È tutto a posto', ru: 'Всё в порядке', en: 'Everything is fine' },
+    { it: 'Sono pronto', ru: 'Я готов', en: 'I am ready' },
+  ]},
 ];
 
 const THEORY_TIPS = [
@@ -4108,6 +4277,123 @@ const THEORY_TIPS = [
   { title: { ru: '✅ Читай ВОПРОС, а не только ответ', en: '✅ Read the QUESTION, not just the answer' }, body: { ru: 'Многие ошибки — от невнимательного чтения. Вопрос спрашивает "верно ли утверждение о знаке", а не "что делает знак". Проверь, что именно утверждается.', en: 'Most errors come from careless reading. The question asks "is this statement about the sign correct", not "what does the sign do". Check exactly what is claimed.' } },
 ];
 
+function speakItalian(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'it-IT';
+  u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+function buildSpeedTable(limit) {
+  const t = currentLang;
+  const rows = [
+    { range: `${limit+1}–${limit+10}`,  fine: '€42–173',    discount: '€21–86',     pts: '—',   susp: false },
+    { range: `${limit+11}–${limit+40}`, fine: '€173–695',   discount: '€86–347',    pts: '3',   susp: false },
+    { range: `${limit+41}–${limit+60}`, fine: '€543–2.170', discount: '€271–1.085', pts: '10',  susp: true  },
+    { range: `> ${limit+60}`,           fine: '€845–3.382', discount: '€422–1.691', pts: '10',  susp: true  },
+  ];
+  const head = t==='en'
+    ? ['Speed recorded','Fine','With 50% discount (20 days)','Points','Suspension']
+    : ['Зафиксированная скорость','Штраф','Со скидкой 50% (20 дней)','Баллы','Лишение'];
+  const discLabel = t==='en' ? 'Скидка 50% за оплату в течение 20 дней' : 'Скидка 50% за оплату в течение 20 дней';
+  const discNote  = t==='en'
+    ? 'Pay within 20 days of receiving the notice and pay only half. Works for all violations including serious ones. Note: paying with discount = waiving the right to appeal.'
+    : 'Оплатите в течение 20 дней с момента получения постановления и заплатите вдвое меньше. Работает для всех нарушений, включая серьёзные. Внимание: оплата со скидкой = отказ от права на обжалование.';
+  return `
+    <div style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap">
+      ${SPEED_LIMITS.map(l=>`<button onclick="buildFinesContent(${l})" style="padding:6px 12px;border-radius:20px;border:1.5px solid ${l===limit?'var(--blue)':'var(--border)'};background:${l===limit?'var(--blue)':'var(--card)'};color:${l===limit?'#fff':'var(--text)'};font-size:13px;font-weight:600;cursor:pointer">${l}</button>`).join('')}
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">${t==='en'?`Limit ${limit} km/h · recorded speed and sanction`:`Лимит ${limit} км/ч · зафиксированная скорость и санкция`}</div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="border-bottom:2px solid var(--border)">
+        ${head.map(h=>`<th style="text-align:left;padding:8px 6px;color:var(--muted);font-weight:600;white-space:nowrap">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+      ${rows.map(r=>`<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:9px 6px;font-weight:600">${r.range} km/h</td>
+        <td style="padding:9px 6px;color:var(--red);font-weight:700">${r.fine}</td>
+        <td style="padding:9px 6px;color:var(--green,#22a861)">${r.discount}</td>
+        <td style="padding:9px 6px;color:${r.pts!=='—'?'var(--red)':'var(--muted)'}">${r.pts!=='—'?'−'+r.pts+' pt':r.pts}</td>
+        <td style="padding:9px 6px">${r.susp?'⚠️ '+(t==='en'?'Yes':'Да'):'—'}</td>
+      </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--card);border-left:3px solid var(--blue);border-radius:0 10px 10px 0">
+      <div style="font-size:12px;font-weight:700;margin-bottom:4px">💡 ${t==='en'?'50% discount within 20 days':'Скидка 50% за 20 дней'}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">${discNote}</div>
+    </div>`;
+}
+
+function buildFinesContent(limit) {
+  const t = currentLang;
+  const content = document.getElementById('theory-content');
+  const tabs = [
+    { id:'violations', label: t==='en'?'Violations':'Нарушения' },
+    { id:'speed',      label: t==='en'?'Speed':'Скорость' },
+    { id:'points',     label: t==='en'?'Points system':'Баллы' },
+  ];
+  const activeTab = (limit != null) ? 'speed' : (content._finesTab || 'violations');
+  if (limit == null) limit = content._finesLimit || 50;
+  content._finesTab = activeTab;
+  content._finesLimit = limit;
+
+  let html = `<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">
+    ${tabs.map(tb=>`<button onclick="switchFinesTab('${tb.id}')" style="padding:7px 14px;border-radius:20px;border:1.5px solid ${tb.id===activeTab?'var(--blue)':'var(--border)'};background:${tb.id===activeTab?'var(--blue)':'var(--card)'};color:${tb.id===activeTab?'#fff':'var(--text)'};font-size:13px;font-weight:600;cursor:pointer">${tb.label}</button>`).join('')}
+  </div>`;
+
+  if (activeTab === 'violations') {
+    html += THEORY_FINES.map(f=>`
+      <div class="theory-fine-row">
+        <div class="fine-icon">${f.icon}</div>
+        <div class="fine-info">
+          <div class="fine-name" style="font-size:14px;font-weight:700">${f.it}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${f.name[t]||f.name.ru}</div>
+          <div class="fine-detail">${f.detail}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">${f.desc_it}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;font-style:italic">${f.desc[t]||f.desc.ru}</div>
+        </div>
+      </div>`).join('');
+  } else if (activeTab === 'speed') {
+    html += buildSpeedTable(limit);
+  } else {
+    html += `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px">
+        <div style="font-size:15px;font-weight:700;margin-bottom:4px">Patente a punti</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px">${t==='en'?'Points-based driving licence system':'Балльная система водительских прав'}</div>
+        <div style="font-size:13px;line-height:1.6">
+          ${t==='en'
+            ? '<b>New drivers</b> (first 3 years): start with <b>18 points</b>.<br><b>Other drivers</b>: start with <b>20 points</b>.<br>Points are <b>added back</b> (+2 pts/year) for offence-free driving, up to 30.<br>If all points are lost: licence revoked, must retake both theory and practical tests.'
+            : '<b>Новые водители</b> (первые 3 года): начинают с <b>18 баллов</b>.<br><b>Остальные водители</b>: начинают с <b>20 баллов</b>.<br>Баллы <b>восстанавливаются</b> (+2 балла/год) при безаварийной езде, максимум 30.<br>При потере всех баллов: аннулирование прав, обязательная пересдача теории и практики.'}
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px">${t==='en'?'Most common deductions':'Самые частые списания'}</div>
+        ${[
+          ['🔴', t==='en'?'Red light':'Красный свет', '−6'],
+          ['🚀', t==='en'?'Speeding +40 km/h':'Превышение +40 км/ч', '−10'],
+          ['📱', t==='en'?'Phone at wheel':'Телефон за рулём', '−5'],
+          ['💺', t==='en'?'No seatbelt':'Без ремня', '−5'],
+          ['🍺', t==='en'?'Alcohol >0.5 g/l':'Алкоголь >0,5 г/л', '−10'],
+        ].map(([ico,name,pts])=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span>${ico} ${name}</span>
+            <span style="font-weight:700;color:var(--red)">${pts} pt</span>
+          </div>`).join('')}
+      </div>`;
+  }
+  content.innerHTML = html;
+}
+
+function switchFinesTab(tab) {
+  const content = document.getElementById('theory-content');
+  content._finesTab = tab;
+  buildFinesContent(content._finesLimit || 50);
+}
+
 function showTheory(section) {
   const content = document.getElementById('theory-content');
   const title = document.getElementById('theory-screen-title');
@@ -4119,55 +4405,84 @@ function showTheory(section) {
       <div class="theory-chapter">
         <div class="ch-num">${ch.num}</div>
         <div class="ch-info">
-          <div class="ch-title">${ch.title[t] || ch.title.ru}</div>
-          <div class="ch-sub">${ch.subs.slice(0,3).join(' · ')}${ch.subs.length > 3 ? ' …' : ''}</div>
+          <div class="ch-title" style="font-size:15px;font-weight:700">${ch.title.it}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${ch.title[t]||ch.title.ru}</div>
+          <div class="ch-sub" style="margin-top:4px">${ch.subs.slice(0,3).join(' · ')}${ch.subs.length > 3 ? ' …' : ''}</div>
         </div>
         <div class="ch-arrow">›</div>
       </div>`).join('');
 
   } else if (section === 'glossary') {
-    title.textContent = t === 'en' ? '📝 Glossary' : '📝 Словарь терминов';
-    content.innerHTML = '<div class="theory-section-heading">' + (t === 'en' ? 'Italian term → Translation' : 'Итальянский термин → Перевод') + '</div>' +
+    title.textContent = t === 'en' ? '📝 Glossario' : '📝 Словарь терминов';
+    content.innerHTML = '<div class="theory-section-heading">' + (t === 'en' ? 'Terminologia italiana · Translation' : 'Итальянская терминология · Перевод') + '</div>' +
       THEORY_GLOSSARY.map(g => `
         <div class="theory-glossary-item">
-          <div class="gl-it">${g.it}</div>
-          <div class="gl-ru">${t === 'en' ? g.en : g.ru}</div>
+          <div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+            <div class="gl-it" style="font-size:16px">${g.it}</div>
+            <button onclick="speakItalian('${g.it.replace(/'/g,"\\'")}')" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px 4px" title="Ascolta">🔊</button>
+          </div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5">${g.def_it}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic">${t==='en'?g.def_en:g.def_ru}</div>
         </div>`).join('');
 
   } else if (section === 'signs') {
-    title.textContent = t === 'en' ? '🚦 Road Signs' : '🚦 Дорожные знаки';
+    title.textContent = t === 'en' ? '🚦 Segnaletica stradale' : '🚦 Дорожные знаки';
     const cats = [
-      { emoji: '⚠️', name: { ru: 'Предупреждающие', en: 'Warning signs' }, desc: { ru: 'Треугольник, красная рамка. Предупреждают об опасности, ничего не запрещают.', en: 'Triangle, red border. Warn of danger, no prohibition.' } },
-      { emoji: '🚫', name: { ru: 'Запрещающие', en: 'Prohibition signs' }, desc: { ru: 'Круглые, красная рамка. Запрещают действие.', en: 'Round, red border. Prohibit an action.' } },
-      { emoji: '🔵', name: { ru: 'Предписывающие', en: 'Mandatory signs' }, desc: { ru: 'Круглые, синие. Обязывают выполнить действие.', en: 'Round, blue. Require an action.' } },
-      { emoji: '🟦', name: { ru: 'Указательные', en: 'Information signs' }, desc: { ru: 'Прямоугольные / квадратные, синие или зелёные. Информируют.', en: 'Rectangular / square, blue or green. Provide information.' } },
-      { emoji: '🟨', name: { ru: 'Дополнительные таблички', en: 'Additional panels' }, desc: { ru: 'Устанавливаются под основным знаком, уточняют его действие.', en: 'Placed under main sign, clarify its scope.' } },
-      { emoji: '🔶', name: { ru: 'Временные знаки', en: 'Temporary signs' }, desc: { ru: 'На строительных работах и ремонте. Имеют приоритет над постоянными.', en: 'Used at roadworks. Take priority over permanent signs.' } },
+      { emoji: '⚠️', it: 'Segnali di pericolo', name: { ru: 'Предупреждающие', en: 'Warning signs' },
+        def_it: 'Forma triangolare con bordo rosso. Avvertono di un pericolo ma non impongono divieti.',
+        desc: { ru: 'Треугольник, красная рамка. Только предупреждают — ничего не запрещают.', en: 'Triangle, red border. Warn of danger only — no prohibition.' } },
+      { emoji: '🚫', it: 'Segnali di divieto', name: { ru: 'Запрещающие', en: 'Prohibition signs' },
+        def_it: 'Forma circolare con bordo rosso. Vietano comportamenti specifici.',
+        desc: { ru: 'Круглые, красная рамка. Запрещают конкретные действия.', en: 'Round, red border. Prohibit specific actions.' } },
+      { emoji: '🔵', it: 'Segnali di obbligo', name: { ru: 'Предписывающие', en: 'Mandatory signs' },
+        def_it: 'Forma circolare su fondo blu. Impongono un comportamento obbligatorio.',
+        desc: { ru: 'Круглые, синие. Обязывают выполнить действие.', en: 'Round, blue. Require a specific action.' } },
+      { emoji: '🟦', it: 'Segnali di indicazione', name: { ru: 'Указательные', en: 'Information signs' },
+        def_it: 'Forma rettangolare o quadrata, sfondo blu o verde. Forniscono informazioni utili.',
+        desc: { ru: 'Прямоугольные/квадратные, синие или зелёные. Информируют.', en: 'Rectangular/square, blue or green. Provide information.' } },
+      { emoji: '🟨', it: 'Pannelli integrativi', name: { ru: 'Дополнительные таблички', en: 'Supplementary panels' },
+        def_it: 'Posti sotto il segnale principale. Ne precisano o limitano il significato.',
+        desc: { ru: 'Устанавливаются под основным знаком, уточняют его значение.', en: 'Placed under the main sign to clarify or limit its meaning.' } },
+      { emoji: '🔶', it: 'Segnali temporanei', name: { ru: 'Временные знаки', en: 'Temporary signs' },
+        def_it: 'Usati in cantieri o situazioni transitorie. Hanno precedenza sui segnali permanenti.',
+        desc: { ru: 'При дорожных работах. Имеют приоритет над постоянными знаками.', en: 'Used at roadworks. Take priority over permanent signs.' } },
     ];
     content.innerHTML = cats.map(c => `
       <div class="theory-chapter">
         <div class="ch-num" style="font-size:22px">${c.emoji}</div>
         <div class="ch-info">
-          <div class="ch-title">${c.name[t] || c.name.ru}</div>
-          <div class="ch-sub">${c.desc[t] || c.desc.ru}</div>
+          <div style="font-size:15px;font-weight:700">${c.it}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${c.name[t]||c.name.ru}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">${c.def_it}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;font-style:italic">${c.desc[t]||c.desc.ru}</div>
         </div>
       </div>`).join('');
 
   } else if (section === 'fines') {
-    title.textContent = t === 'en' ? '⚖️ Fines & Sanctions' : '⚖️ Штрафы и санкции';
-    content.innerHTML = '<div class="theory-section-heading">' + (t === 'en' ? 'Key violations' : 'Основные нарушения') + '</div>' +
-      THEORY_FINES.map(f => `
-        <div class="theory-fine-row">
-          <div class="fine-icon">${f.icon}</div>
-          <div class="fine-info">
-            <div class="fine-name">${f.name[t] || f.name.ru}</div>
-            <div class="fine-detail">${f.detail}</div>
-            <div class="fine-desc">${f.desc[t] || f.desc.ru}</div>
-          </div>
-        </div>`).join('');
+    title.textContent = t === 'en' ? '⚖️ Infrazioni e sanzioni' : '⚖️ Штрафы и санкции';
+    content._finesTab = 'violations';
+    content._finesLimit = 50;
+    buildFinesContent(null);
+    showScreen('s-theory');
+    return;
+
+  } else if (section === 'commands') {
+    title.textContent = t === 'en' ? '🎤 Comandi dell\'esaminatore' : '🎤 Команды инструктора';
+    content.innerHTML = THEORY_COMMANDS.map(grp => `
+      <div class="theory-section-heading">${grp.group.it} <span style="font-weight:400;font-style:italic"> · ${grp.group[t]||grp.group.ru}</span></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px">
+        ${grp.items.map((item,i) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;${i>0?'border-top:1px solid var(--border)':''}">
+            <div style="flex:1">
+              <div style="font-size:15px;font-weight:700">${item.it}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">${item[t]||item.ru}</div>
+            </div>
+            <button onclick="speakItalian('${item.it.replace(/'/g,"\\'")}')" style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;flex-shrink:0" title="Ascolta">🔊</button>
+          </div>`).join('')}
+      </div>`).join('');
 
   } else if (section === 'tips') {
-    title.textContent = t === 'en' ? '💡 Exam Tips' : '💡 Советы для сдачи';
+    title.textContent = t === 'en' ? '💡 Consigli per l\'esame' : '💡 Советы для сдачи';
     content.innerHTML = THEORY_TIPS.map(tip => `
       <div class="theory-tip">
         <div class="tip-title">${tip.title[t] || tip.title.ru}</div>
@@ -4178,11 +4493,12 @@ function showTheory(section) {
   showScreen('s-theory');
 }
 
-function showTheoryHandbook() { showTheory('handbook'); }
-function showTheoryGlossary() { showTheory('glossary'); }
-function showTheorySigns()    { showTheory('signs'); }
-function showTheoryFines()    { showTheory('fines'); }
-function showTheoryTips()     { showTheory('tips'); }
+function showTheoryHandbook()  { showTheory('handbook'); }
+function showTheoryGlossary()  { showTheory('glossary'); }
+function showTheorySigns()     { showTheory('signs'); }
+function showTheoryFines()     { showTheory('fines'); }
+function showTheoryTips()      { showTheory('tips'); }
+function showTheoryCommands()  { showTheory('commands'); }
 
 // ===== EXAM SAVE ON TAB SWITCH / PAGE LEAVE =====
 document.addEventListener('visibilitychange', () => {
