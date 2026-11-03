@@ -710,6 +710,134 @@ const T = {
   }
 };
 
+// ===== EXPLANATIONS BY TOPIC (IT / EN / RU) =====
+// Each topic has a "correct" and "wrong" explanation.
+// Used by getExplanation(q, lang) to return the right language.
+const EXP = {
+  'segnali-pericolo': {
+    it: { ok: 'I segnali di pericolo hanno forma triangolare con bordo rosso. Avvertono il conducente di un tratto pericoloso in avanti, ma non vietano né obbligano nulla.', no: "L'affermazione sul segnale non corrisponde al Codice della Strada italiano. I segnali di pericolo sono triangolari con bordo rosso: avvertono il conducente di un tratto pericoloso in avanti, ma non vietano né obbligano nulla." },
+    en: { ok: 'Danger signs are triangular with a red border. They warn the driver of a hazardous section ahead, but do not prohibit or require any specific action.', no: "The statement about the sign does not correspond to the Italian Highway Code. Danger signs are triangular with a red border: they warn of a hazardous section ahead but impose no obligation." },
+    ru: { ok: 'Знаки опасности — треугольные, с красной рамкой. Они предупреждают водителя об опасном участке впереди, но ничего не запрещают и не обязывают.', no: 'Изображённый знак — это знак опасности (треугольный с красной рамкой). Знаки опасности предупреждают об опасном участке впереди, но ничего не запрещают.' }
+  },
+  'segnali-divieto': {
+    it: { ok: 'I segnali di divieto sono circolari con bordo rosso. Vietano determinate azioni: accesso, sorpasso, superamento di velocità, ecc.', no: "L'affermazione sul segnale non è corretta. I segnali di divieto sono circolari con bordo rosso e vietano determinate azioni: accesso, sorpasso, velocità eccessiva, ecc." },
+    en: { ok: 'Prohibition signs are circular with a red border. They prohibit specific actions: entry, overtaking, speeding, etc.', no: "The statement about the sign is incorrect. Prohibition signs are circular with a red border and prohibit specific actions such as entry, overtaking, and speeding." },
+    ru: { ok: 'Знаки запрета — круглые, с красной рамкой. Они запрещают определённые действия: въезд, обгон, превышение скорости и т.д.', no: 'Изображённый знак — это знак запрета (круглый с красной рамкой). Знаки запрета запрещают определённые действия: въезд, обгон, превышение скорости.' }
+  },
+  'segnali-obbligo': {
+    it: { ok: 'I segnali di obbligo sono circolari e di colore blu. Obbligano il conducente a compiere una determinata azione: procedere diritto, svoltare, dare la precedenza, ecc.', no: "L'affermazione sul segnale non è corretta. I segnali di obbligo sono circolari e blu: impongono al conducente un'azione specifica come procedere diritto, svoltare o dare la precedenza." },
+    en: { ok: 'Mandatory signs are circular and blue. They require the driver to perform a specific action: go straight, turn, give way, etc.', no: "The statement about the sign is incorrect. Mandatory signs are circular and blue: they require the driver to perform a specific action such as going straight, turning, or giving way." },
+    ru: { ok: 'Знаки обязанности — круглые, синие. Они обязывают водителя выполнить определённое действие: ехать прямо, повернуть, уступить дорогу.', no: 'Изображённый знак — это знак обязанности (круглый синий). Знаки обязанности требуют выполнения определённого действия.' }
+  },
+  'segnali-indicazione': {
+    it: { ok: 'I segnali di indicazione sono rettangolari o quadrati, di colore blu o verde. Forniscono informazioni su direzioni, distanze e servizi stradali.', no: "L'affermazione sul segnale non è corretta. I segnali di indicazione sono rettangolari/quadrati, blu o verdi: forniscono informazioni su direzioni, distanze e servizi." },
+    en: { ok: 'Information signs are rectangular or square, blue or green. They provide information about directions, distances and road services.', no: "The statement about the sign is incorrect. Information signs are rectangular or square, blue or green: they provide information about directions, distances and road services." },
+    ru: { ok: 'Знаки указания — прямоугольные или квадратные, синие или зелёные. Они дают информацию о направлении, расстоянии, услугах на дороге.', no: 'Изображённый знак — это знак указания (прямоугольный/квадратный синий или зелёный). Знаки указания дают информацию о направлении и услугах.' }
+  },
+  'segnali-complementari': {
+    it: { ok: 'I segnali complementari (coni, barriere, segnali temporanei) sono utilizzati nei cantieri stradali, durante lavori in corso o per la segnaletica provvisoria.', no: "L'affermazione sul segnale non è corretta. I segnali complementari (coni, barriere, segnali temporanei) sono usati nei cantieri, nei lavori stradali e per la segnaletica provvisoria." },
+    en: { ok: 'Complementary signs (cones, barriers, temporary signs) are used at road works, during maintenance operations or for temporary road markings.', no: "The statement about the sign is incorrect. Complementary signs (cones, barriers, temporary signs) are used at road works and for temporary road markings." },
+    ru: { ok: 'Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.', no: 'Изображённый знак — это дополнительный знак (временный/строительный). Используется на стройках и при ремонте дороги.' }
+  },
+  'pannelli-integrativi': {
+    it: { ok: 'I pannelli integrativi sono collocati sotto il segnale principale e ne precisano l\'applicazione: distanza, orario, tipo di veicolo, ecc.', no: "L'affermazione sul segnale non è corretta. I pannelli integrativi sono posizionati sotto il segnale principale per precisarne l'applicazione: distanza, orario, tipo di veicolo, ecc." },
+    en: { ok: 'Supplementary panels are placed below the main sign and specify its application: distance, time, type of vehicle, etc.', no: "The statement about the sign is incorrect. Supplementary panels are placed below the main sign to specify its application: distance, time, vehicle type, etc." },
+    ru: { ok: 'Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.', no: 'Изображённый знак — это дополнительная табличка под основным знаком. Уточняет действие основного знака.' }
+  },
+  'segnaletica-orizzontale': {
+    it: { ok: 'La segnaletica orizzontale comprende linee e scritte sulla carreggiata. La linea continua vieta il sorpasso, quella discontinua lo consente se sicuro.', no: "L'affermazione non corrisponde al Codice della Strada. La segnaletica orizzontale comprende linee e scritte sulla carreggiata: la linea continua vieta il sorpasso, quella discontinua lo consente se sicuro." },
+    en: { ok: 'Horizontal road markings include lines and writings on the road surface. A continuous line prohibits overtaking; a dashed line allows it when safe.', no: "The statement does not correspond to the Italian Highway Code. Horizontal road markings include lines and road writings: a continuous line prohibits overtaking; a dashed line allows it when safe." },
+    ru: { ok: 'Горизонтальная разметка — линии и надписи на дороге. Сплошная линия запрещает пересечение, прерывистая — разрешает при безопасности.', no: 'Утверждение не соответствует ПДД. Горизонтальная разметка: сплошная линия запрещает пересечение, прерывистая — разрешает при безопасности.' }
+  },
+  'segnalazioni-semaforiche': {
+    it: { ok: 'Semaforici: rosso = stop, giallo = prepararsi/completare la manovra, verde = via libera. Le frecce direzionali valgono solo nella direzione indicata.', no: "L'affermazione non corrisponde al Codice della Strada. Semaforici: rosso = stop, giallo = prepararsi/completare la manovra, verde = via libera. Le frecce direzionali valgono solo nella direzione indicata." },
+    en: { ok: 'Traffic light signals: red = stop, amber = prepare/complete manoeuvre, green = go. Directional arrows apply only in the indicated direction.', no: "The statement does not correspond to the Italian Highway Code. Traffic light signals: red = stop, amber = prepare/complete manoeuvre, green = go." },
+    ru: { ok: 'Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать. Стрелки действуют только в направлении стрелки.', no: 'Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать. Утверждение не соответствует ПДД.' }
+  },
+  'precedenza-incroci': {
+    it: { ok: 'Agli incroci senza segnali si cede la precedenza a chi viene da destra. Tram, veicoli sulla strada principale e chi è già nell\'incrocio hanno la precedenza.', no: "L'affermazione non corrisponde al Codice della Strada. Agli incroci senza segnali si cede la precedenza a chi viene da destra. Tram, veicoli sulla strada principale e chi è già nell'incrocio hanno la precedenza." },
+    en: { ok: 'At junctions without signs, you must give way to vehicles coming from the right. Trams, vehicles on the main road and those already in the junction have priority.', no: "The statement does not correspond to the Italian Highway Code. At junctions without signs, give way to vehicles from the right. Trams, main-road vehicles and those already in the junction have priority." },
+    ru: { ok: 'На перекрёстках без знаков уступают дорогу тому, кто справа. Трамваи, транспорт на главной дороге и тот, кто уже въехал — имеют преимущество.', no: 'Утверждение не соответствует ПДД. На перекрёстках без знаков уступают дорогу тому, кто справа. Трамваи и транспорт на главной дороге имеют преимущество.' }
+  },
+  'norme-sorpasso': {
+    it: { ok: 'Il sorpasso è vietato sulle strisce pedonali, agli incroci, nelle curve, in cima alle salite e nelle gallerie (salvo strade a più corsie). Si sorpassa sempre a sinistra.', no: "L'affermazione non corrisponde al Codice della Strada. Il sorpasso è vietato sulle strisce pedonali, agli incroci, nelle curve, in cima alle salite e nelle gallerie. Si sorpassa sempre a sinistra." },
+    en: { ok: 'Overtaking is prohibited at pedestrian crossings, junctions, bends, hilltops and tunnels (unless there are multiple lanes). Always overtake on the left.', no: "The statement does not correspond to the Italian Highway Code. Overtaking is prohibited at pedestrian crossings, junctions, bends, hilltops and tunnels. Always overtake on the left." },
+    ru: { ok: 'Обгон запрещён на пешеходных переходах, перекрёстках, поворотах, вершинах подъёмов, в тоннелях (кроме дорог с несколькими полосами). Всегда обгоняют слева.', no: 'Утверждение не соответствует ПДД. Обгон запрещён на пешеходных переходах, перекрёстках, поворотах, вершинах подъёмов, в тоннелях.' }
+  },
+  'norme-circolazione': {
+    it: { ok: 'Le principali norme di circolazione in Italia riguardano: limiti di velocità, corsie di marcia e diritti dei diversi tipi di conducenti.', no: "L'affermazione non corrisponde al Codice della Strada italiano. Le norme di circolazione comprendono: limiti di velocità, uso delle corsie e diritti delle diverse categorie di conducenti." },
+    en: { ok: 'The main Italian traffic rules cover: speed limits, lane use and the rights of different categories of drivers.', no: "The statement does not correspond to the Italian Highway Code. Traffic rules cover speed limits, lane use and the rights of different driver categories." },
+    ru: { ok: 'Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.', no: 'Утверждение не соответствует ПДД Италии. Основные правила движения: скоростные режимы, полосы, права водителей.' }
+  },
+  'fermata-sosta': {
+    it: { ok: 'Fermata = sosta breve (fino a 1 min, conducente a bordo). Sosta = parcheggio. Entrambe sono vietate in curva, in cima alle salite, sulle strisce pedonali e alle fermate dei mezzi pubblici.', no: "L'affermazione non corrisponde al Codice della Strada. Fermata = sosta breve (max 1 min). Sosta = parcheggio. Entrambe vietate in curva, in cima alle salite, sulle strisce pedonali e alle fermate dei mezzi pubblici." },
+    en: { ok: 'Fermata (stopping) = brief halt (up to 1 min, driver on board). Sosta (parking) = leaving the vehicle. Both are prohibited on bends, hilltops, pedestrian crossings and bus stops.', no: "The statement does not correspond to the Italian Highway Code. Fermata = brief halt; Sosta = parking. Both are prohibited on bends, hilltops, pedestrian crossings and bus stops." },
+    ru: { ok: 'Fermata — кратковременная остановка (до 1 минуты, водитель в машине). Sosta — стоянка. Запрещены на поворотах, вершинах подъёмов, пешеходных переходах, остановках транспорта.', no: 'Утверждение не соответствует ПДД. Fermata (остановка) и Sosta (стоянка) запрещены на поворотах, вершинах, пешеходных переходах и остановках.' }
+  },
+  'luci-dispositivi': {
+    it: { ok: 'Luci di marcia diurna obbligatorie. Anabbaglianti in centri abitati e scarsa visibilità. Abbaglianti solo fuori città in assenza di veicoli in senso contrario.', no: "L'affermazione non corrisponde al Codice della Strada. Luci: le luci di marcia diurna sono obbligatorie; gli anabbaglianti si usano in città e con scarsa visibilità; gli abbaglianti solo fuori città senza veicoli in senso contrario." },
+    en: { ok: 'Daytime running lights are mandatory. Dipped headlights in built-up areas and poor visibility. Full beam only outside towns and in the absence of oncoming vehicles.', no: "The statement does not correspond to the Italian Highway Code. Daytime running lights are mandatory; dipped headlights in towns and low visibility; full beam only outside towns without oncoming vehicles." },
+    ru: { ok: 'Дневные ходовые огни — обязательны. Ближний свет — в населённых пунктах и условиях плохой видимости. Дальний — только вне города при отсутствии встречных.', no: 'Утверждение не соответствует ПДД. Дневные огни обязательны. Ближний свет — в городе и при плохой видимости. Дальний — только вне города.' }
+  },
+  'distanza-sicurezza': {
+    it: { ok: 'La distanza di sicurezza dipende dalla velocità. Lo spazio di frenatura aumenta proporzionalmente al QUADRATO della velocità: raddoppiando la velocità, lo spazio quadruplica.', no: "L'affermazione è sbagliata. La distanza di sicurezza dipende dalla velocità. Lo spazio di frenatura aumenta proporzionalmente al QUADRATO della velocità: raddoppiando la velocità, lo spazio quadruplica (non raddoppia)." },
+    en: { ok: 'Safe following distance depends on speed. Braking distance increases in proportion to the SQUARE of speed: doubling the speed quadruples the braking distance.', no: "The statement is incorrect. Braking distance increases proportionally to the SQUARE of speed: doubling the speed quadruples the braking distance (it does not just double)." },
+    ru: { ok: 'Дистанция безопасности зависит от скорости. Тормозной путь увеличивается пропорционально КВАДРАТУ скорости — при удвоении скорости путь увеличивается в 4 раза.', no: 'Утверждение неверно. Тормозной путь увеличивается пропорционально КВАДРАТУ скорости: при удвоении скорости путь увеличивается в 4 раза, а не в 2.' }
+  },
+  'elementi-veicolo': {
+    it: { ok: 'Pneumatici, ammortizzatori, freni e pressione delle gomme influenzano la sicurezza. Gli ammortizzatori usurati aumentano lo spazio di frenatura e riducono la maneggevolezza.', no: "L'affermazione non corrisponde al Codice della Strada. Pneumatici, ammortizzatori, freni e pressione delle gomme influenzano la sicurezza. Gli ammortizzatori usurati aumentano lo spazio di frenatura." },
+    en: { ok: 'Tyres, shock absorbers, brakes and tyre pressure all affect safety. Worn shock absorbers increase braking distance and reduce handling.', no: "The statement does not correspond to the Italian Highway Code. Tyres, shock absorbers, brakes and tyre pressure all affect safety. Worn shock absorbers increase braking distance." },
+    ru: { ok: 'Шины, амортизаторы, тормоза, давление в шинах — всё влияет на безопасность. Изношенные амортизаторы увеличивают тормозной путь и снижают управляемость.', no: 'Утверждение не соответствует ПДД. Шины, амортизаторы, тормоза и давление в шинах влияют на безопасность вождения.' }
+  },
+  'dispositivi-sicurezza': {
+    it: { ok: 'La cintura di sicurezza è obbligatoria per tutti. Il casco è obbligatorio su motocicli e ciclomotori. I seggiolini per bambini sono obbligatori per i minori.', no: "L'affermazione non è corretta. La cintura di sicurezza è obbligatoria per tutti. Il casco è obbligatorio su motocicli e ciclomotori. I seggiolini per bambini sono obbligatori per i minori." },
+    en: { ok: 'Seatbelts are compulsory for everyone. Helmets are mandatory on motorcycles and mopeds. Child seats are compulsory for minors.', no: "The statement is incorrect. Seatbelts are compulsory for all occupants. Helmets are mandatory on motorcycles and mopeds. Child seats are required for minors." },
+    ru: { ok: 'Ремень безопасности обязателен для всех. Шлем обязателен на мотоциклах и мопедах. Детские кресла обязательны для несовершеннолетних.', no: 'Утверждение неверно. Ремень безопасности обязателен для всех. Шлем обязателен на мотоциклах и мопедах.' }
+  },
+  'alcool-droghe-soccorso': {
+    it: { ok: 'Tasso alcolemico consentito: 0,5 g/l (0,0 per neopatentati nei primi 3 anni e conducenti professionali). In caso di incidente: primo soccorso, chiamare il 112.', no: "L'affermazione è sbagliata. Tasso alcolemico consentito: 0,5 g/l (0,0 per neopatentati nei primi 3 anni e conducenti professionali). In caso di incidente: primo soccorso, chiamare il 112." },
+    en: { ok: 'Permitted blood alcohol level: 0.5 g/l (0.0 for newly licensed drivers in the first 3 years and professional drivers). In case of accident: first aid, call 112.', no: "The statement is incorrect. Permitted blood alcohol level: 0.5 g/l (0.0 for newly licensed and professional drivers). In case of accident: first aid, call 112." },
+    ru: { ok: 'Допустимый уровень алкоголя: 0,5 г/л (для новичков до 3 лет стажа и профессиональных водителей — 0,0 г/л). При ДТП — первая помощь, вызов 112.', no: 'Утверждение неверно. Допустимый уровень алкоголя: 0,5 г/л (для новичков до 3 лет стажа — 0,0 г/л). При ДТП — первая помощь, вызов 112.' }
+  },
+  'prevenzione-incidenti': {
+    it: { ok: 'La maggior parte degli incidenti è causata da eccesso di velocità, mancato rispetto delle distanze, stanchezza e distrazione. Le condizioni stradali (fondo scivoloso, ecc.) contribuiscono anch\'esse.', no: "L'affermazione non corrisponde al Codice della Strada. La maggior parte degli incidenti è causata da velocità eccessiva, mancato rispetto delle distanze, stanchezza e distrazione." },
+    en: { ok: 'Most accidents are caused by speeding, failure to maintain safe distance, fatigue and distraction. Road conditions (slippery surfaces, etc.) also play a role.', no: "The statement does not correspond to the Italian Highway Code. Most accidents are caused by speeding, tailgating, fatigue and distraction." },
+    ru: { ok: 'Большинство аварий происходит из-за превышения скорости, несоблюдения дистанции, усталости и отвлечения внимания. Дорожные условия тоже играют роль.', no: 'Утверждение не соответствует ПДД. Большинство аварий — из-за превышения скорости, несоблюдения дистанции, усталости и отвлечения внимания.' }
+  },
+  'responsabilita-assicurazione': {
+    it: { ok: 'La Responsabilità Civile (RC Auto) è obbligatoria per tutti i veicoli. Il risarcimento è dovuto ai terzi danneggiati indipendentemente dalla colpa.', no: "L'affermazione non è corretta. La RC Auto è obbligatoria per tutti i veicoli a motore. Il risarcimento ai terzi danneggiati è dovuto indipendentemente dalla colpa del conducente." },
+    en: { ok: 'Third-party liability insurance (RC Auto) is compulsory for all vehicles. Compensation is owed to injured third parties regardless of fault.', no: "The statement is incorrect. RC Auto insurance is compulsory for all motor vehicles. Compensation to injured third parties is owed regardless of the driver's fault." },
+    ru: { ok: 'Гражданская ответственность (RC Auto) обязательна для всех транспортных средств. Возмещение ущерба третьим лицам не зависит от вины.', no: 'Утверждение не соответствует ПДД. RC Auto обязательна для всех. Возмещение ущерба третьим лицам не зависит от вины водителя.' }
+  },
+  'ambiente-consumi': {
+    it: { ok: 'La guida fluida riduce il consumo di carburante e le emissioni. Pressione corretta dei pneumatici, filtro dell\'aria pulito e motore efficiente riducono l\'inquinamento.', no: "L'affermazione non è corretta. La guida fluida riduce il consumo di carburante e le emissioni. Pressione corretta delle gomme e motore efficiente riducono l'inquinamento." },
+    en: { ok: 'Smooth driving reduces fuel consumption and emissions. Correct tyre pressure, a clean air filter and an efficient engine reduce pollution.', no: "The statement is incorrect. Smooth driving reduces fuel consumption and emissions. Correct tyre pressure and an efficient engine reduce pollution." },
+    ru: { ok: 'Плавное вождение снижает расход топлива и выбросы. Правильное давление в шинах, чистый воздушный фильтр и исправный двигатель уменьшают загрязнение.', no: 'Утверждение не соответствует ПДД. Плавное вождение снижает расход топлива. Правильное давление и исправный двигатель уменьшают загрязнение.' }
+  },
+  'definizioni-doveri': {
+    it: { ok: 'Il conducente è obbligato a rispettare il Codice della Strada, cedere il passo ai pedoni sulle strisce, non usare il telefono senza auricolare e mantenere il veicolo in buone condizioni.', no: "L'affermazione non corrisponde al Codice della Strada. Il conducente deve rispettare il Codice, cedere il passo ai pedoni, non usare il telefono senza auricolare e mantenere il veicolo in buone condizioni." },
+    en: { ok: 'The driver is required to comply with the Highway Code, give way to pedestrians at crossings, not use a phone without a hands-free kit and keep the vehicle in good condition.', no: "The statement does not correspond to the Italian Highway Code. The driver must comply with the code, give way to pedestrians, not use a phone without hands-free and keep the vehicle in good condition." },
+    ru: { ok: 'Водитель обязан соблюдать ПДД, уступать дорогу пешеходам на переходах, не пользоваться телефоном без гарнитуры, поддерживать ТС в исправном состоянии.', no: 'Утверждение не соответствует ПДД. Водитель обязан соблюдать ПДД, уступать дорогу пешеходам и содержать ТС в исправном состоянии.' }
+  }
+};
+
+// Returns explanation text for a question in the current language
+function getExplanation(q, lang) {
+  const tid = q.tid || '';
+  const isCorrect = q.c === 'vero';
+  const expObj = EXP[tid];
+  if (expObj && expObj[lang]) {
+    return expObj[lang][isCorrect ? 'ok' : 'no'];
+  }
+  // fallback to Russian e1 with label
+  if (q.e1) {
+    if (lang === 'it') return `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:4px">📖 Spiegazione (RU):</em>${q.e1}`;
+    if (lang === 'en') return `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:4px">🇷🇺 Spiegazione in russo:</em>${q.e1}`;
+    return q.e1;
+  }
+  return '';
+}
+
 function tr(key, vars) {
   const lang = T[currentLang] || T.ru;
   let s = lang[key] || T.ru[key] || key;
@@ -991,12 +1119,14 @@ function startExam() {
   }
   useExam();
   const qs = shuffleArr([...QUESTIONS]).slice(0, 30);
-  beginSession(qs, '🎯 Пробный экзамен');
+  const examTitle = currentLang === 'it' ? '🎯 Simulazione esame' : currentLang === 'en' ? '🎯 Exam simulation' : '🎯 Пробный экзамен';
+  beginSession(qs, examTitle);
 }
 
 function startExamRandom() {
   const qs = shuffleArr([...QUESTIONS]).slice(0, 30);
-  beginSession(qs, '🔀 Тренировка');
+  const practiceTitle = currentLang === 'it' ? '🔀 Allenamento' : currentLang === 'en' ? '🔀 Practice' : '🔀 Тренировка';
+  beginSession(qs, practiceTitle);
 }
 
 function beginSession(qs, title) {
@@ -1095,17 +1225,10 @@ function pick(sel) {
   document.getElementById('exp-verdict').innerHTML =
     `<span style="color:${color}">${verdictText}</span>`;
 
-  // e1 = explanation in Russian; show label when not in RU mode
-  if (q.e1) {
-    if (currentLang === 'it') {
-      document.getElementById('exp-rule').innerHTML =
-        `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">📖 Spiegazione (RU):</em>${q.e1}`;
-    } else if (currentLang === 'en') {
-      document.getElementById('exp-rule').innerHTML =
-        `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Explanation in Russian:</em>${q.e1}`;
-    } else {
-      document.getElementById('exp-rule').innerHTML = q.e1;
-    }
+  // Show explanation in the current language
+  const expText = getExplanation(q, currentLang);
+  if (expText) {
+    document.getElementById('exp-rule').innerHTML = expText;
   }
 
   if (!isPremium) {
@@ -1137,10 +1260,12 @@ function showStats() {
 
   document.getElementById('r-score').textContent = pct + '%';
   document.getElementById('r-score').className = 'result-score ' + (pass ? 'pass' : 'fail');
-  document.getElementById('r-verdict').textContent = pass ? '🎉 Сдал!' : '😔 Не сдал';
-  document.getElementById('r-sub').textContent = pass
-    ? 'Отличный результат! Ещё немного — и ты готов к экзамену.'
-    : `Нужно ${Math.ceil(total*0.87)}/${total}. Повтори слабые темы.`;
+  const verdictPass = currentLang === 'it' ? '🎉 Promosso!' : currentLang === 'en' ? '🎉 Passed!' : '🎉 Сдал!';
+  const verdictFail = currentLang === 'it' ? '😔 Non promosso' : currentLang === 'en' ? '😔 Failed' : '😔 Не сдал';
+  const subPass = currentLang === 'it' ? 'Ottimo risultato! Ancora un po\' e sei pronto per l\'esame.' : currentLang === 'en' ? 'Great result! A little more and you\'re ready for the exam.' : 'Отличный результат! Ещё немного — и ты готов к экзамену.';
+  const subFail = currentLang === 'it' ? `Servono ${Math.ceil(total*0.87)}/${total}. Ripassa gli argomenti deboli.` : currentLang === 'en' ? `Need ${Math.ceil(total*0.87)}/${total}. Review your weak topics.` : `Нужно ${Math.ceil(total*0.87)}/${total}. Повтори слабые темы.`;
+  document.getElementById('r-verdict').textContent = pass ? verdictPass : verdictFail;
+  document.getElementById('r-sub').textContent = pass ? subPass : subFail;
   document.getElementById('r-correct').textContent = session.correct;
   document.getElementById('r-wrong').textContent = session.wrong;
   document.getElementById('r-time').textContent = mins || '<1';
@@ -1260,17 +1385,12 @@ function updateExpLang() {
   const expEl = document.getElementById('exp-rule');
   if (!expEl || !session || !session.qs) return;
   const q = session.qs[session.idx];
-  if (!q || !q.e1) return;
+  if (!q) return;
   // Only update if explanation is currently visible
   const expBox = document.getElementById('explanation');
   if (!expBox || !expBox.classList.contains('show')) return;
-  if (currentLang === 'it') {
-    expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">📖 Spiegazione (RU):</em>${q.e1}`;
-  } else if (currentLang === 'en') {
-    expEl.innerHTML = `<em style="color:var(--muted);font-size:11px;display:block;margin-bottom:6px">🇷🇺 Explanation in Russian:</em>${q.e1}`;
-  } else {
-    expEl.innerHTML = q.e1;
-  }
+  const expText = getExplanation(q, currentLang);
+  if (expText) expEl.innerHTML = expText;
   // Also update verdict text
   const verdEl = document.getElementById('exp-verdict');
   if (verdEl && verdEl.innerHTML) {
@@ -1304,6 +1424,7 @@ document.body.classList.add('lang-' + currentLang);
 document.getElementById('lang-ru').classList.toggle('active', currentLang === 'ru');
 document.getElementById('lang-it').classList.toggle('active', currentLang === 'it');
 document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+applyI18n(); // apply translations before renderHome so page never flashes Russian
 renderHome();
 </script>
 </body>
