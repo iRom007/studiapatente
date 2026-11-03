@@ -228,7 +228,7 @@
   .theory-fine-row .fine-detail { font-size: 12px; color: var(--red); margin-top: 3px; font-weight: 600; }
   .theory-fine-row .fine-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  /* THEORY MENU */
+  /* THEORY MENU (home screen grid) */
   .theory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
   .theory-card { background: var(--card); border: 1px solid var(--border);
     border-radius: 12px; padding: 13px 14px; cursor: pointer; transition: 0.2s;
@@ -238,8 +238,33 @@
   .theory-card .t-info { flex: 1; min-width: 0; }
   .theory-card .t-name { font-size: 12px; font-weight: 600; }
   .theory-card .t-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  /* handbook card spans full width */
   .theory-card.wide { grid-column: 1 / -1; }
+
+  /* THEORY SCREEN */
+  #s-theory { padding: 0 !important; display: flex; flex-direction: column; }
+  #theory-topbar { flex-shrink: 0; }
+  #theory-sidebar { flex-shrink: 0; }
+  .th-menu-item { display: flex; align-items: center; gap: 8px; padding: 9px 16px;
+    font-size: 13px; cursor: pointer; transition: .15s; color: var(--text); }
+  .th-menu-item:hover { background: var(--hover, rgba(0,0,0,.05)); }
+  .th-menu-item.active { background: #fff3ec; color: #c0500a; font-weight: 600;
+    border-right: 3px solid #c0500a; }
+  .dark .th-menu-item.active { background: rgba(192,80,10,.18); color: #f07840; border-right-color: #f07840; }
+  .th-menu-ico { font-size: 16px; flex-shrink: 0; width: 20px; text-align: center; }
+  .th-content-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .th-content-sub   { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.4; }
+
+  /* SIGNS GRID */
+  .signs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .sign-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 10px 10px; text-align: center; transition: .15s; cursor: default; }
+  .sign-card:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .sign-img { width: 60px; height: 60px; margin: 0 auto 8px; }
+  .sign-img svg { width: 100%; height: 100%; }
+  .sign-name-it { font-size: 11px; font-weight: 700; line-height: 1.3; margin-bottom: 2px; }
+  .sign-name-tr { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+  .sign-desc-it { font-size: 10px; color: var(--muted); line-height: 1.4; text-align: left; }
+  .sign-desc-tr { font-size: 10px; color: var(--muted); font-style: italic; line-height: 1.4; text-align: left; margin-top: 3px; padding-top: 3px; border-top: 1px solid var(--border); }
 
   /* TOPIC GRID */
   .topics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -676,12 +701,52 @@
 </div>
 
 <!-- ====== THEORY SCREEN ====== -->
-<div class="screen" id="s-theory">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
-    <button class="back-btn" onclick="goHome()" style="width:auto;height:auto;padding:7px 12px;font-size:13px;border-radius:8px">← Назад</button>
-    <h2 id="theory-screen-title" style="font-size:18px;font-weight:700;margin:0;flex:1">📖 Теория</h2>
+<div class="screen" id="s-theory" style="padding:0;max-width:none">
+
+  <!-- THEORY TOP BAR -->
+  <div id="theory-topbar" style="display:flex;align-items:center;gap:10px;padding:14px 16px 0;margin-bottom:0">
+    <button class="back-btn" onclick="goHome()" style="width:auto;height:auto;padding:7px 12px;font-size:13px;border-radius:8px;flex-shrink:0">← Назад</button>
+    <h2 style="font-size:17px;font-weight:700;margin:0;flex:1">📖 Теория</h2>
+    <!-- translation toggle -->
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="font-size:12px;color:var(--muted)" id="theory-lang-label">Перевод</span>
+      <div id="theory-lang-toggle" onclick="theoryToggleLang()" style="width:42px;height:24px;border-radius:12px;background:var(--blue);cursor:pointer;position:relative;transition:.2s;flex-shrink:0">
+        <div id="theory-lang-knob" style="width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:.2s"></div>
+      </div>
+    </div>
   </div>
-  <div id="theory-content"></div>
+
+  <!-- THEORY LAYOUT: sidebar + content -->
+  <div style="display:flex;min-height:0;margin-top:12px">
+
+    <!-- SIDEBAR -->
+    <div id="theory-sidebar" style="width:200px;flex-shrink:0;border-right:1px solid var(--border);padding:0 0 20px 0;overflow-y:auto">
+      <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.7px;padding:10px 16px 6px;text-transform:uppercase">Учебник</div>
+      <div class="th-menu-item" id="thm-handbook"  onclick="showTheory('handbook')" >
+        <span class="th-menu-ico">📚</span><span>Теория по темам</span>
+      </div>
+      <div class="th-menu-item" id="thm-glossary"  onclick="showTheory('glossary')" >
+        <span class="th-menu-ico">📝</span><span>Словарь терминов</span>
+      </div>
+      <div class="th-menu-item" id="thm-commands"  onclick="showTheory('commands')" >
+        <span class="th-menu-ico">🎤</span><span>Команды инструктора</span>
+      </div>
+      <div class="th-menu-item" id="thm-signs"     onclick="showTheory('signs')"    >
+        <span class="th-menu-ico">🚦</span><span>Дорожные знаки</span>
+      </div>
+      <div class="th-menu-item" id="thm-fines"     onclick="showTheory('fines')"    >
+        <span class="th-menu-ico">⚖️</span><span>Нарушения и штрафы</span>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.7px;padding:14px 16px 6px;text-transform:uppercase">Статьи</div>
+      <div class="th-menu-item" id="thm-tips"      onclick="showTheory('tips')"     >
+        <span class="th-menu-ico">💡</span><span>Лайфхаки для сдачи</span>
+      </div>
+    </div>
+
+    <!-- CONTENT PANEL -->
+    <div id="theory-content" style="flex:1;padding:14px 16px 32px;overflow-y:auto;min-width:0"></div>
+
+  </div>
 </div>
 
 <!-- ====== PREMIUM MODAL ====== -->
@@ -4394,27 +4459,170 @@ function switchFinesTab(tab) {
   buildFinesContent(content._finesLimit || 50);
 }
 
+// ===== THEORY TRANSLATION TOGGLE =====
+let theoryShowTranslation = true;
+
+function theoryToggleLang() {
+  theoryShowTranslation = !theoryShowTranslation;
+  const knob   = document.getElementById('theory-lang-knob');
+  const toggle = document.getElementById('theory-lang-toggle');
+  const label  = document.getElementById('theory-lang-label');
+  if (knob)   knob.style.left = theoryShowTranslation ? '3px' : '21px';
+  if (toggle) toggle.style.background = theoryShowTranslation ? 'var(--blue)' : '#888';
+  if (label)  label.textContent = theoryShowTranslation
+    ? (currentLang === 'en' ? 'Translation ON'  : 'Перевод ВКЛ')
+    : (currentLang === 'en' ? 'Translation OFF' : 'Перевод ВЫКЛ');
+  const content = document.getElementById('theory-content');
+  if (content && content._currentSection) showTheory(content._currentSection);
+}
+
+function theorySetActive(section) {
+  ['handbook','glossary','commands','signs','fines','tips'].forEach(s => {
+    const el = document.getElementById('thm-' + s);
+    if (el) el.classList.toggle('active', s === section);
+  });
+}
+
+// ===== ROAD SIGNS DATA =====
+const ROAD_SIGNS = [
+  // --- PERICOLO ---
+  { cat:'pericolo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,52 4,52" fill="#fff" stroke="#e30d0d" stroke-width="4"/><text x="30" y="44" text-anchor="middle" font-size="26" fill="#222">⚠</text></svg>',
+    it:'Generico pericolo', ru:'Общая опасность', en:'General hazard',
+    desc_it:'Segnale generico di pericolo. Prestare attenzione e ridurre la velocità.',
+    desc_ru:'Общий сигнал об опасности. Снижайте скорость и будьте внимательны.',
+    desc_en:'Generic danger sign. Reduce speed and pay attention.' },
+  { cat:'pericolo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,52 4,52" fill="#fff" stroke="#e30d0d" stroke-width="4"/><path d="M25 40 Q30 20 35 40" fill="none" stroke="#222" stroke-width="3"/><circle cx="30" cy="44" r="2" fill="#222"/></svg>',
+    it:'Dosso o cunetta', ru:'Лежачий полицейский / яма', en:'Speed bump or dip',
+    desc_it:'Segnala un dosso o una cunetta sulla carreggiata. Ridurre la velocità.',
+    desc_ru:'Дорожный лежачий полицейский или яма. Снизьте скорость.',
+    desc_en:'Speed bump or road dip ahead. Reduce speed.' },
+  { cat:'pericolo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,52 4,52" fill="#fff" stroke="#e30d0d" stroke-width="4"/><path d="M20 44 Q25 30 30 36 Q35 42 40 28" fill="none" stroke="#222" stroke-width="3"/></svg>',
+    it:'Curva pericolosa', ru:'Опасный поворот', en:'Dangerous curve',
+    desc_it:'Curva pericolosa a destra (o sinistra). Ridurre la velocità prima della curva.',
+    desc_ru:'Опасный поворот. Снизьте скорость до входа в поворот.',
+    desc_en:'Dangerous curve ahead. Reduce speed before the bend.' },
+  { cat:'pericolo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,52 4,52" fill="#fff" stroke="#e30d0d" stroke-width="4"/><text x="30" y="44" text-anchor="middle" font-size="20" fill="#222">🚸</text></svg>',
+    it:'Attraversamento pedonale', ru:'Пешеходный переход', en:'Pedestrian crossing',
+    desc_it:'Segnala un attraversamento pedonale. Dare la precedenza ai pedoni.',
+    desc_ru:'Пешеходный переход впереди. Уступайте пешеходам.',
+    desc_en:'Pedestrian crossing ahead. Give way to pedestrians.' },
+  { cat:'pericolo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,52 4,52" fill="#fff" stroke="#e30d0d" stroke-width="4"/><text x="30" y="44" text-anchor="middle" font-size="20" fill="#222">🚂</text></svg>',
+    it:'Passaggio a livello', ru:'Железнодорожный переезд', en:'Level crossing',
+    desc_it:'Passaggio a livello con o senza barriere. Fermarsi se le barriere sono abbassate.',
+    desc_ru:'Железнодорожный переезд. Остановитесь при опущенных шлагбаумах.',
+    desc_en:'Level crossing ahead. Stop if barriers are down.' },
+  // --- DIVIETO ---
+  { cat:'divieto', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#fff" stroke="#e30d0d" stroke-width="4"/><line x1="12" y1="30" x2="48" y2="30" stroke="#e30d0d" stroke-width="6"/></svg>',
+    it:'Divieto di accesso', ru:'Въезд запрещён', en:'No entry',
+    desc_it:'Vietato l\'accesso a tutti i veicoli. Segnale di senso vietato.',
+    desc_ru:'Въезд запрещён для всех транспортных средств.',
+    desc_en:'No entry for any vehicle.' },
+  { cat:'divieto', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#fff" stroke="#e30d0d" stroke-width="4"/><text x="30" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">50</text></svg>',
+    it:'Limite di velocità', ru:'Ограничение скорости', en:'Speed limit',
+    desc_it:'Limite massimo di velocità. Non superare la velocità indicata.',
+    desc_ru:'Максимальная скорость. Не превyша указанное ограничение.',
+    desc_en:'Maximum speed limit. Do not exceed the indicated speed.' },
+  { cat:'divieto', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#fff" stroke="#e30d0d" stroke-width="4"/><line x1="14" y1="46" x2="46" y2="14" stroke="#e30d0d" stroke-width="5"/><text x="30" y="36" text-anchor="middle" font-size="18" fill="#222">P</text></svg>',
+    it:'Divieto di sosta', ru:'Стоянка запрещена', en:'No parking',
+    desc_it:'Vietato sostare in questa zona. Possibile rimozione del veicolo.',
+    desc_ru:'Стоянка запрещена. Возможна эвакуация транспортного средства.',
+    desc_en:'Parking prohibited. Vehicle may be towed.' },
+  { cat:'divieto', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#fff" stroke="#e30d0d" stroke-width="4"/><line x1="14" y1="46" x2="46" y2="14" stroke="#e30d0d" stroke-width="5"/><text x="28" y="38" text-anchor="middle" font-size="22" fill="#222">↔</text></svg>',
+    it:'Divieto di sorpasso', ru:'Обгон запрещён', en:'No overtaking',
+    desc_it:'Vietato superare altri veicoli. Valido fino al segnale di fine divieto.',
+    desc_ru:'Обгон запрещён. Действует до знака окончания запрета.',
+    desc_en:'No overtaking allowed until end-of-restriction sign.' },
+  { cat:'divieto', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#fff" stroke="#e30d0d" stroke-width="4"/><text x="30" y="38" text-anchor="middle" font-size="26" fill="#e30d0d">↺</text><line x1="14" y1="46" x2="46" y2="14" stroke="#e30d0d" stroke-width="5"/></svg>',
+    it:'Divieto di inversione', ru:'Разворот запрещён', en:'No U-turn',
+    desc_it:'Vietato invertire il senso di marcia.',
+    desc_ru:'Разворот запрещён.',
+    desc_en:'U-turn prohibited.' },
+  // --- OBBLIGO ---
+  { cat:'obbligo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#0066cc"/><text x="30" y="40" text-anchor="middle" font-size="28" fill="#fff">↑</text></svg>',
+    it:'Obbligo di direzione', ru:'Движение прямо', en:'Go straight ahead',
+    desc_it:'Obbligo di procedere nella direzione indicata dalla freccia.',
+    desc_ru:'Обязательное движение в указанном направлении.',
+    desc_en:'Mandatory direction of travel as shown by the arrow.' },
+  { cat:'obbligo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#0066cc"/><text x="30" y="40" text-anchor="middle" font-size="28" fill="#fff">→</text></svg>',
+    it:'Obbligo di svoltare a destra', ru:'Поворот направо обязателен', en:'Turn right ahead',
+    desc_it:'Obbligo di svoltare a destra. Non è consentito proseguire diritto.',
+    desc_ru:'Поворот направо обязателен. Прямо ехать запрещено.',
+    desc_en:'Mandatory right turn. Proceeding straight is not allowed.' },
+  { cat:'obbligo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#0066cc"/><text x="30" y="42" text-anchor="middle" font-size="22" fill="#fff">⟳</text></svg>',
+    it:'Rotatoria obbligatoria', ru:'Круговое движение', en:'Roundabout ahead',
+    desc_it:'Indica una rotatoria. Dare la precedenza ai veicoli già in rotatoria.',
+    desc_ru:'Круговое движение. Уступайте дорогу транспортным средствам в кольце.',
+    desc_en:'Roundabout ahead. Give way to vehicles already in the roundabout.' },
+  { cat:'obbligo', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="26" fill="#0066cc"/><rect x="20" y="18" width="20" height="3" rx="1" fill="#fff"/><text x="30" y="44" text-anchor="middle" font-size="20" fill="#fff">↑</text></svg>',
+    it:'Passaggio obbligatorio', ru:'Объезд обязателен', en:'Mandatory bypass',
+    desc_it:'Obbligo di passare dal lato indicato (es. ostacolo o isola spartitraffico).',
+    desc_ru:'Обязательный объезд препятствия с указанной стороны.',
+    desc_en:'Mandatory passage on the indicated side of an obstacle.' },
+  // --- INDICAZIONE ---
+  { cat:'indicazione', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="15" width="52" height="30" rx="4" fill="#0066cc"/><text x="30" y="35" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">ROMA 12</text></svg>',
+    it:'Indicazione di direzione', ru:'Указатель направления', en:'Direction sign',
+    desc_it:'Indica la direzione e la distanza per raggiungere una destinazione.',
+    desc_ru:'Указывает направление и расстояние до населённого пункта.',
+    desc_en:'Indicates direction and distance to a destination.' },
+  { cat:'indicazione', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="52" height="40" rx="4" fill="#0066cc"/><text x="30" y="28" text-anchor="middle" font-size="11" fill="#fff">AUTOSTRADA</text><text x="30" y="44" text-anchor="middle" font-size="22" fill="#fff">A1</text></svg>',
+    it:'Autostrada', ru:'Автомагистраль', en:'Motorway',
+    desc_it:'Inizio di un\'autostrada. Vietato l\'accesso a pedoni, ciclomotori sotto 150cc, veicoli lenti.',
+    desc_ru:'Начало автомагистрали. Запрещён въезд пешеходам, мопедам и тихоходным транспортным средствам.',
+    desc_en:'Start of motorway. No entry for pedestrians, mopeds under 150cc, slow vehicles.' },
+  { cat:'indicazione', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="15" width="52" height="30" rx="4" fill="#009933"/><text x="30" y="35" text-anchor="middle" font-size="13" fill="#fff" font-weight="bold">USCITA</text></svg>',
+    it:'Uscita autostradale', ru:'Съезд с автомагистрали', en:'Motorway exit',
+    desc_it:'Indica l\'uscita dall\'autostrada. Portarsi sulla corsia di destra con anticipo.',
+    desc_ru:'Указывает съезд с автомагистрали. Заблаговременно перестройтесь в правый ряд.',
+    desc_en:'Motorway exit ahead. Move to the right lane in advance.' },
+  { cat:'indicazione', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="15" width="52" height="30" rx="4" fill="#0066cc"/><text x="30" y="38" text-anchor="middle" font-size="28" fill="#fff">P</text></svg>',
+    it:'Parcheggio', ru:'Парковка', en:'Parking',
+    desc_it:'Indica un\'area di parcheggio autorizzato.',
+    desc_ru:'Обозначает место разрешённой стоянки.',
+    desc_en:'Indicates an authorised parking area.' },
+  // --- PRECEDENZA ---
+  { cat:'precedenza', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,52 4,52" fill="#fff" stroke="#e30d0d" stroke-width="4"/><polygon points="30,14 48,46 12,46" fill="#e30d0d"/></svg>',
+    it:'Dare precedenza', ru:'Уступите дорогу', en:'Give way',
+    desc_it:'Obbligo di dare la precedenza ai veicoli provenienti da destra o dalla strada principale.',
+    desc_ru:'Обязаны уступить дорогу транспортным средствам справа или на главной дороге.',
+    desc_en:'You must give way to vehicles from the right or on the main road.' },
+  { cat:'precedenza', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="52" height="52" rx="4" fill="#e30d0d"/><rect x="10" y="10" width="40" height="40" rx="3" fill="#fff"/><text x="30" y="40" text-anchor="middle" font-size="30" font-weight="bold" fill="#e30d0d">!</text></svg>',
+    it:'Stop', ru:'Стоп', en:'Stop',
+    desc_it:'Obbligo assoluto di fermarsi e dare la precedenza. Fermarsi anche in assenza di altri veicoli.',
+    desc_ru:'Абсолютная обязанность остановиться и уступить дорогу. Остановка обязательна, даже при отсутствии машин.',
+    desc_en:'Mandatory full stop and give way. Must stop even if no other vehicles are present.' },
+  { cat:'precedenza', svg:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,4 56,30 30,56 4,30" fill="#ffcc00" stroke="#000" stroke-width="3"/></svg>',
+    it:'Precedenza (strada principale)', ru:'Главная дорога', en:'Priority road',
+    desc_it:'Sei sulla strada con diritto di precedenza rispetto alle strade laterali.',
+    desc_ru:'Вы на главной дороге. Имеете преимущество перед боковыми дорогами.',
+    desc_en:'You are on the priority road. You have right of way over side roads.' },
+];
+
 function showTheory(section) {
   const content = document.getElementById('theory-content');
-  const title = document.getElementById('theory-screen-title');
   const t = currentLang;
+  const showTr = theoryShowTranslation;
+  content._currentSection = section;
+  theorySetActive(section);
 
   if (section === 'handbook') {
-    title.textContent = t === 'en' ? '📚 Handbook' : '📚 Учебник по темам';
-    content.innerHTML = THEORY_HANDBOOK.map(ch => `
-      <div class="theory-chapter">
-        <div class="ch-num">${ch.num}</div>
-        <div class="ch-info">
-          <div class="ch-title" style="font-size:15px;font-weight:700">${ch.title.it}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">${ch.title[t]||ch.title.ru}</div>
-          <div class="ch-sub" style="margin-top:4px">${ch.subs.slice(0,3).join(' · ')}${ch.subs.length > 3 ? ' …' : ''}</div>
-        </div>
-        <div class="ch-arrow">›</div>
-      </div>`).join('');
+    content.innerHTML =
+      `<div class="th-content-title">📚 ${t==='en'?'Handbook by topics':'Теория по темам'}</div>` +
+      `<div class="th-content-sub">Codice della Strada — ${t==='en'?'14 chapters':'14 глав'}</div>` +
+      THEORY_HANDBOOK.map(ch => `
+        <div class="theory-chapter">
+          <div class="ch-num">${ch.num}</div>
+          <div class="ch-info">
+            <div class="ch-title" style="font-size:15px;font-weight:700">${ch.title.it}</div>
+            ${showTr ? `<div style="font-size:12px;color:var(--muted);margin-top:2px">${ch.title[t]||ch.title.ru}</div>` : ''}
+            <div class="ch-sub" style="margin-top:4px">${ch.subs.slice(0,3).join(' · ')}${ch.subs.length>3?' …':''}</div>
+          </div>
+          <div class="ch-arrow">›</div>
+        </div>`).join('');
 
   } else if (section === 'glossary') {
-    title.textContent = t === 'en' ? '📝 Glossario' : '📝 Словарь терминов';
-    content.innerHTML = '<div class="theory-section-heading">' + (t === 'en' ? 'Terminologia italiana · Translation' : 'Итальянская терминология · Перевод') + '</div>' +
+    content.innerHTML =
+      `<div class="th-content-title">📝 ${t==='en'?'Glossary':'Словарь терминов'}</div>` +
+      `<div class="th-content-sub">Terminologia italiana${showTr?(t==='en'?' · Translation':' · Перевод'):''}</div>` +
       THEORY_GLOSSARY.map(g => `
         <div class="theory-glossary-item">
           <div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
@@ -4422,44 +4630,41 @@ function showTheory(section) {
             <button onclick="speakItalian('${g.it.replace(/'/g,"\\'")}')" style="background:none;border:none;cursor:pointer;font-size:18px;padding:2px 4px" title="Ascolta">🔊</button>
           </div>
           <div style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5">${g.def_it}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic">${t==='en'?g.def_en:g.def_ru}</div>
+          ${showTr ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic">${t==='en'?g.def_en:g.def_ru}</div>` : ''}
         </div>`).join('');
 
   } else if (section === 'signs') {
-    title.textContent = t === 'en' ? '🚦 Segnaletica stradale' : '🚦 Дорожные знаки';
-    const cats = [
-      { emoji: '⚠️', it: 'Segnali di pericolo', name: { ru: 'Предупреждающие', en: 'Warning signs' },
-        def_it: 'Forma triangolare con bordo rosso. Avvertono di un pericolo ma non impongono divieti.',
-        desc: { ru: 'Треугольник, красная рамка. Только предупреждают — ничего не запрещают.', en: 'Triangle, red border. Warn of danger only — no prohibition.' } },
-      { emoji: '🚫', it: 'Segnali di divieto', name: { ru: 'Запрещающие', en: 'Prohibition signs' },
-        def_it: 'Forma circolare con bordo rosso. Vietano comportamenti specifici.',
-        desc: { ru: 'Круглые, красная рамка. Запрещают конкретные действия.', en: 'Round, red border. Prohibit specific actions.' } },
-      { emoji: '🔵', it: 'Segnali di obbligo', name: { ru: 'Предписывающие', en: 'Mandatory signs' },
-        def_it: 'Forma circolare su fondo blu. Impongono un comportamento obbligatorio.',
-        desc: { ru: 'Круглые, синие. Обязывают выполнить действие.', en: 'Round, blue. Require a specific action.' } },
-      { emoji: '🟦', it: 'Segnali di indicazione', name: { ru: 'Указательные', en: 'Information signs' },
-        def_it: 'Forma rettangolare o quadrata, sfondo blu o verde. Forniscono informazioni utili.',
-        desc: { ru: 'Прямоугольные/квадратные, синие или зелёные. Информируют.', en: 'Rectangular/square, blue or green. Provide information.' } },
-      { emoji: '🟨', it: 'Pannelli integrativi', name: { ru: 'Дополнительные таблички', en: 'Supplementary panels' },
-        def_it: 'Posti sotto il segnale principale. Ne precisano o limitano il significato.',
-        desc: { ru: 'Устанавливаются под основным знаком, уточняют его значение.', en: 'Placed under the main sign to clarify or limit its meaning.' } },
-      { emoji: '🔶', it: 'Segnali temporanei', name: { ru: 'Временные знаки', en: 'Temporary signs' },
-        def_it: 'Usati in cantieri o situazioni transitorie. Hanno precedenza sui segnali permanenti.',
-        desc: { ru: 'При дорожных работах. Имеют приоритет над постоянными знаками.', en: 'Used at roadworks. Take priority over permanent signs.' } },
-    ];
-    content.innerHTML = cats.map(c => `
-      <div class="theory-chapter">
-        <div class="ch-num" style="font-size:22px">${c.emoji}</div>
-        <div class="ch-info">
-          <div style="font-size:15px;font-weight:700">${c.it}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">${c.name[t]||c.name.ru}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px">${c.def_it}</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px;font-style:italic">${c.desc[t]||c.desc.ru}</div>
-        </div>
-      </div>`).join('');
+    const catNames = {
+      pericolo:    { it:'Segnali di pericolo',    ru:'Предупреждающие', en:'Warning signs' },
+      divieto:     { it:'Segnali di divieto',     ru:'Запрещающие',     en:'Prohibition signs' },
+      obbligo:     { it:'Segnali di obbligo',     ru:'Предписывающие',  en:'Mandatory signs' },
+      indicazione: { it:'Segnali di indicazione', ru:'Указательные',    en:'Information signs' },
+      precedenza:  { it:'Precedenza',             ru:'Приоритет',       en:'Priority signs' },
+    };
+    const cats = ['pericolo','divieto','obbligo','indicazione','precedenza'];
+    let html = `<div class="th-content-title">🚦 ${t==='en'?'Road Signs':'Дорожные знаки'}</div>` +
+               `<div class="th-content-sub">Segnaletica stradale italiana — ${ROAD_SIGNS.length} segnali</div>`;
+    cats.forEach(cat => {
+      const signs = ROAD_SIGNS.filter(s => s.cat === cat);
+      if (!signs.length) return;
+      const cn = catNames[cat];
+      html += `<div class="theory-section-heading">${cn.it}`;
+      if (showTr) html += ` <span style="font-weight:400;font-style:italic"> · ${cn[t]||cn.ru}</span>`;
+      html += `</div><div class="signs-grid">`;
+      signs.forEach(s => {
+        html += `<div class="sign-card">
+          <div class="sign-img">${s.svg}</div>
+          <div class="sign-name-it">${s.it}</div>
+          ${showTr ? `<div class="sign-name-tr">${s[t]||s.ru}</div>` : ''}
+          <div class="sign-desc-it">${s.desc_it}</div>
+          ${showTr ? `<div class="sign-desc-tr">${s['desc_'+t]||s.desc_ru}</div>` : ''}
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    content.innerHTML = html;
 
   } else if (section === 'fines') {
-    title.textContent = t === 'en' ? '⚖️ Infrazioni e sanzioni' : '⚖️ Штрафы и санкции';
     content._finesTab = 'violations';
     content._finesLimit = 50;
     buildFinesContent(null);
@@ -4467,27 +4672,31 @@ function showTheory(section) {
     return;
 
   } else if (section === 'commands') {
-    title.textContent = t === 'en' ? '🎤 Comandi dell\'esaminatore' : '🎤 Команды инструктора';
-    content.innerHTML = THEORY_COMMANDS.map(grp => `
-      <div class="theory-section-heading">${grp.group.it} <span style="font-weight:400;font-style:italic"> · ${grp.group[t]||grp.group.ru}</span></div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px">
-        ${grp.items.map((item,i) => `
-          <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;${i>0?'border-top:1px solid var(--border)':''}">
-            <div style="flex:1">
-              <div style="font-size:15px;font-weight:700">${item.it}</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:2px">${item[t]||item.ru}</div>
-            </div>
-            <button onclick="speakItalian('${item.it.replace(/'/g,"\\'")}')" style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;flex-shrink:0" title="Ascolta">🔊</button>
-          </div>`).join('')}
-      </div>`).join('');
+    content.innerHTML =
+      `<div class="th-content-title">🎤 ${t==='en'?"Examiner's commands":"Команды инструктора"}</div>` +
+      `<div class="th-content-sub">Comandi dell'esaminatore${showTr?(t==='en'?' · English':' · Русский'):''}</div>` +
+      THEORY_COMMANDS.map(grp => `
+        <div class="theory-section-heading">${grp.group.it}${showTr?` <span style="font-weight:400;font-style:italic"> · ${grp.group[t]||grp.group.ru}</span>`:''}</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px">
+          ${grp.items.map((item,i) => `
+            <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;${i>0?'border-top:1px solid var(--border)':''}">
+              <div style="flex:1">
+                <div style="font-size:15px;font-weight:700">${item.it}</div>
+                ${showTr ? `<div style="font-size:12px;color:var(--muted);margin-top:2px">${item[t]||item.ru}</div>` : ''}
+              </div>
+              <button onclick="speakItalian('${item.it.replace(/'/g,"\\'")}')" style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;flex-shrink:0" title="Ascolta">🔊</button>
+            </div>`).join('')}
+        </div>`).join('');
 
   } else if (section === 'tips') {
-    title.textContent = t === 'en' ? '💡 Consigli per l\'esame' : '💡 Советы для сдачи';
-    content.innerHTML = THEORY_TIPS.map(tip => `
-      <div class="theory-tip">
-        <div class="tip-title">${tip.title[t] || tip.title.ru}</div>
-        <div class="tip-body">${tip.body[t] || tip.body.ru}</div>
-      </div>`).join('');
+    content.innerHTML =
+      `<div class="th-content-title">💡 ${t==='en'?'Exam tips':'Советы для сдачи'}</div>` +
+      `<div class="th-content-sub">Consigli per l'esame di guida</div>` +
+      THEORY_TIPS.map(tip => `
+        <div class="theory-tip">
+          <div class="tip-title">${t==='en'?tip.title.en:tip.title.ru}</div>
+          <div class="tip-body">${t==='en'?tip.body.en:tip.body.ru}</div>
+        </div>`).join('');
   }
 
   showScreen('s-theory');
