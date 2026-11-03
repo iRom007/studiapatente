@@ -27,12 +27,19 @@
     --bg:     #f1f5f9;
     --card:   #ffffff;
     --card2:  #f8fafc;
-    --border: #cbd5e1;
-    --text:   #0f172a;
-    --muted:  #64748b;
+    --border: #94a3b8;
+    --text:   #0a1628;
+    --muted:  #374151;
     --shadow: 0 2px 12px rgba(0,0,0,0.08);
     --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
   }
+  [data-theme="light"] .cat-desc { color: #1e293b; }
+  [data-theme="light"] .stat-label { color: #374151; }
+  [data-theme="light"] .section-label { color: #374151; }
+  [data-theme="light"] .feat-text p { color: #374151; }
+  [data-theme="light"] .hero p { color: #1e293b; }
+  [data-theme="light"] .meta-pill { color: #1e293b; border-color: #94a3b8; }
+  [data-theme="light"] .cat-sub { color: #374151; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -73,6 +80,13 @@
   }
   .lang-btn.active { background: var(--blue); color: white; }
   .lang-btn:hover:not(.active) { background: var(--card2); color: var(--text); }
+  .font-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 8px; padding: 4px 8px; cursor: pointer;
+    font-size: 13px; font-weight: 700; color: var(--muted); transition: 0.15s;
+    line-height: 1;
+  }
+  .font-btn:hover { background: var(--card2); color: var(--text); }
   .theme-btn {
     background: none; border: 1px solid var(--border);
     border-radius: 8px; padding: 5px 9px; cursor: pointer;
@@ -403,6 +417,7 @@
       <button class="lang-btn" id="ln-it" onclick="setLang('it')">IT</button>
       <button class="lang-btn" id="ln-en" onclick="setLang('en')">EN</button>
     </div>
+    <button class="font-btn" id="font-size-btn" onclick="cycleFont()" title="Размер шрифта">A</button>
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
   </div>
 </nav>
@@ -548,7 +563,7 @@
 </div>
 
 <!-- ===== WATER SECTION ===== -->
-<div class="section">
+<div class="section" id="water-section" style="display:none">
   <div class="section-label" id="t-sec-water">Права на управление водным транспортом</div>
   <div class="cat-grid">
 
@@ -872,6 +887,17 @@ function toggleTheme() {
   try { localStorage.setItem('sp_theme', newTheme); } catch(e) {}
 }
 
+// ===== FONT SIZE =====
+const FONT_SIZES = [16, 18, 20];
+const FONT_LABELS = ['A', 'A+', 'A++'];
+let fontIdx = 0;
+function cycleFont() {
+  fontIdx = (fontIdx + 1) % FONT_SIZES.length;
+  document.body.style.fontSize = FONT_SIZES[fontIdx] + 'px';
+  document.getElementById('font-size-btn').textContent = FONT_LABELS[fontIdx];
+  try { localStorage.setItem('sp_font', fontIdx); } catch(e) {}
+}
+
 // ===== MODAL =====
 function showComingSoon(cat) {
   const T = LANGS[lang] || LANGS.ru;
@@ -896,6 +922,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
     if (t) {
       document.documentElement.setAttribute('data-theme', t);
       document.getElementById('theme-btn').textContent = t === 'light' ? '🌙' : '☀️';
+    }
+  } catch(e) {}
+
+  // Restore font size
+  try {
+    const fi = parseInt(localStorage.getItem('sp_font'));
+    if (!isNaN(fi) && fi > 0 && fi < FONT_SIZES.length) {
+      fontIdx = fi;
+      document.body.style.fontSize = FONT_SIZES[fontIdx] + 'px';
+      document.getElementById('font-size-btn').textContent = FONT_LABELS[fontIdx];
     }
   } catch(e) {}
 
