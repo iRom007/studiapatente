@@ -966,7 +966,122 @@ function translateQ(t, lang) {
       .replace(/sul marciapiede/gi,'на тротуаре').replace(/sulla strada/gi,'на дороге')
       .replace(/sul lato destro/gi,'с правой стороны').replace(/sul lato sinistro/gi,'с левой стороны')
       .replace(/a destra/gi,'вправо').replace(/a sinistra/gi,'влево')
-      .replace(/diritto/gi,'прямо').replace(/al centro/gi,'по центру');
+      .replace(/diritto/gi,'прямо').replace(/al centro/gi,'по центру')
+      .replace(/riporta i nomi delle località raggiungibili/gi,'указывает названия населённых пунктов')
+      .replace(/riporta i nomi/gi,'указывает названия')
+      .replace(/delle località/gi,'населённых пунктов')
+      .replace(/raggiungi\w+/gi,'доступных')
+      .replace(/raffigurato/gi,'изображённый')
+      .replace(/raffigurata/gi,'изображённая')
+      .replace(/rappresentato/gi,'изображённый')
+      .replace(/rappresentata/gi,'изображённая')
+      .replace(/in figura/gi,'на рисунке')
+      .replace(/posto in vicinanza/gi,'расположен вблизи')
+      .replace(/posta in vicinanza/gi,'расположена вблизи')
+      .replace(/indica che/gi,'указывает, что')
+      .replace(/indica un/gi,'указывает на')
+      .replace(/indica la/gi,'указывает')
+      .replace(/indica il/gi,'указывает')
+      .replace(/indica i /gi,'указывает ')
+      .replace(/è consentito/gi,'разрешается')
+      .replace(/è vietato/gi,'запрещается')
+      .replace(/è obbligatorio/gi,'обязательно')
+      .replace(/non è consentito/gi,'не разрешается')
+      .replace(/non è vietato/gi,'не запрещается')
+      .replace(/deve dare/gi,'должен уступить')
+      .replace(/devono dare/gi,'должны уступить')
+      .replace(/la precedenza/gi,'приоритет')
+      .replace(/dare la precedenza/gi,'уступить дорогу')
+      .replace(/un cantiere stradale/gi,'дорожный участок ремонта')
+      .replace(/cantiere/gi,'строительный участок')
+      .replace(/un incrocio/gi,'перекрёсток')
+      .replace(/un passaggio a livello/gi,'железнодорожный переезд')
+      .replace(/passaggio a livello/gi,'железнодорожный переезд')
+      .replace(/una scuola/gi,'школа')
+      .replace(/una curva/gi,'поворот')
+      .replace(/il semaforo/gi,'светофор')
+      .replace(/la striscia pedonale/gi,'пешеходный переход')
+      .replace(/le strisce pedonali/gi,'пешеходные переходы')
+      .replace(/gli attraversamenti pedonali/gi,'пешеходные переходы')
+      .replace(/il dosso/gi,'дорожная неровность')
+      .replace(/il centro abitato/gi,'населённый пункт')
+      .replace(/un'area/gi,'зона')
+      .replace(/l'area/gi,'зона')
+      .replace(/le aree/gi,'зоны')
+      .replace(/gli autocarri/gi,'грузовые автомобили')
+      .replace(/gli autobus/gi,'автобусы')
+      .replace(/le automobili/gi,'автомобили')
+      .replace(/il pedone/gi,'пешеход')
+      .replace(/i pedoni/gi,'пешеходы')
+      .replace(/il ciclista/gi,'велосипедист')
+      .replace(/i ciclisti/gi,'велосипедисти')
+      .replace(/la bicicletta/gi,'велосипед')
+      .replace(/le biciclette/gi,'велосипеды')
+      .replace(/consentito/gi,'разрешено')
+      .replace(/vietato/gi,'запрещено')
+      .replace(/obbligatorio/gi,'обязательно')
+      .replace(/il segnale/gi,'знак')
+      .replace(/i segnali/gi,'знаки')
+      .replace(/un segnale/gi,'знак')
+      .replace(/del segnale/gi,'знака')
+      .replace(/un pannello/gi,'табличка')
+      .replace(/il pannello/gi,'табличка')
+      .replace(/i pannelli/gi,'таблички')
+      .replace(/del pannello/gi,'таблички')
+      .replace(/integrativo/gi,'дополнительный')
+      .replace(/integrativi/gi,'дополнительные')
+      .replace(/la velocità massima/gi,'максимальная скорость')
+      .replace(/velocità massima/gi,'максимальная скорость')
+      .replace(/la massa a pieno carico/gi,'полная масса')
+      .replace(/massa a pieno carico/gi,'полная масса')
+      .replace(/tonnellate/gi,'тонн')
+      .replace(/chilometri orari/gi,'км/ч')
+      .replace(/km\/h/gi,'км/ч')
+      .replace(/gli ammortizzatori/gi,'амортизаторы')
+      .replace(/gli pneumatici/gi,'шины')
+      .replace(/il freno/gi,'тормоз')
+      .replace(/i freni/gi,'тормоза')
+      .replace(/il motore/gi,'двигатель')
+      .replace(/la batteria/gi,'аккумулятор')
+      .replace(/il volante/gi,'руль')
+      .replace(/la frizione/gi,'сцепление')
+      .replace(/il cambio/gi,'коробка передач')
+      .replace(/olio/gi,'масло')
+      .replace(/carburante/gi,'топливо')
+      .replace(/benzina/gi,'бензин')
+      .replace(/gasolio/gi,'дизельное топливо')
+      .replace(/il parabrezza/gi,'лобовое стекло')
+      .replace(/i tergicristalli/gi,'стеклоочистители')
+      .replace(/un veicolo che procede/gi,'транспортное средство, движущееся')
+      .replace(/il veicolo che procede/gi,'транспортное средство, движущееся')
+      .replace(/per i conducenti/gi,'для водителей')
+      .replace(/per il conducente/gi,'для водителя')
+      .replace(/i conducenti devono/gi,'водители должны')
+      .replace(/il conducente deve/gi,'водитель должен')
+      .replace(/norme di circolazione/gi,'правила дорожного движения')
+      .replace(/il codice della strada/gi,'правила дорожного движения')
+      .replace(/polizia stradale/gi,'дорожная полиция')
+      .replace(/carabinieri/gi,'карабинеры')
+      .replace(/la multa/gi,'штраф')
+      .replace(/sanzione/gi,'санкция/штраф')
+      .replace(/decurtazione/gi,'снятие баллов')
+      .replace(/punti/gi,'баллов')
+      .replace(/la patente/gi,'водительское удостоверение')
+      .replace(/della patente/gi,'водительского удостоверения')
+      .replace(/dell'assicurazione/gi,'страховки')
+      .replace(/della polizza/gi,'страхового полиса')
+      .replace(/revisione/gi,'техосмотр')
+      .replace(/collaudo/gi,'техническая проверка')
+      .replace(/bollo/gi,'налог на транспортное средство')
+      .replace(/targhe/gi,'номерные знаки')
+      .replace(/la targa/gi,'номерной знак')
+      .replace(/la manovra di/gi,'манёвр')
+      .replace(/la manovra/gi,'манёвр')
+      .replace(/le manovre/gi,'манёвры')
+      .replace(/l'inversione/gi,'разворот')
+      .replace(/la retromarcia/gi,'задний ход')
+      .replace(/il parcheggio/gi,'парковка')
+      .replace(/un parcheggio/gi,'парковка');
     else return s
       .replace(/il transito/gi,'traffic flow').replace(/il sorpasso/gi,'overtaking')
       .replace(/la sosta/gi,'parking').replace(/la fermata/gi,'stopping')
@@ -990,7 +1105,115 @@ function translateQ(t, lang) {
       .replace(/sul marciapiede/gi,'on the pavement').replace(/sulla strada/gi,'on the road')
       .replace(/sul lato destro/gi,'on the right side').replace(/sul lato sinistro/gi,'on the left side')
       .replace(/a destra/gi,'to the right').replace(/a sinistra/gi,'to the left')
-      .replace(/diritto/gi,'straight ahead').replace(/al centro/gi,'in the centre');
+      .replace(/diritto/gi,'straight ahead').replace(/al centro/gi,'in the centre')
+      .replace(/riporta i nomi delle località raggiungibili/gi,'shows the names of reachable localities')
+      .replace(/riporta i nomi/gi,'shows the names')
+      .replace(/delle località/gi,'of the localities')
+      .replace(/raggiungi\w+/gi,'reachable')
+      .replace(/raffigurato/gi,'shown')
+      .replace(/raffigurata/gi,'shown')
+      .replace(/rappresentato/gi,'shown')
+      .replace(/rappresentata/gi,'shown')
+      .replace(/in figura/gi,'in the figure')
+      .replace(/posto in vicinanza/gi,'located near')
+      .replace(/posta in vicinanza/gi,'located near')
+      .replace(/indica che/gi,'indicates that')
+      .replace(/indica un/gi,'indicates a')
+      .replace(/indica la/gi,'indicates the')
+      .replace(/indica il/gi,'indicates the')
+      .replace(/indica i /gi,'indicates the ')
+      .replace(/è consentito/gi,'is permitted')
+      .replace(/è vietato/gi,'is prohibited')
+      .replace(/è obbligatorio/gi,'is mandatory')
+      .replace(/non è consentito/gi,'is not permitted')
+      .replace(/non è vietato/gi,'is not prohibited')
+      .replace(/deve dare/gi,'must give')
+      .replace(/devono dare/gi,'must give')
+      .replace(/dare la precedenza/gi,'give way')
+      .replace(/un cantiere stradale/gi,'a road construction site')
+      .replace(/cantiere/gi,'construction site')
+      .replace(/un incrocio/gi,'an intersection')
+      .replace(/un passaggio a livello/gi,'a level crossing')
+      .replace(/passaggio a livello/gi,'level crossing')
+      .replace(/una scuola/gi,'a school')
+      .replace(/una curva/gi,'a bend')
+      .replace(/il semaforo/gi,'the traffic light')
+      .replace(/la striscia pedonale/gi,'the pedestrian crossing')
+      .replace(/le strisce pedonali/gi,'pedestrian crossings')
+      .replace(/gli attraversamenti pedonali/gi,'pedestrian crossings')
+      .replace(/il dosso/gi,'the speed bump')
+      .replace(/il centro abitato/gi,'the built-up area')
+      .replace(/un'area/gi,'an area')
+      .replace(/l'area/gi,'the area')
+      .replace(/le aree/gi,'the areas')
+      .replace(/gli autocarri/gi,'heavy goods vehicles')
+      .replace(/gli autobus/gi,'buses')
+      .replace(/le automobili/gi,'cars')
+      .replace(/il pedone/gi,'the pedestrian')
+      .replace(/il ciclista/gi,'the cyclist')
+      .replace(/i ciclisti/gi,'cyclists')
+      .replace(/la bicicletta/gi,'the bicycle')
+      .replace(/le biciclette/gi,'bicycles')
+      .replace(/consentito/gi,'permitted')
+      .replace(/vietato/gi,'prohibited')
+      .replace(/obbligatorio/gi,'mandatory')
+      .replace(/il segnale/gi,'the sign')
+      .replace(/i segnali/gi,'the signs')
+      .replace(/un segnale/gi,'a sign')
+      .replace(/del segnale/gi,'of the sign')
+      .replace(/un pannello/gi,'a panel')
+      .replace(/il pannello/gi,'the panel')
+      .replace(/i pannelli/gi,'the panels')
+      .replace(/del pannello/gi,'of the panel')
+      .replace(/integrativo/gi,'supplementary')
+      .replace(/integrativi/gi,'supplementary')
+      .replace(/la velocità massima/gi,'the maximum speed')
+      .replace(/velocità massima/gi,'maximum speed')
+      .replace(/la massa a pieno carico/gi,'the gross vehicle weight')
+      .replace(/massa a pieno carico/gi,'gross vehicle weight')
+      .replace(/tonnellate/gi,'tonnes')
+      .replace(/chilometri orari/gi,'km/h')
+      .replace(/gli ammortizzatori/gi,'shock absorbers')
+      .replace(/gli pneumatici/gi,'tyres')
+      .replace(/il freno/gi,'the brake')
+      .replace(/i freni/gi,'the brakes')
+      .replace(/il motore/gi,'the engine')
+      .replace(/la batteria/gi,'the battery')
+      .replace(/il volante/gi,'the steering wheel')
+      .replace(/la frizione/gi,'the clutch')
+      .replace(/il cambio/gi,'the gearbox')
+      .replace(/olio/gi,'oil')
+      .replace(/carburante/gi,'fuel')
+      .replace(/benzina/gi,'petrol')
+      .replace(/gasolio/gi,'diesel')
+      .replace(/il parabrezza/gi,'the windscreen')
+      .replace(/i tergicristalli/gi,'windscreen wipers')
+      .replace(/per i conducenti/gi,'for drivers')
+      .replace(/per il conducente/gi,'for the driver')
+      .replace(/i conducenti devono/gi,'drivers must')
+      .replace(/il conducente deve/gi,'the driver must')
+      .replace(/norme di circolazione/gi,'traffic regulations')
+      .replace(/il codice della strada/gi,'the highway code')
+      .replace(/polizia stradale/gi,'traffic police')
+      .replace(/la multa/gi,'the fine')
+      .replace(/sanzione/gi,'penalty')
+      .replace(/decurtazione/gi,'deduction')
+      .replace(/punti/gi,'points')
+      .replace(/la patente/gi,'the driving licence')
+      .replace(/della patente/gi,'of the driving licence')
+      .replace(/dell'assicurazione/gi,'of the insurance')
+      .replace(/della polizza/gi,'of the policy')
+      .replace(/revisione/gi,'MOT test')
+      .replace(/collaudo/gi,'technical inspection')
+      .replace(/targhe/gi,'number plates')
+      .replace(/la targa/gi,'the number plate')
+      .replace(/la manovra di/gi,'the manoeuvre')
+      .replace(/la manovra/gi,'the manoeuvre')
+      .replace(/le manovre/gi,'manoeuvres')
+      .replace(/l'inversione/gi,'a U-turn')
+      .replace(/la retromarcia/gi,'reversing')
+      .replace(/il parcheggio/gi,'parking')
+      .replace(/un parcheggio/gi,'a parking area');
   }
 
   let m;
@@ -1612,14 +1835,116 @@ function translateQ(t, lang) {
   if ((m = t.match(/^Nelle aree (.+)$/i)))
     return ru ? `В зонах: ${w(m[1])}` : `In areas: ${w(m[1])}`;
 
+  // ── IL PANNELLO INTEGRATIVO (without raffigurato) ────────────────────
+  if ((m = t.match(/^Il pannello integrativo in figura (.+)$/i)))
+    return ru ? `Дополнительная табличка на рисунке: ${w(m[1])}` : `The supplementary panel in the figure: ${w(m[1])}`;
+  if ((m = t.match(/^Il pannello integrativo rappresentato (.+)$/i)))
+    return ru ? `Изображённая дополнительная табличка: ${w(m[1])}` : `The supplementary panel shown: ${w(m[1])}`;
+  if ((m = t.match(/^Il pannello integrativo (.+)$/i)))
+    return ru ? `Дополнительная табличка: ${w(m[1])}` : `The supplementary panel: ${w(m[1])}`;
+  if ((m = t.match(/^Il pannello in figura (.+)$/i)))
+    return ru ? `Табличка на рисунке: ${w(m[1])}` : `The panel in the figure: ${w(m[1])}`;
+
+  // ── SEGNALE RAFFIGURATO WITH COLON ───────────────────────────────────
+  if ((m = t.match(/^Il segnale raffigurato:\s*(.+)$/i)))
+    return ru ? `Изображённый знак: ${w(m[1])}` : `The sign shown: ${w(m[1])}`;
+
+  // ── SECONDO LE NORME ─────────────────────────────────────────────────
+  if ((m = t.match(/^Secondo le norme di precedenza (.+)$/i)))
+    return ru ? `Согласно правилам приоритета: ${w(m[1])}` : `According to right-of-way rules: ${w(m[1])}`;
+  if ((m = t.match(/^Secondo le norme (.+)$/i)))
+    return ru ? `Согласно правилам: ${w(m[1])}` : `According to the rules: ${w(m[1])}`;
+
+  // ── SE UN FERITO / INFORTUNATO ────────────────────────────────────────
+  if ((m = t.match(/^Se un infortunato (.+)$/i)))
+    return ru ? `Если пострадавший: ${w(m[1])}` : `If an injured person: ${w(m[1])}`;
+  if ((m = t.match(/^Se un ferito (.+)$/i)))
+    return ru ? `Если пострадавший: ${w(m[1])}` : `If a wounded person: ${w(m[1])}`;
+
+  // ── NELLA SITUAZIONE / NELLA FIGURA ──────────────────────────────────
+  if ((m = t.match(/^La strada rappresentata (.+)$/i)))
+    return ru ? `Изображённая дорога: ${w(m[1])}` : `The road shown: ${w(m[1])}`;
+  if ((m = t.match(/^Dopo il segnale (.+)$/i)))
+    return ru ? `После знака: ${w(m[1])}` : `After the sign: ${w(m[1])}`;
+
+  // ── NELL'ATTRAVERSARE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Nell'attraversare (.+)$/i)))
+    return ru ? `При пересечении: ${w(m[1])}` : `When crossing: ${w(m[1])}`;
+
+  // ── SU STRADE COPERTE / WET ROADS ────────────────────────────────────
+  if ((m = t.match(/^Su strade coperte (.+)$/i)))
+    return ru ? `На дорогах, покрытых: ${w(m[1])}` : `On roads covered with: ${w(m[1])}`;
+
+  // ── PER DIMINUIRE / RIDURRE ───────────────────────────────────────────
+  if ((m = t.match(/^Per diminuire il (.+)$/i)))
+    return ru ? `Для снижения: ${w(m[1])}` : `To reduce: ${w(m[1])}`;
+
+  // ── LE SOSPENSIONI ────────────────────────────────────────────────────
+  if ((m = t.match(/^Le sospensioni (.+)$/i)))
+    return ru ? `Подвеска: ${w(m[1])}` : `The suspension: ${w(m[1])}`;
+
+  // ── IL VIGILE DISPOSTO ────────────────────────────────────────────────
+  if ((m = t.match(/^Il vigile (.+)$/i)))
+    return ru ? `Регулировщик: ${w(m[1])}` : `The traffic officer: ${w(m[1])}`;
+
+  // ── QUANDO LE PERSONE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Quando le persone (.+)$/i)))
+    return ru ? `Когда люди: ${w(m[1])}` : `When people: ${w(m[1])}`;
+
+  // ── SI DEVONO ─────────────────────────────────────────────────────────
+  if ((m = t.match(/^Si devono (.+)$/i)))
+    return ru ? `Необходимо: ${w(m[1])}` : `It is necessary to: ${w(m[1])}`;
+
+  // ── ALLORCHÉ DI NOTTE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Allorché di notte[,]? (.+)$/i)))
+    return ru ? `В ночное время: ${w(m[1])}` : `At night: ${w(m[1])}`;
+
+  // ── SE AD UN ──────────────────────────────────────────────────────────
+  if ((m = t.match(/^Se ad un (.+)$/i)))
+    return ru ? `Если: ${w(m[1])}` : `If at a: ${w(m[1])}`;
+
+  // ── DURANTE LA MARCIA (with comma) ───────────────────────────────────
+  if ((m = t.match(/^Durante la marcia[,]? (.+)$/i)))
+    return ru ? `Во время движения: ${w(m[1])}` : `While moving: ${w(m[1])}`;
+
+  // ── DURANTE LA GUIDA (with comma) ────────────────────────────────────
+  if ((m = t.match(/^Durante la guida[,]? (.+)$/i)))
+    return ru ? `Во время вождения: ${w(m[1])}` : `While driving: ${w(m[1])}`;
+
+  // ── E' VIETATO, IN ────────────────────────────────────────────────────
+  if ((m = t.match(/^E' vietato, (.+)$/i)))
+    return ru ? `Запрещается: ${w(m[1])}` : `It is prohibited: ${w(m[1])}`;
+  if ((m = t.match(/^È vietato, (.+)$/i)))
+    return ru ? `Запрещается: ${w(m[1])}` : `It is prohibited: ${w(m[1])}`;
+
+  // ── DOPO UN INCIDENTE ─────────────────────────────────────────────────
+  if ((m = t.match(/^Dopo un incidente (.+)$/i)))
+    return ru ? `После ДТП: ${w(m[1])}` : `After an accident: ${w(m[1])}`;
+
+  // ── SUI MOTOCICLI ─────────────────────────────────────────────────────
+  if ((m = t.match(/^Sui motocicli (.+)$/i)))
+    return ru ? `На мотоциклах: ${w(m[1])}` : `On motorcycles: ${w(m[1])}`;
+
+  // ── LE STRADE EXTRAURBANE ─────────────────────────────────────────────
+  if ((m = t.match(/^Le strade extraurbane (.+)$/i)))
+    return ru ? `Загородные дороги: ${w(m[1])}` : `Rural roads: ${w(m[1])}`;
+
+  // ── I SEGNALI LUMINOSI ────────────────────────────────────────────────
+  if ((m = t.match(/^I segnali luminosi (.+)$/i)))
+    return ru ? `Световые сигналы: ${w(m[1])}` : `Light signals: ${w(m[1])}`;
+
+  // ── QUANDO AD UN INCROCIO ─────────────────────────────────────────────
+  if ((m = t.match(/^Quando ad un (.+)$/i)))
+    return ru ? `Когда на: ${w(m[1])}` : `When at a: ${w(m[1])}`;
+
   // ── GENERIC CATCHALLS ────────────────────────────────────────────────
   if ((m = t.match(/^L'(.+)$/i)))
     return ru ? `${w(m[1])}` : `${w(m[1])}`;
   if ((m = t.match(/^Lo (.+)$/i)))
     return ru ? `${w(m[1])}` : `${w(m[1])}`;
 
-  // ── FALLBACK: show original Italian ─────────────────────────────────
-  return t;
+  // ── SMART FALLBACK: translate key Italian words, keep rest ─────────────
+  return w(t);
 }
 
 
