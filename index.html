@@ -84,15 +84,15 @@
   .lang-btn:hover:not(.active) { background: var(--card2); color: var(--text); }
   .font-btn {
     background: none; border: 1px solid var(--border);
-    border-radius: 8px; padding: 4px 8px; cursor: pointer;
-    font-size: 13px; font-weight: 700; color: var(--muted); transition: 0.15s;
+    border-radius: 8px; padding: 5px 10px; cursor: pointer;
+    font-size: 12px; font-weight: 700; color: var(--muted); transition: 0.15s;
     line-height: 1;
   }
   .font-btn:hover { background: var(--card2); color: var(--text); }
   .theme-btn {
     background: none; border: 1px solid var(--border);
-    border-radius: 8px; padding: 5px 9px; cursor: pointer;
-    font-size: 16px; color: var(--text); transition: 0.15s;
+    border-radius: 8px; padding: 5px 10px; cursor: pointer;
+    font-size: 12px; color: var(--text); transition: 0.15s; line-height: 1;
   }
   .theme-btn:hover { background: var(--card2); }
 
@@ -420,7 +420,7 @@
       <button class="lang-btn" id="ln-ru" onclick="setLang('ru')">RU</button>
     </div>
     <button class="font-btn" id="font-size-btn" onclick="cycleFont()" title="Размер шрифта">A</button>
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">☾</button>
   </div>
 </nav>
 
@@ -497,11 +497,11 @@
         </div>
       </div>
       <div class="cat-desc" id="t-a-desc">
-        Мотоциклы без ограничений мощности. Доступна с 24 лет или через 2 года после A2. В разработке.
+        Мотоциклы без ограничений мощности. Прямой доступ с 24 лет, или с 20 лет после 2 лет с A2. Высший уровень мотоциклетных прав.
       </div>
       <div class="cat-meta">
         <div class="meta-pill"><span class="icon">🔒</span><span id="t-a-q">~2 500 вопросов</span></div>
-        <div class="meta-pill"><span class="icon">📅</span><span id="t-coming-label">В разработке</span></div>
+        <div class="meta-pill"><span class="icon">📚</span><span>30 вопр. · 20 мин</span></div>
       </div>
       <div class="cat-cta">
         <button class="cta-btn" style="color:var(--orange)" onclick="showComingSoon('A')">
@@ -518,15 +518,15 @@
         <div class="cat-titles">
           <div class="cat-badge badge-coming">СКОРО</div>
           <div class="cat-name">Категория A2</div>
-          <div class="cat-sub" id="t-a2-sub">Мотоцикл · до 35 кВт</div>
+          <div class="cat-sub" id="t-a2-sub">Мотоцикл · до 35 кВт · с 18 лет</div>
         </div>
       </div>
       <div class="cat-desc" id="t-a2-desc">
-        Мотоциклы мощностью до 35 кВт. Доступна с 18 лет. Промежуточная ступень перед категорией A.
+        Мотоциклы мощностью до 35 кВт (47 л.с.), мин. 175 кг. Доступна с 18 лет. Через 2 года даёт право перейти на A без экзамена.
       </div>
       <div class="cat-meta">
         <div class="meta-pill"><span class="icon">🔒</span><span>~2 500 вопросов</span></div>
-        <div class="meta-pill"><span class="icon">📅</span><span id="t-coming-label2">В разработке</span></div>
+        <div class="meta-pill"><span class="icon">📚</span><span>30 вопр. · 20 мин</span></div>
       </div>
       <div class="cat-cta">
         <button class="cta-btn" style="color:var(--purple)" onclick="showComingSoon('A2')">
@@ -543,15 +543,15 @@
         <div class="cat-titles">
           <div class="cat-badge badge-coming">СКОРО</div>
           <div class="cat-name">Категория A1</div>
-          <div class="cat-sub" id="t-a1-sub">Мотоцикл · до 11 кВт</div>
+          <div class="cat-sub" id="t-a1-sub">Мотоцикл · до 11 кВт · с 16 лет</div>
         </div>
       </div>
       <div class="cat-desc" id="t-a1-desc">
-        Лёгкие мотоциклы до 11 кВт (125 куб. см). Доступна с 16 лет. Идеально для начинающих.
+        Лёгкие мотоциклы до 125 куб. см и 11 кВт (15 л.с.). Доступна с 16 лет. Первая ступень мотоциклетных прав в Италии.
       </div>
       <div class="cat-meta">
         <div class="meta-pill"><span class="icon">🔒</span><span>~2 500 вопросов</span></div>
-        <div class="meta-pill"><span class="icon">📅</span><span>В разработке</span></div>
+        <div class="meta-pill"><span class="icon">📚</span><span>30 вопр. · 20 мин</span></div>
       </div>
       <div class="cat-cta">
         <button class="cta-btn" style="color:var(--gold)" onclick="showComingSoon('A1')">
@@ -890,7 +890,7 @@ function toggleTheme() {
   const isDark = html.getAttribute('data-theme') === 'dark';
   const newTheme = isDark ? 'light' : 'dark';
   html.setAttribute('data-theme', newTheme);
-  document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-btn').textContent = isDark ? '☾' : '☀';
   try { localStorage.setItem('sp_theme', newTheme); } catch(e) {}
 }
 
@@ -928,7 +928,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
     const t = localStorage.getItem('sp_theme');
     if (t) {
       document.documentElement.setAttribute('data-theme', t);
-      document.getElementById('theme-btn').textContent = t === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-btn').textContent = t === 'light' ? '☾' : '☀';
     }
   } catch(e) {}
 
