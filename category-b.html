@@ -1992,15 +1992,7 @@ function translateQ(t, lang) {
       .replace(/\bgaregg\w+/gi,'участие в гонках').replace(/\bgenerale\b/gi,'общий')
       .replace(/\bmodificare\b/gi,'изменить').replace(/\bforatura\b/gi,'прокол')
       .replace(/\binfraz\w+/gi,'нарушения').replace(/\bmomento\b/gi,'момент')
-      .replace(/\belle\b/gi,'') // fragment, remove
-      .replace(/\bzone\b/gi,'') // fragment, remove
-      .replace(/\bzione\b/gi,'') // fragment, remove
-      .replace(/\bzioni\b/gi,'') // fragment, remove
-      .replace(/\beventual\b/gi,'') // fragment, remove
-      .replace(/\balc\b/gi,'') // fragment, remove
-      .replace(/\bpre\b/gi,'') // fragment, remove
-      .replace(/\bsor\b/gi,'') // fragment, remove
-      .replace(/\ball\b(?!\s*\d)/gi,'') // fragment, remove if not before number
+      // (fragment cleanup removed — was incorrectly deleting translated text)
       .replace(/\bessere\b/gi,'быть').replace(/\bè\b/gi,'является')
       .replace(/\bposto\b/gi,'расположен').replace(/\bposta\b/gi,'расположена').replace(/\bposti\b/gi,'расположены')
       .replace(/\bcircolazione\b/gi,'движение').replace(/\bmarcia\b/gi,'движение')
