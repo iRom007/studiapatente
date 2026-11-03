@@ -427,17 +427,17 @@
 <body>
 
 <nav>
-  <a href="index.html" class="back-btn" id="back-btn" title="Выбор категории">←</a>
+  <a href="index.html" class="back-btn" id="back-btn" title="Выбор категории" aria-label="Назад к выбору категории">←</a>
   <button class="logo" onclick="goHome()" title="На главную">
-    <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span> <span class="cat-label">B</span>
+    <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span>
   </button>
-  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">☀</button>
   <div class="lang-switcher" id="lang-switcher">
-    <button class="lang-btn" id="lang-it" onclick="setLang('it')">IT</button>
-    <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
-    <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')">RU</button>
+    <button class="lang-btn" id="lang-it" onclick="setLang('it')" aria-label="Итальянский язык">IT</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')" aria-label="Английский язык">EN</button>
+    <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')" aria-label="Русский язык">RU</button>
   </div>
-  <button class="font-btn" id="font-btn" onclick="toggleFont()" title="Размер шрифта">Аа</button>
+  <button class="font-btn" id="font-btn" onclick="toggleFont()" title="Размер шрифта" aria-label="Переключить размер шрифта">Аа</button>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему" aria-label="Переключить тему оформления">☀</button>
   <div class="premium-badge" onclick="showPremiumModal('nav')">👑 Premium</div>
 </nav>
 
