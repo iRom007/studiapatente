@@ -243,16 +243,12 @@
   .exam-err-counter { font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
   .exam-err-counter.warn1 { color: var(--orange, #f97316); }
   .exam-err-counter.danger { color: var(--red); animation: blink 1s step-end infinite; }
-  /* Bilingual mode */
-  .bilingual-toggle { background: none; border: 1px solid var(--border); border-radius: 6px;
-    padding: 3px 8px; font-size: 11px; color: var(--muted); cursor: pointer; transition: 0.15s;
-    white-space: nowrap; align-self: flex-end; margin-bottom: 4px; }
-  .bilingual-toggle.active { background: #2563eb20; border-color: var(--blue); color: var(--blue); }
-  .bilingual-toggle:hover { background: var(--card2); color: var(--text); }
-  .q-original { font-size: 13px; color: var(--muted); font-style: italic;
-    border-left: 3px solid var(--border); padding: 6px 10px; margin-top: 8px;
-    border-radius: 0 6px 6px 0; background: var(--card2); line-height: 1.5; }
-  [data-theme="light"] .q-original { background: #f1f5f9; border-color: #94a3b8; }
+  /* Bilingual mode — translation shown below original */
+  .q-translation { font-size: 13px; color: var(--muted); margin-top: 7px; line-height: 1.5;
+    padding-left: 2px; display: none; }
+  .q-original { font-size: 15px; line-height: 1.6; font-weight: 500; }
+  /* when bilingual is on, q-text becomes the Italian original (styled as main text),
+     q-translation shows the RU/EN subtitle below it */
   .progress-bar-wrap { background: var(--border); border-radius: 4px; height: 5px;
     margin-bottom: 18px; overflow: hidden; }
   .progress-bar { height: 100%; background: var(--green); transition: width 0.3s; }
@@ -431,10 +427,9 @@
   <button class="logo" onclick="goHome()" title="На главную">
     <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span>
   </button>
-  <div class="lang-switcher" id="lang-switcher">
-    <button class="lang-btn" id="lang-it" onclick="setLang('it')" aria-label="Итальянский язык">IT</button>
-    <button class="lang-btn" id="lang-en" onclick="setLang('en')" aria-label="Английский язык">EN</button>
-    <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')" aria-label="Русский язык">RU</button>
+  <div class="lang-switcher" id="lang-switcher" title="Язык перевода">
+    <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')" aria-label="Перевод на русский">RU</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')" aria-label="Перевод на английский">EN</button>
   </div>
   <button class="font-btn" id="font-btn" onclick="toggleFont()" title="Размер шрифта" aria-label="Переключить размер шрифта">Аа</button>
   <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему" aria-label="Переключить тему оформления">☀</button>
@@ -509,7 +504,6 @@
     <button class="back-btn" id="back-btn" onclick="goHome()">← Назад</button>
     <div class="quiz-title" id="quiz-title">Тема</div>
     <div class="q-counter" id="q-counter">1 / 30</div>
-    <button class="bilingual-toggle" id="bilingual-toggle" onclick="toggleBilingual()" title="Итальянский оригинал">🇮🇹 IT</button>
     <div class="exam-err-counter" id="exam-err-counter" style="display:none">❌ <span id="err-display">0/3</span></div>
     <div class="exam-timer" id="exam-timer" style="display:none">⏱ <span id="timer-display">30:00</span></div>
   </div>
@@ -518,8 +512,8 @@
   <div id="quiz-content">
     <div class="question-card">
       <div class="question-num" id="q-num">#00000</div>
-      <div class="question-text" id="q-text"></div>
-      <div class="q-original" id="q-original" style="display:none"></div>
+      <div class="question-text q-original" id="q-text"></div>
+      <div class="q-translation" id="q-translation"></div>
       <div class="sign-visual" id="sign-visual"></div>
     </div>
 
@@ -3671,10 +3665,6 @@ function clearExamTimer() {
 function beginSession(qs, title, isExam) {
   clearExamTimer();
   session = { qs, idx: 0, correct: 0, wrong: 0, started: Date.now(), title, limitHit: false, isExam: !!isExam, wrongItems: [] };
-  // Reset bilingual mode state
-  bilingualMode = false;
-  const biBtn = document.getElementById('bilingual-toggle');
-  if (biBtn) biBtn.classList.remove('active');
   document.getElementById('quiz-title').textContent = title;
   document.getElementById('quiz-content').style.display = '';
   document.getElementById('limit-overlay').style.display = 'none';
@@ -3710,12 +3700,10 @@ function renderQ() {
     currentLang === 'it' ? `Domanda #${q.n||q.id}` :
     currentLang === 'en' ? `Question #${q.n||q.id}` :
     `Вопрос #${q.n||q.id}`;
-  document.getElementById('q-text').textContent = translateQ(q.t, currentLang);
+  // Always show Italian original in the main question text
+  document.getElementById('q-text').textContent = q.t;
+  // Show translation below it (RU or EN)
   updateBilingualView();
-
-  // Update bilingual toggle visibility (hide in IT mode since no point)
-  const biBtn = document.getElementById('bilingual-toggle');
-  if (biBtn) biBtn.style.display = currentLang === 'it' ? 'none' : '';
 
   // Sign / intersection image
   const sv = document.getElementById('sign-visual');
@@ -3923,22 +3911,18 @@ function goHome() {
 }
 
 // ===== BILINGUAL MODE =====
-let bilingualMode = false;
-function toggleBilingual() {
-  bilingualMode = !bilingualMode;
-  const btn = document.getElementById('bilingual-toggle');
-  if (btn) btn.classList.toggle('active', bilingualMode);
-  updateBilingualView();
-}
+// Always on: q-text shows Italian original, q-translation shows RU/EN below it
 function updateBilingualView() {
-  const origEl = document.getElementById('q-original');
-  if (!origEl || !session.qs[session.idx]) return;
+  const transEl = document.getElementById('q-translation');
+  if (!transEl || !session.qs || !session.qs[session.idx]) return;
   const q = session.qs[session.idx];
-  if (bilingualMode && currentLang !== 'it') {
-    origEl.textContent = q.t;
-    origEl.style.display = '';
+  const translated = translateQ(q.t, currentLang);
+  // Only show translation if it differs from original (i.e. not IT mode)
+  if (currentLang !== 'it' && translated !== q.t) {
+    transEl.textContent = translated;
+    transEl.style.display = '';
   } else {
-    origEl.style.display = 'none';
+    transEl.style.display = 'none';
   }
 }
 
@@ -4058,12 +4042,14 @@ function checkRenewal() {
 // ===== LANGUAGE SWITCHER =====
 // Support ?lang= URL param (Этап 3 i18n)
 const _urlLang = new URLSearchParams(location.search).get('lang');
-if (_urlLang && ['ru','it','en'].includes(_urlLang)) {
+if (_urlLang && ['ru','en'].includes(_urlLang)) {
   try { localStorage.setItem('lang', _urlLang); } catch(e) {}
 }
-let currentLang = (_urlLang && ['ru','it','en'].includes(_urlLang))
+// Default to 'ru'; if old localStorage had 'it', fall back to 'ru'
+const _savedLang = localStorage.getItem('lang');
+let currentLang = (_urlLang && ['ru','en'].includes(_urlLang))
   ? _urlLang
-  : (localStorage.getItem('lang') || 'ru');
+  : (['ru','en'].includes(_savedLang) ? _savedLang : 'ru');
 
 function setLang(lang) {
   currentLang = lang;
@@ -4072,7 +4058,6 @@ function setLang(lang) {
   document.body.className = document.body.className.replace(/lang-\w+/g, '').trim();
   document.body.classList.add('lang-' + lang);
   document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
-  document.getElementById('lang-it').classList.toggle('active', lang === 'it');
   document.getElementById('lang-en').classList.toggle('active', lang === 'en');
   // Apply all static UI translations
   applyI18n();
@@ -4135,7 +4120,6 @@ function updateExpLang() {
 checkRenewal();
 document.body.classList.add('lang-' + currentLang);
 document.getElementById('lang-ru').classList.toggle('active', currentLang === 'ru');
-document.getElementById('lang-it').classList.toggle('active', currentLang === 'it');
 document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
 applyI18n(); // apply translations before renderHome so page never flashes Russian
 renderHome();
