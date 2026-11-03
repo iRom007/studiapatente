@@ -191,6 +191,56 @@
   .exam-btn .sub { font-size: 11px; font-weight: 400; color: inherit; opacity: 0.8;
     display: block; margin-top: 3px; }
 
+  /* THEORY SCREEN */
+  .theory-chapter { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer;
+    transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+  .theory-chapter:hover { border-color: var(--blue); }
+  .theory-chapter .ch-num { font-size: 13px; font-weight: 700; color: var(--muted);
+    min-width: 28px; }
+  .theory-chapter .ch-info { flex: 1; }
+  .theory-chapter .ch-title { font-size: 14px; font-weight: 600; }
+  .theory-chapter .ch-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .theory-chapter .ch-arrow { color: var(--muted); font-size: 16px; }
+  .theory-section-heading { font-size: 13px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .theory-glossary-item { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+  .theory-glossary-item .gl-it { font-size: 15px; font-weight: 600; }
+  .theory-glossary-item .gl-ru { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .theory-sign-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .theory-sign-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px; text-align: center; }
+  .theory-sign-card .sg-emoji { font-size: 28px; margin-bottom: 6px; }
+  .theory-sign-card .sg-name { font-size: 12px; font-weight: 600; }
+  .theory-sign-card .sg-desc { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .theory-tip { background: var(--card); border-left: 3px solid var(--blue);
+    border-radius: 0 10px 10px 0; padding: 12px 14px; margin-bottom: 8px; }
+  .theory-tip .tip-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .theory-tip .tip-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .theory-fine-row { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+    display: flex; gap: 12px; align-items: flex-start; }
+  .theory-fine-row .fine-icon { font-size: 22px; flex-shrink: 0; }
+  .theory-fine-row .fine-info { flex: 1; }
+  .theory-fine-row .fine-name { font-size: 13px; font-weight: 600; }
+  .theory-fine-row .fine-detail { font-size: 12px; color: var(--red); margin-top: 3px; font-weight: 600; }
+  .theory-fine-row .fine-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* THEORY MENU */
+  .theory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+  .theory-card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 13px 14px; cursor: pointer; transition: 0.2s;
+    display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+  .theory-card:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .theory-card .t-icon { font-size: 22px; flex-shrink: 0; }
+  .theory-card .t-info { flex: 1; min-width: 0; }
+  .theory-card .t-name { font-size: 12px; font-weight: 600; }
+  .theory-card .t-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  /* handbook card spans full width */
+  .theory-card.wide { grid-column: 1 / -1; }
+
   /* TOPIC GRID */
   .topics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .topic-card { background: var(--card); border: 1px solid var(--border);
@@ -489,6 +539,52 @@
     </div>
   </div>
 
+  <!-- THEORY SECTION -->
+  <div class="section-title" id="theory-section-title">📖 Теория</div>
+  <div class="theory-grid" id="theory-grid">
+    <!-- handbook: full-width -->
+    <div class="theory-card wide" onclick="showTheoryHandbook()">
+      <span class="t-icon">📚</span>
+      <div class="t-info">
+        <div class="t-name" id="th-handbook-name">Учебник по темам</div>
+        <div class="t-sub" id="th-handbook-sub">14 разделов · 80 глав · официальная программа</div>
+      </div>
+      <span style="color:var(--muted);font-size:16px">›</span>
+    </div>
+    <!-- signs -->
+    <div class="theory-card" onclick="showTheorySigns()">
+      <span class="t-icon">🚦</span>
+      <div class="t-info">
+        <div class="t-name" id="th-signs-name">Дорожные знаки</div>
+        <div class="t-sub" id="th-signs-sub">все категории</div>
+      </div>
+    </div>
+    <!-- glossary -->
+    <div class="theory-card" onclick="showTheoryGlossary()">
+      <span class="t-icon">📝</span>
+      <div class="t-info">
+        <div class="t-name" id="th-glossary-name">Словарь терминов</div>
+        <div class="t-sub" id="th-glossary-sub">IT → RU / EN</div>
+      </div>
+    </div>
+    <!-- fines -->
+    <div class="theory-card" onclick="showTheoryFines()">
+      <span class="t-icon">⚖️</span>
+      <div class="t-info">
+        <div class="t-name" id="th-fines-name">Штрафы и санкции</div>
+        <div class="t-sub" id="th-fines-sub">нарушения и последствия</div>
+      </div>
+    </div>
+    <!-- tips -->
+    <div class="theory-card" onclick="showTheoryTips()">
+      <span class="t-icon">💡</span>
+      <div class="t-info">
+        <div class="t-name" id="th-tips-name">Советы для сдачи</div>
+        <div class="t-sub" id="th-tips-sub">лайфхаки и стратегии</div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOPICS -->
   <div class="section-title" id="topics-section-title">📚 Темы <span id="topics-subtitle">— все доступны бесплатно</span></div>
   <div class="topics" id="topics-grid"></div>
@@ -568,6 +664,15 @@
     <h3 id="wrong-review-title">❌ Разбор ошибок</h3>
     <div id="wrong-items-list"></div>
   </div>
+</div>
+
+<!-- ====== THEORY SCREEN ====== -->
+<div class="screen" id="s-theory">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+    <button class="back-btn" onclick="goHome()" style="width:auto;height:auto;padding:7px 12px;font-size:13px;border-radius:8px">← Назад</button>
+    <h2 id="theory-screen-title" style="font-size:18px;font-weight:700;margin:0;flex:1">📖 Теория</h2>
+  </div>
+  <div id="theory-content"></div>
 </div>
 
 <!-- ====== PREMIUM MODAL ====== -->
@@ -3925,6 +4030,159 @@ function updateBilingualView() {
     transEl.style.display = 'none';
   }
 }
+
+// ===== THEORY SECTION =====
+const THEORY_HANDBOOK = [
+  { num: '1', title: { ru: 'Дорога и общие правила', en: 'Road and general rules', it: 'Strada e norme generali' }, subs: ['Типы дорог и их части','Участники движения','Общие правила','Полосы и обочина','Автомагистрали','Спецполосы'] },
+  { num: '2', title: { ru: 'Знаки, сигналы, разметка', en: 'Signs, signals, markings', it: 'Segnali e segnaletica' }, subs: ['Применение знаков','Регулировщик','Временные знаки','Светофоры','Предупреждающие знаки','Запрещающие знаки','Указательные знаки','Разметка','Обозначения на ТС'] },
+  { num: '3', title: { ru: 'Скорость и дистанция', en: 'Speed and distance', it: 'Velocità e distanze' }, subs: ['Основные понятия','Когда снижать скорость','Ограничения скорости','Безопасная дистанция'] },
+  { num: '4', title: { ru: 'Преимущество в движении', en: 'Right of way', it: 'Precedenza' }, subs: ['Перекрёстки','Сужения дороги','ЖД переезды','Тоннели','Спецтранспорт'] },
+  { num: '5', title: { ru: 'Манёвры', en: 'Manoeuvres', it: 'Manovre' }, subs: ['Правила манёвров','Въезд в поток','Перестроение','Повороты','Разворот','Обгон','Остановка и стоянка','Движение задним ходом'] },
+  { num: '6', title: { ru: 'Уязвимые участники', en: 'Vulnerable road users', it: 'Utenti vulnerabili' }, subs: ['Общие понятия','Пешеходы','Велосипедисты','Мотоциклы','Категория B на мото','Самокаты','Животные'] },
+  { num: '7', title: { ru: 'Световые и звуковые сигналы', en: 'Lights and signals', it: 'Luci e segnali acustici' }, subs: ['Общие правила','Виды огней','Звуковые сигналы'] },
+  { num: '8', title: { ru: 'Перевозка людей и грузов', en: 'Passengers and cargo', it: 'Persone e merci' }, subs: ['Пассажиры','Грузы'] },
+  { num: '9', title: { ru: 'Транспортное средство', en: 'Vehicle', it: 'Il veicolo' }, subs: ['Виды ТС','Посадка и обзор','Органы управления','Оснащение','Устройство и ТО'] },
+  { num: '10', title: { ru: 'Безопасность ТС', en: 'Vehicle safety', it: 'Sicurezza del veicolo' }, subs: ['Активная и пассивная безопасность','Тормоза и ESP','Шины','Освещение и подвеска','ADAS','Пассивная безопасность'] },
+  { num: '11', title: { ru: 'Водитель и риски', en: 'Driver and risk factors', it: 'Conducente e rischi' }, subs: ['Восприятие и реакция','Опыт и возраст','Эмоции','Алкоголь','Наркотики','Болезни и лекарства','Сон','Усталость','Отвлечение','Скорость'] },
+  { num: '12', title: { ru: 'Экономичное и безопасное вождение', en: 'Eco and safe driving', it: 'Guida preventiva ed ecologica' }, subs: ['Предупредительное вождение','Сложные условия','Взаимное уважение','Экономичность','Электромобили и зоны'] },
+  { num: '13', title: { ru: 'ДТП и первая помощь', en: 'Accidents and first aid', it: 'Incidenti e pronto soccorso' }, subs: ['Масштабы ДТП','Причины','Где и как','Действия при ДТП','Первая помощь'] },
+  { num: '14', title: { ru: 'Документы, права, штрафы', en: 'Documents, licences, fines', it: 'Documenti, patenti, sanzioni' }, subs: ['Документы водителя','Техосмотр ITV','Водительские права','Балльная система','Санкции'] },
+];
+
+const THEORY_GLOSSARY = [
+  { it: 'Carreggiata', ru: 'Проезжая часть дороги', en: 'Carriageway' },
+  { it: 'Corsia', ru: 'Полоса движения', en: 'Lane' },
+  { it: 'Precedenza', ru: 'Преимущество / приоритет', en: 'Right of way' },
+  { it: 'Sorpasso', ru: 'Обгон', en: 'Overtaking' },
+  { it: 'Distanza di sicurezza', ru: 'Безопасная дистанция', en: 'Safe following distance' },
+  { it: 'Spazio di frenatura', ru: 'Тормозной путь', en: 'Braking distance' },
+  { it: 'Spazio di arresto', ru: 'Остановочный путь', en: 'Stopping distance' },
+  { it: 'Fermata', ru: 'Кратковременная остановка (≤1 мин, водитель в ТС)', en: 'Brief stop (≤1 min, driver present)' },
+  { it: 'Sosta', ru: 'Стоянка', en: 'Parking / prolonged stop' },
+  { it: 'Svolta', ru: 'Поворот', en: 'Turn' },
+  { it: 'Inversione di marcia', ru: 'Разворот', en: 'U-turn' },
+  { it: 'Incrocio', ru: 'Перекрёсток', en: 'Intersection / crossroads' },
+  { it: 'Rotatoria', ru: 'Кольцевой перекрёсток', en: 'Roundabout' },
+  { it: 'Passaggio a livello', ru: 'Железнодорожный переезд', en: 'Level crossing' },
+  { it: 'Autostrada', ru: 'Автомагистраль', en: 'Motorway / highway' },
+  { it: 'Strada extraurbana principale', ru: 'Главная внегородская дорога', en: 'Main extra-urban road' },
+  { it: 'Centro abitato', ru: 'Населённый пункт', en: 'Built-up area' },
+  { it: 'Aderenza', ru: 'Сцепление с дорогой', en: 'Road grip / traction' },
+  { it: 'Aquaplaning', ru: 'Аквапланирование', en: 'Aquaplaning' },
+  { it: 'ABS', ru: 'Антиблокировочная система тормозов', en: 'Anti-lock braking system' },
+  { it: 'ESP / ESC', ru: 'Система курсовой устойчивости', en: 'Electronic stability control' },
+  { it: 'Cintura di sicurezza', ru: 'Ремень безопасности', en: 'Seatbelt' },
+  { it: 'Airbag', ru: 'Подушка безопасности', en: 'Airbag' },
+  { it: 'Pneumatico', ru: 'Шина / покрышка', en: 'Tyre' },
+  { it: 'Ammortizzatore', ru: 'Амортизатор', en: 'Shock absorber' },
+  { it: 'Revisione (ITV)', ru: 'Технический осмотр', en: 'Vehicle inspection / MOT' },
+  { it: 'Patente a punti', ru: 'Балльная система прав', en: 'Points-based licence' },
+  { it: 'Tasso alcolemico', ru: 'Уровень алкоголя в крови', en: 'Blood alcohol level' },
+  { it: 'Nebbia', ru: 'Туман', en: 'Fog' },
+  { it: 'Abbaglianti', ru: 'Дальний свет фар', en: 'High beams / full beam' },
+  { it: 'Anabbaglianti', ru: 'Ближний свет фар', en: 'Low beams / dipped headlights' },
+  { it: 'Freccia / indicatore', ru: 'Указатель поворота', en: 'Turn signal / indicator' },
+  { it: 'Triangolo di emergenza', ru: 'Аварийный треугольник', en: 'Warning triangle' },
+  { it: 'Giubbotto catarifrangente', ru: 'Светоотражающий жилет', en: 'Reflective vest / hi-vis jacket' },
+];
+
+const THEORY_FINES = [
+  { icon: '📱', name: { ru: 'Телефон за рулём', en: 'Phone while driving' }, detail: '€250–1.000', desc: { ru: 'Первый раз. При повторном — немедленное лишение прав', en: 'First offence. Repeat: immediate licence suspension' } },
+  { icon: '🍺', name: { ru: 'Алкоголь > 0,5 г/л', en: 'Alcohol > 0.5 g/l' }, detail: '€543–2.170 + лишение', desc: { ru: 'Для новичков (до 3 лет) и профессионалов — нулевой лимит', en: 'For new drivers (<3 years) and professionals: zero tolerance' } },
+  { icon: '🚀', name: { ru: 'Превышение > 40 км/ч', en: 'Speeding > 40 km/h' }, detail: '€543–2.170 + -10 баллов', desc: { ru: 'Превышение > 60 км/ч — лишение прав до 12 месяцев', en: 'Exceeding limit by >60 km/h: suspension up to 12 months' } },
+  { icon: '🔴', name: { ru: 'Проезд на красный', en: 'Running a red light' }, detail: '€167–665 + -6 баллов', desc: { ru: 'При ДТП — уголовная ответственность', en: 'If accident caused: criminal liability' } },
+  { icon: '🅿️', name: { ru: 'Стоянка под знаком', en: 'Parking under sign' }, detail: '€42–173', desc: { ru: 'На месте для инвалидов — €80–318', en: 'Disabled bay: €80–318' } },
+  { icon: '💺', name: { ru: 'Непристёгнутый ремень', en: 'No seatbelt' }, detail: '€83–333', desc: { ru: 'Штраф на водителе, даже если не пристёгнут пассажир', en: 'Driver fined even if it\'s a passenger who isn\'t belted' } },
+  { icon: '🌙', name: { ru: 'Нет ближнего света', en: 'No headlights on' }, detail: '€42–173', desc: { ru: 'Обязателен в населённых пунктах и ночью', en: 'Mandatory in built-up areas and at night' } },
+  { icon: '⭐', name: { ru: 'Потеря всех баллов', en: 'All points lost' }, detail: 'Экзамен заново', desc: { ru: 'Новые водители начинают с 18 баллов, остальные — с 20', en: 'New drivers start with 18 points, others with 20' } },
+];
+
+const THEORY_TIPS = [
+  { title: { ru: '✅ Утверждения «всегда» и «никогда» — почти всегда ложь', en: '✅ Statements with "always" / "never" — almost always false' }, body: { ru: 'В итальянских ПДД почти нет абсолютных правил. Если вопрос содержит "всегда", "никогда", "в любом случае" — скорее всего ответ FALSO.', en: 'Italian traffic law has few absolutes. If the question says "always", "never", "in any case" — the answer is usually FALSO.' } },
+  { title: { ru: '✅ Треугольник = предупреждение, не запрет', en: '✅ Triangle = warning, not prohibition' }, body: { ru: 'Знак опасности (треугольный, красная рамка) только предупреждает — ничего не запрещает и не обязывает. Это частый вопрос.', en: 'Danger sign (triangle, red border) only warns — doesn\'t prohibit or require anything. Frequent exam question.' } },
+  { title: { ru: '✅ Уступи тому, кто справа', en: '✅ Give way to the right' }, body: { ru: 'На перекрёстке без знаков — уступай тому, кто едет справа от тебя. Трамваи и транспорт на главной дороге — всегда приоритет.', en: 'At uncontrolled intersections, yield to traffic from the right. Trams and traffic on the main road always have priority.' } },
+  { title: { ru: '✅ Тормозной путь растёт пропорционально КВАДРАТУ скорости', en: '✅ Braking distance grows proportionally to the SQUARE of speed' }, body: { ru: 'При удвоении скорости тормозной путь увеличивается в 4 раза, а не в 2. Это классический вопрос-ловушка.', en: 'Double the speed = quadruple the braking distance. Classic trick question.' } },
+  { title: { ru: '✅ Алкоголь 0,0 для новичков и профессионалов', en: '✅ Zero alcohol for new drivers and professionals' }, body: { ru: 'Первые 3 года стажа и водители младше 21 года — нулевой лимит. Для остальных — 0,5 г/л. Профессиональные водители (грузовики, такси) — тоже 0,0.', en: 'First 3 years or under 21: zero tolerance. Others: 0.5 g/l. Professional drivers (trucks, taxis): also 0.0.' } },
+  { title: { ru: '✅ Фары ВСЕГДА — в тоннеле и населённом пункте', en: '✅ Headlights ALWAYS on — in tunnels and built-up areas' }, body: { ru: 'Ближний свет обязателен в тоннелях в любое время суток. В населённых пунктах — всегда при плохой видимости.', en: 'Low beams mandatory in tunnels at any time of day. In built-up areas: always in poor visibility.' } },
+  { title: { ru: '✅ Не путай fermata и sosta', en: '✅ Don\'t confuse fermata and sosta' }, body: { ru: 'Fermata — кратковременная остановка (до 1 минуты, водитель в машине, двигатель можно не глушить). Sosta — стоянка. Запреты могут распространяться на одно, но не другое.', en: 'Fermata = brief stop (≤1 min, driver at wheel). Sosta = parking. Prohibitions may apply to one but not the other.' } },
+  { title: { ru: '✅ Читай ВОПРОС, а не только ответ', en: '✅ Read the QUESTION, not just the answer' }, body: { ru: 'Многие ошибки — от невнимательного чтения. Вопрос спрашивает "верно ли утверждение о знаке", а не "что делает знак". Проверь, что именно утверждается.', en: 'Most errors come from careless reading. The question asks "is this statement about the sign correct", not "what does the sign do". Check exactly what is claimed.' } },
+];
+
+function showTheory(section) {
+  const content = document.getElementById('theory-content');
+  const title = document.getElementById('theory-screen-title');
+  const t = currentLang;
+
+  if (section === 'handbook') {
+    title.textContent = t === 'en' ? '📚 Handbook' : '📚 Учебник по темам';
+    content.innerHTML = THEORY_HANDBOOK.map(ch => `
+      <div class="theory-chapter">
+        <div class="ch-num">${ch.num}</div>
+        <div class="ch-info">
+          <div class="ch-title">${ch.title[t] || ch.title.ru}</div>
+          <div class="ch-sub">${ch.subs.slice(0,3).join(' · ')}${ch.subs.length > 3 ? ' …' : ''}</div>
+        </div>
+        <div class="ch-arrow">›</div>
+      </div>`).join('');
+
+  } else if (section === 'glossary') {
+    title.textContent = t === 'en' ? '📝 Glossary' : '📝 Словарь терминов';
+    content.innerHTML = '<div class="theory-section-heading">' + (t === 'en' ? 'Italian term → Translation' : 'Итальянский термин → Перевод') + '</div>' +
+      THEORY_GLOSSARY.map(g => `
+        <div class="theory-glossary-item">
+          <div class="gl-it">${g.it}</div>
+          <div class="gl-ru">${t === 'en' ? g.en : g.ru}</div>
+        </div>`).join('');
+
+  } else if (section === 'signs') {
+    title.textContent = t === 'en' ? '🚦 Road Signs' : '🚦 Дорожные знаки';
+    const cats = [
+      { emoji: '⚠️', name: { ru: 'Предупреждающие', en: 'Warning signs' }, desc: { ru: 'Треугольник, красная рамка. Предупреждают об опасности, ничего не запрещают.', en: 'Triangle, red border. Warn of danger, no prohibition.' } },
+      { emoji: '🚫', name: { ru: 'Запрещающие', en: 'Prohibition signs' }, desc: { ru: 'Круглые, красная рамка. Запрещают действие.', en: 'Round, red border. Prohibit an action.' } },
+      { emoji: '🔵', name: { ru: 'Предписывающие', en: 'Mandatory signs' }, desc: { ru: 'Круглые, синие. Обязывают выполнить действие.', en: 'Round, blue. Require an action.' } },
+      { emoji: '🟦', name: { ru: 'Указательные', en: 'Information signs' }, desc: { ru: 'Прямоугольные / квадратные, синие или зелёные. Информируют.', en: 'Rectangular / square, blue or green. Provide information.' } },
+      { emoji: '🟨', name: { ru: 'Дополнительные таблички', en: 'Additional panels' }, desc: { ru: 'Устанавливаются под основным знаком, уточняют его действие.', en: 'Placed under main sign, clarify its scope.' } },
+      { emoji: '🔶', name: { ru: 'Временные знаки', en: 'Temporary signs' }, desc: { ru: 'На строительных работах и ремонте. Имеют приоритет над постоянными.', en: 'Used at roadworks. Take priority over permanent signs.' } },
+    ];
+    content.innerHTML = cats.map(c => `
+      <div class="theory-chapter">
+        <div class="ch-num" style="font-size:22px">${c.emoji}</div>
+        <div class="ch-info">
+          <div class="ch-title">${c.name[t] || c.name.ru}</div>
+          <div class="ch-sub">${c.desc[t] || c.desc.ru}</div>
+        </div>
+      </div>`).join('');
+
+  } else if (section === 'fines') {
+    title.textContent = t === 'en' ? '⚖️ Fines & Sanctions' : '⚖️ Штрафы и санкции';
+    content.innerHTML = '<div class="theory-section-heading">' + (t === 'en' ? 'Key violations' : 'Основные нарушения') + '</div>' +
+      THEORY_FINES.map(f => `
+        <div class="theory-fine-row">
+          <div class="fine-icon">${f.icon}</div>
+          <div class="fine-info">
+            <div class="fine-name">${f.name[t] || f.name.ru}</div>
+            <div class="fine-detail">${f.detail}</div>
+            <div class="fine-desc">${f.desc[t] || f.desc.ru}</div>
+          </div>
+        </div>`).join('');
+
+  } else if (section === 'tips') {
+    title.textContent = t === 'en' ? '💡 Exam Tips' : '💡 Советы для сдачи';
+    content.innerHTML = THEORY_TIPS.map(tip => `
+      <div class="theory-tip">
+        <div class="tip-title">${tip.title[t] || tip.title.ru}</div>
+        <div class="tip-body">${tip.body[t] || tip.body.ru}</div>
+      </div>`).join('');
+  }
+
+  showScreen('s-theory');
+}
+
+function showTheoryHandbook() { showTheory('handbook'); }
+function showTheoryGlossary() { showTheory('glossary'); }
+function showTheorySigns()    { showTheory('signs'); }
+function showTheoryFines()    { showTheory('fines'); }
+function showTheoryTips()     { showTheory('tips'); }
 
 // ===== EXAM SAVE ON TAB SWITCH / PAGE LEAVE =====
 document.addEventListener('visibilitychange', () => {
