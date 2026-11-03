@@ -6,6 +6,11 @@
 <title>Studiapatente — Категория B · Автомобиль</title>
 <meta name="description" content="6832 вопроса официальной базы MIT для категории B. Подготовка к итальянским правам на русском, итальянском и английском языках.">
 <link rel="canonical" href="https://studiapatente.it/category-b.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="ru" href="https://studiapatente.it/category-b.html?lang=ru">
+<link rel="alternate" hreflang="it" href="https://studiapatente.it/category-b.html?lang=it">
+<link rel="alternate" hreflang="en" href="https://studiapatente.it/category-b.html?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://studiapatente.it/category-b.html">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studiapatente.it/category-b.html">
@@ -17,6 +22,33 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "StudiaPatente — Categoria B",
+  "url": "https://studiapatente.it/category-b.html",
+  "description": "6832 domande ufficiali MIT per la patente di categoria B. Preparazione in russo, italiano e inglese.",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web",
+  "inLanguage": ["ru", "it", "en"],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": "student"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "StudiaPatente.it",
+    "url": "https://studiapatente.it/"
+  }
+}
+</script>
 <!-- Anti-FOUC: применяем тему до рендера страницы -->
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
 <style>
@@ -306,10 +338,26 @@
   .modal .close-modal { width: 100%; background: none; border: none;
     color: var(--muted); font-size: 13px; cursor: pointer; padding: 6px; }
 
+  /* ===== TABLET 768px ===== */
+  @media (max-width: 768px) {
+    .hero { padding: 24px 16px 20px; }
+    .hero h1 { font-size: 22px; }
+    .hero p { font-size: 13px; }
+    nav { padding: 8px 12px; gap: 6px; }
+    .logo { font-size: 15px; }
+    .lang-btn { padding: 4px 7px; font-size: 11px; }
+    .premium-badge { font-size: 11px; padding: 4px 8px; }
+    .question-text { font-size: 14px; }
+    .ans-btn { font-size: 14px; padding: 12px 14px; }
+    .topics { grid-template-columns: 1fr 1fr; }
+  }
+  /* ===== MOBILE 480px ===== */
   @media (max-width: 480px) {
     .topics { grid-template-columns: 1fr; }
     .stats-actions { grid-template-columns: 1fr; }
     .exam-row { grid-template-columns: 1fr; }
+    .result-meta { gap: 16px; flex-wrap: wrap; }
+    .sign-visual img { max-width: 170px; max-height: 170px; }
   }
 </style>
 </head>
@@ -2166,7 +2214,14 @@ function checkRenewal() {
 }
 
 // ===== LANGUAGE SWITCHER =====
-let currentLang = localStorage.getItem('lang') || 'ru';
+// Support ?lang= URL param (Этап 3 i18n)
+const _urlLang = new URLSearchParams(location.search).get('lang');
+if (_urlLang && ['ru','it','en'].includes(_urlLang)) {
+  try { localStorage.setItem('lang', _urlLang); } catch(e) {}
+}
+let currentLang = (_urlLang && ['ru','it','en'].includes(_urlLang))
+  ? _urlLang
+  : (localStorage.getItem('lang') || 'ru');
 
 function setLang(lang) {
   currentLang = lang;

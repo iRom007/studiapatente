@@ -6,6 +6,11 @@
 <title>Studiapatente — Подготовка к итальянским правам</title>
 <meta name="description" content="Подготовка к экзамену на итальянские водительские права. Категории A1, A2, A, B. Вопросы на русском, итальянском и английском языках.">
 <link rel="canonical" href="https://studiapatente.it/">
+<!-- hreflang (Этап 3: lang parameter i18n) -->
+<link rel="alternate" hreflang="ru" href="https://studiapatente.it/?lang=ru">
+<link rel="alternate" hreflang="it" href="https://studiapatente.it/?lang=it">
+<link rel="alternate" hreflang="en" href="https://studiapatente.it/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://studiapatente.it/">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studiapatente.it/">
@@ -17,6 +22,40 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#15803d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="StudiaPatente">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "StudiaPatente",
+  "url": "https://studiapatente.it/",
+  "description": "Подготовка к экзамену на итальянские водительские права. 6832 официальных вопроса MIT. Категории A1, A2, A, B. Русский, итальянский, английский языки.",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web",
+  "inLanguage": ["ru", "it", "en"],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": "student"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "StudiaPatente.it",
+    "url": "https://studiapatente.it/"
+  }
+}
+</script>
 <!-- Anti-FOUC: применяем тему до рендера страницы -->
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
 <style>
@@ -414,11 +453,31 @@
     cursor: pointer;
   }
 
-  @media (max-width: 480px) {
-    .hero { padding: 36px 16px 28px; }
+  /* ===== TABLET 768px ===== */
+  @media (max-width: 768px) {
+    .hero { padding: 40px 16px 32px; }
+    .hero h1 { font-size: clamp(22px, 5vw, 32px); }
     .cat-grid { grid-template-columns: 1fr; }
     .stats-bar { gap: 8px; }
-    .stat-item { min-width: 100px; }
+    .stat-item { min-width: 110px; padding: 12px 14px; }
+    .stat-num { font-size: 20px; }
+    .features { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    nav { padding: 10px 14px; gap: 8px; }
+    .logo { font-size: 17px; }
+    .lang-btn { padding: 4px 7px; font-size: 11px; }
+    .section { padding: 0 12px 36px; }
+    .cat-card { padding: 16px 18px; }
+    .cat-name { font-size: 18px; }
+    .cat-icon { width: 46px; height: 46px; font-size: 22px; }
+  }
+  /* ===== MOBILE 480px ===== */
+  @media (max-width: 480px) {
+    .hero { padding: 28px 14px 24px; }
+    .stats-bar { gap: 6px; }
+    .stat-item { min-width: 80px; padding: 10px 12px; }
+    .stat-num { font-size: 18px; }
+    .features { grid-template-columns: 1fr; }
+    .font-btn { display: none; }
   }
 </style>
 </head>
@@ -935,6 +994,13 @@ function closeModal(e) {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
 // ===== INIT =====
 (function() {
   // Restore theme
@@ -957,9 +1023,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
   } catch(e) {}
 
   // Restore lang — unified key 'lang' shared with category-b.html
+  // Also supports ?lang= URL param (Этап 3 i18n)
   try {
-    const saved = localStorage.getItem('lang') || 'ru';
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    const saved = urlLang || localStorage.getItem('lang') || 'ru';
     lang = ['ru','it','en'].includes(saved) ? saved : 'ru';
+    if (urlLang && ['ru','it','en'].includes(urlLang)) localStorage.setItem('lang', urlLang);
   } catch(e) {}
 
   applyLang();

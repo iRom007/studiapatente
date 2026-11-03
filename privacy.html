@@ -4,56 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Политика конфиденциальности — Studiapatente.it</title>
+<meta name="description" content="Политика конфиденциальности Studiapatente.it. Приложение не собирает никаких персональных данных.">
+<link rel="canonical" href="https://studiapatente.it/privacy.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.ico">
+<!-- Anti-FOUC -->
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
 <style>
   :root, [data-theme="dark"] {
     --bg: #0f172a; --card: #1e293b; --border: #334155;
-    --text: #e2e8f0; --muted: #94a3b8; --green: #4ade80;
+    --text: #e2e8f0; --muted: #94a3b8; --green: #4ade80; --blue: #3b82f6;
+    --card2: #162032; --shadow: 0 2px 12px rgba(0,0,0,0.4);
   }
   [data-theme="light"] {
     --bg: #f1f5f9; --card: #ffffff; --border: #94a3b8;
-    --text: #0a1628; --muted: #374151; --green: #15803d;
+    --text: #0a1628; --muted: #374151; --green: #15803d; --blue: #2563eb;
+    --card2: #f8fafc; --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg); color: var(--text); min-height: 100vh;
-    line-height: 1.7;
+    background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7;
+    transition: background 0.2s, color 0.2s;
   }
   nav {
     background: var(--card); border-bottom: 1px solid var(--border);
-    padding: 12px 20px; display: flex; align-items: center; gap: 12px;
-    position: sticky; top: 0; z-index: 100;
+    padding: 12px 20px; display: flex; align-items: center; gap: 10px;
+    position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
   }
-  .logo { font-weight: 800; font-size: 19px; text-decoration: none; }
+  .logo { font-weight: 800; font-size: 19px; text-decoration: none; flex-shrink: 0; }
   .logo .w-studia  { color: var(--text); }
-  .logo .w-patente { color: var(--green); }
-  .logo .w-tld     { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .logo .w-patente { color: #15803d; }
+  [data-theme="dark"] .logo .w-patente { color: #4ade80; }
+  .logo .w-tld { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .lang-btn {
+    background: none; border: none; padding: 5px 9px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    color: var(--muted); transition: 0.15s; letter-spacing: 0.5px;
+  }
+  .lang-btn.active { background: var(--blue); color: white; }
+  .lang-btn:hover:not(.active) { background: var(--card2); color: var(--text); }
+  .theme-btn {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 5px 10px; cursor: pointer; font-size: 12px; color: var(--text); line-height: 1;
+  }
   .back-btn {
-    margin-left: auto; background: none; border: 1px solid var(--border);
-    color: var(--muted); padding: 6px 14px; border-radius: 8px;
-    cursor: pointer; font-size: 13px; text-decoration: none;
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); padding: 5px 12px; border-radius: 8px;
+    cursor: pointer; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap;
   }
   .back-btn:hover { border-color: var(--green); color: var(--green); }
   main { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
-  h1 { font-size: 28px; margin-bottom: 8px; }
+  h1 { font-size: clamp(22px,4vw,28px); margin-bottom: 8px; }
   .subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
-  h2 { font-size: 18px; margin: 32px 0 12px; color: var(--green); }
-  p { margin-bottom: 14px; color: var(--text); }
+  h2 { font-size: 17px; margin: 32px 0 12px; color: var(--green); }
+  p { margin-bottom: 14px; }
   .highlight {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 12px; padding: 20px 24px; margin: 24px 0;
   }
-  .highlight .big { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .highlight .big { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
   .highlight p { margin: 0; color: var(--muted); }
   a { color: var(--green); text-decoration: none; }
   a:hover { text-decoration: underline; }
+  ul { padding-left: 24px; margin-bottom: 14px; }
+  ul li { margin-bottom: 6px; }
   footer {
     text-align: center; padding: 24px; color: var(--muted);
     font-size: 13px; border-top: 1px solid var(--border);
   }
-  .theme-btn {
-    background: none; border: 1px solid var(--border); border-radius: 8px;
-    padding: 6px 10px; cursor: pointer; font-size: 16px; color: var(--text);
+  @media (max-width: 480px) {
+    nav { flex-wrap: wrap; gap: 8px; }
+    .back-btn { display: none; }
+  }
+  @media (max-width: 768px) {
+    main { padding: 28px 16px 60px; }
   }
 </style>
 </head>
@@ -62,72 +89,200 @@
   <a class="logo" href="index.html">
     <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span>
   </a>
-  <button class="theme-btn" onclick="toggleTheme()">🌙</button>
-  <a class="back-btn" href="index.html">← Назад</a>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn" id="ln-it" onclick="setLang('it')">IT</button>
+      <button class="lang-btn" id="ln-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="ln-ru" onclick="setLang('ru')">RU</button>
+    </div>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☾</button>
+    <a class="back-btn" href="index.html" id="back-link">← Назад</a>
+  </div>
 </nav>
 
 <main>
-  <h1>Политика конфиденциальности</h1>
-  <p class="subtitle">Последнее обновление: ноябрь 2024 г.</p>
+  <h1 id="p-title">Политика конфиденциальности</h1>
+  <p class="subtitle" id="p-updated">Последнее обновление: ноябрь 2024 г.</p>
 
   <div class="highlight">
-    <div class="big">✅ Данные не собираются</div>
-    <p>Studiapatente.it не собирает, не хранит и не передаёт никаких персональных данных пользователей.</p>
+    <div class="big" id="p-no-data-title">✅ Данные не собираются</div>
+    <p id="p-no-data-desc">Studiapatente.it не собирает, не хранит и не передаёт никаких персональных данных пользователей.</p>
   </div>
 
-  <h2>1. Общие положения</h2>
-  <p>Настоящая Политика конфиденциальности описывает, как приложение <strong>Studiapatente.it</strong> обращается с данными пользователей. Мы разработали это приложение с уважением к вашей конфиденциальности.</p>
+  <h2 id="p-h1">1. Общие положения</h2>
+  <p id="p-h1-text">Настоящая Политика конфиденциальности описывает, как приложение <strong>Studiapatente.it</strong> обращается с данными пользователей. Мы разработали это приложение с уважением к вашей конфиденциальности.</p>
 
-  <h2>2. Сбор данных</h2>
-  <p>Мы <strong>не собираем</strong> никаких персональных данных. Приложение не требует регистрации, не запрашивает имя, email, номер телефона или любую другую личную информацию.</p>
-  <p>Мы не используем системы веб-аналитики, счётчики посещений, рекламные сети или трекеры третьих сторон.</p>
+  <h2 id="p-h2">2. Сбор данных</h2>
+  <p id="p-h2-text1">Мы <strong>не собираем</strong> никаких персональных данных. Приложение не требует регистрации, не запрашивает имя, email, номер телефона или любую другую личную информацию.</p>
+  <p id="p-h2-text2">Мы не используем системы веб-аналитики, счётчики посещений, рекламные сети или трекеры третьих сторон.</p>
 
-  <h2>3. Локальное хранилище (localStorage)</h2>
-  <p>Для обеспечения удобства использования приложение сохраняет следующие данные <strong>исключительно на вашем устройстве</strong> с помощью браузерного localStorage:</p>
-  <ul style="padding-left: 24px; margin-bottom: 14px;">
-    <li style="margin-bottom: 6px;">Выбранный язык интерфейса (русский / итальянский / английский)</li>
-    <li style="margin-bottom: 6px;">Тема оформления (светлая / тёмная)</li>
-    <li style="margin-bottom: 6px;">Размер шрифта</li>
-    <li style="margin-bottom: 6px;">Прогресс прохождения тестов</li>
+  <h2 id="p-h3">3. Локальное хранилище (localStorage)</h2>
+  <p id="p-h3-text">Для обеспечения удобства использования приложение сохраняет следующие данные <strong>исключительно на вашем устройстве</strong> с помощью браузерного localStorage:</p>
+  <ul id="p-h3-list">
+    <li>Выбранный язык интерфейса (русский / итальянский / английский)</li>
+    <li>Тема оформления (светлая / тёмная)</li>
+    <li>Размер шрифта</li>
+    <li>Прогресс прохождения тестов</li>
   </ul>
-  <p>Эти данные хранятся только на вашем устройстве и <strong>никогда не передаются</strong> на серверы или третьим лицам. Вы можете удалить их в любой момент через настройки браузера.</p>
+  <p id="p-h3-text2">Эти данные хранятся только на вашем устройстве и <strong>никогда не передаются</strong> на серверы или третьим лицам. Вы можете удалить их в любой момент через настройки браузера.</p>
 
-  <h2>4. Файлы Cookie</h2>
-  <p>Приложение не использует файлы Cookie для отслеживания пользователей.</p>
+  <h2 id="p-h4">4. Файлы Cookie</h2>
+  <p id="p-h4-text">Приложение не использует файлы Cookie для отслеживания пользователей.</p>
 
-  <h2>5. Передача данных третьим лицам</h2>
-  <p>Мы не продаём, не обмениваем и не передаём какие-либо данные третьим лицам, поскольку мы их не собираем.</p>
+  <h2 id="p-h5">5. Передача данных третьим лицам</h2>
+  <p id="p-h5-text">Мы не продаём, не обмениваем и не передаём какие-либо данные третьим лицам, поскольку мы их не собираем.</p>
 
-  <h2>6. Данные детей</h2>
-  <p>Наше приложение не собирает данные пользователей любого возраста, включая детей до 13 лет.</p>
+  <h2 id="p-h6">6. Данные детей</h2>
+  <p id="p-h6-text">Наше приложение не собирает данные пользователей любого возраста, включая детей до 13 лет.</p>
 
-  <h2>7. Изменения в политике</h2>
-  <p>Мы можем обновлять данную Политику конфиденциальности. Об изменениях будет сообщено на данной странице с указанием даты обновления.</p>
+  <h2 id="p-h7">7. Изменения в политике</h2>
+  <p id="p-h7-text">Мы можем обновлять данную Политику конфиденциальности. Об изменениях будет сообщено на данной странице с указанием даты обновления.</p>
 
-  <h2>8. Контакт</h2>
-  <p>Если у вас есть вопросы относительно данной политики, напишите нам:</p>
+  <h2 id="p-h8">8. Контакт</h2>
+  <p id="p-h8-text">Если у вас есть вопросы относительно данной политики, напишите нам:</p>
   <p><a href="mailto:support@studiapatente.it">support@studiapatente.it</a></p>
 </main>
 
 <footer>
   <strong><span style="color:var(--text)">Studia</span><span style="color:var(--green)">Patente</span><span style="color:var(--muted);font-size:0.9em">.it</span></strong>
-  &nbsp;·&nbsp; Неофициальный учебный ресурс
+  &nbsp;·&nbsp; <span id="p-footer-legal">Неофициальный учебный ресурс</span>
 </footer>
 
 <script>
-  function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+const PRIVACY_LANGS = {
+  ru: {
+    title: 'Политика конфиденциальности',
+    updated: 'Последнее обновление: ноябрь 2024 г.',
+    'no-data-title': '✅ Данные не собираются',
+    'no-data-desc': 'Studiapatente.it не собирает, не хранит и не передаёт никаких персональных данных пользователей.',
+    h1: '1. Общие положения',
+    'h1-text': 'Настоящая Политика конфиденциальности описывает, как приложение <strong>Studiapatente.it</strong> обращается с данными пользователей. Мы разработали это приложение с уважением к вашей конфиденциальности.',
+    h2: '2. Сбор данных',
+    'h2-text1': 'Мы <strong>не собираем</strong> никаких персональных данных. Приложение не требует регистрации, не запрашивает имя, email, номер телефона или любую другую личную информацию.',
+    'h2-text2': 'Мы не используем системы веб-аналитики, счётчики посещений, рекламные сети или трекеры третьих сторон.',
+    h3: '3. Локальное хранилище (localStorage)',
+    'h3-text': 'Для удобства приложение сохраняет следующие данные <strong>исключительно на вашем устройстве</strong> с помощью браузерного localStorage:',
+    'h3-list': '<li>Выбранный язык интерфейса</li><li>Тема оформления (светлая / тёмная)</li><li>Размер шрифта</li><li>Прогресс прохождения тестов</li>',
+    'h3-text2': 'Эти данные хранятся только на вашем устройстве и <strong>никогда не передаются</strong> на серверы. Вы можете удалить их в любой момент через настройки браузера.',
+    h4: '4. Файлы Cookie',
+    'h4-text': 'Приложение не использует файлы Cookie для отслеживания пользователей.',
+    h5: '5. Передача данных третьим лицам',
+    'h5-text': 'Мы не продаём, не обмениваем и не передаём какие-либо данные третьим лицам, поскольку мы их не собираем.',
+    h6: '6. Данные детей',
+    'h6-text': 'Наше приложение не собирает данные пользователей любого возраста, включая детей до 13 лет.',
+    h7: '7. Изменения в политике',
+    'h7-text': 'Мы можем обновлять данную Политику конфиденциальности. Об изменениях будет сообщено на данной странице с указанием даты обновления.',
+    h8: '8. Контакт',
+    'h8-text': 'Если у вас есть вопросы относительно данной политики, напишите нам:',
+    back: '← Назад',
+    'footer-legal': 'Неофициальный учебный ресурс',
+    'page-title': 'Политика конфиденциальности — Studiapatente.it',
+  },
+  it: {
+    title: 'Informativa sulla privacy',
+    updated: 'Ultimo aggiornamento: novembre 2024',
+    'no-data-title': '✅ Nessun dato raccolto',
+    'no-data-desc': 'Studiapatente.it non raccoglie, non conserva e non trasmette alcun dato personale degli utenti.',
+    h1: '1. Disposizioni generali',
+    'h1-text': 'La presente Informativa sulla privacy descrive come l\'applicazione <strong>Studiapatente.it</strong> gestisce i dati degli utenti. Abbiamo sviluppato questa applicazione nel rispetto della tua privacy.',
+    h2: '2. Raccolta dei dati',
+    'h2-text1': '<strong>Non raccogliamo</strong> alcun dato personale. L\'applicazione non richiede registrazione, nome, email, numero di telefono o qualsiasi altra informazione personale.',
+    'h2-text2': 'Non utilizziamo sistemi di analisi web, contatori di visite, reti pubblicitarie o tracker di terze parti.',
+    h3: '3. Archiviazione locale (localStorage)',
+    'h3-text': 'Per comodità, l\'applicazione salva i seguenti dati <strong>esclusivamente sul tuo dispositivo</strong> tramite localStorage del browser:',
+    'h3-list': '<li>Lingua dell\'interfaccia selezionata</li><li>Tema (chiaro / scuro)</li><li>Dimensione del carattere</li><li>Progressi nei test</li>',
+    'h3-text2': 'Questi dati sono archiviati solo sul tuo dispositivo e <strong>non vengono mai trasmessi</strong> a server o terze parti. Puoi eliminarli in qualsiasi momento dalle impostazioni del browser.',
+    h4: '4. Cookie',
+    'h4-text': 'L\'applicazione non utilizza cookie per il tracciamento degli utenti.',
+    h5: '5. Condivisione dei dati',
+    'h5-text': 'Non vendiamo, scambiamo o trasmettiamo alcun dato a terze parti, poiché non li raccogliamo.',
+    h6: '6. Dati dei minori',
+    'h6-text': 'La nostra applicazione non raccoglie dati di utenti di qualsiasi età, inclusi i minori di 13 anni.',
+    h7: '7. Modifiche alla policy',
+    'h7-text': 'Possiamo aggiornare questa Informativa sulla privacy. Le modifiche saranno comunicate su questa pagina con la data di aggiornamento.',
+    h8: '8. Contatto',
+    'h8-text': 'Per domande su questa informativa, scrivici a:',
+    back: '← Indietro',
+    'footer-legal': 'Risorsa didattica non ufficiale',
+    'page-title': 'Privacy Policy — Studiapatente.it',
+  },
+  en: {
+    title: 'Privacy Policy',
+    updated: 'Last updated: November 2024',
+    'no-data-title': '✅ No data collected',
+    'no-data-desc': 'Studiapatente.it does not collect, store or share any personal data.',
+    h1: '1. General',
+    'h1-text': 'This Privacy Policy describes how <strong>Studiapatente.it</strong> handles user data. We built this app with your privacy in mind.',
+    h2: '2. Data collection',
+    'h2-text1': 'We <strong>do not collect</strong> any personal data. The app requires no registration and does not ask for your name, email, phone number, or any other personal information.',
+    'h2-text2': 'We do not use web analytics, visit counters, advertising networks or third-party trackers.',
+    h3: '3. Local storage (localStorage)',
+    'h3-text': 'For your convenience, the app saves the following data <strong>exclusively on your device</strong> using browser localStorage:',
+    'h3-list': '<li>Selected interface language</li><li>Theme (light / dark)</li><li>Font size</li><li>Test progress</li>',
+    'h3-text2': 'This data is stored only on your device and is <strong>never transmitted</strong> to any server or third party. You can delete it at any time through your browser settings.',
+    h4: '4. Cookies',
+    'h4-text': 'The app does not use cookies to track users.',
+    h5: '5. Data sharing',
+    'h5-text': 'We do not sell, trade, or transfer any data to third parties because we do not collect any.',
+    h6: '6. Children\'s data',
+    'h6-text': 'Our app does not collect data from users of any age, including children under 13.',
+    h7: '7. Policy changes',
+    'h7-text': 'We may update this Privacy Policy. Changes will be announced on this page with an updated date.',
+    h8: '8. Contact',
+    'h8-text': 'If you have questions about this policy, contact us:',
+    back: '← Back',
+    'footer-legal': 'Unofficial educational resource',
+    'page-title': 'Privacy Policy — Studiapatente.it',
   }
-  // Apply saved theme
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    if (savedTheme === 'light') document.querySelector('.theme-btn').textContent = '☀️';
+};
+
+let currentLang = 'ru';
+
+function applyLang() {
+  const T = PRIVACY_LANGS[currentLang] || PRIVACY_LANGS.ru;
+  const ids = ['title','updated','no-data-title','no-data-desc',
+    'h1','h1-text','h2','h2-text1','h2-text2','h3','h3-text','h3-list',
+    'h3-text2','h4','h4-text','h5','h5-text','h6','h6-text',
+    'h7','h7-text','h8','h8-text','back-link','footer-legal'];
+  for (const id of ids) {
+    const el = document.getElementById('p-' + id);
+    if (el && T[id] !== undefined) el.innerHTML = T[id];
   }
+  ['ru','it','en'].forEach(l => {
+    const btn = document.getElementById('ln-' + l);
+    if (btn) btn.classList.toggle('active', l === currentLang);
+  });
+  document.documentElement.lang = currentLang;
+  document.title = T['page-title'] || document.title;
+}
+
+function setLang(l) {
+  currentLang = l;
+  try { localStorage.setItem('lang', l); } catch(e) {}
+  applyLang();
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  document.getElementById('theme-btn').textContent = isDark ? '☀' : '☾';
+  try { localStorage.setItem('theme', newTheme); } catch(e) {}
+}
+
+// Init
+(function() {
+  try {
+    const t = localStorage.getItem('theme');
+    if (t) {
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('theme-btn').textContent = t === 'light' ? '☀' : '☾';
+    }
+    const l = localStorage.getItem('lang');
+    if (l && ['ru','it','en'].includes(l)) currentLang = l;
+  } catch(e) {}
+  applyLang();
+})();
 </script>
 </body>
 </html>

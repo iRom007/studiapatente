@@ -1,0 +1,37 @@
+{
+  "name": "StudiaPatente — Итальянские права",
+  "short_name": "StudiaPatente",
+  "description": "Подготовка к итальянским правам. 6832 вопроса MIT. Категории B, A. Русский · Italiano · English.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#15803d",
+  "orientation": "portrait-primary",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Категория B",
+      "short_name": "B",
+      "description": "Практика вопросов категории B",
+      "url": "/category-b.html",
+      "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ],
+  "categories": ["education"],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

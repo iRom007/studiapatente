@@ -4,66 +4,92 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Поддержка — Studiapatente.it</title>
+<meta name="description" content="Поддержка пользователей Studiapatente.it. FAQ, контакты, часто задаваемые вопросы.">
+<link rel="canonical" href="https://studiapatente.it/support.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.ico">
+<!-- Anti-FOUC -->
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
 <style>
   :root, [data-theme="dark"] {
     --bg: #0f172a; --card: #1e293b; --border: #334155;
-    --text: #e2e8f0; --muted: #94a3b8; --green: #4ade80;
+    --text: #e2e8f0; --muted: #94a3b8; --green: #4ade80; --blue: #3b82f6;
+    --card2: #162032; --shadow: 0 2px 12px rgba(0,0,0,0.4);
   }
   [data-theme="light"] {
     --bg: #f1f5f9; --card: #ffffff; --border: #94a3b8;
-    --text: #0a1628; --muted: #374151; --green: #15803d;
+    --text: #0a1628; --muted: #374151; --green: #15803d; --blue: #2563eb;
+    --card2: #f8fafc; --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg); color: var(--text); min-height: 100vh;
-    line-height: 1.7;
+    background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7;
+    transition: background 0.2s, color 0.2s;
   }
   nav {
     background: var(--card); border-bottom: 1px solid var(--border);
-    padding: 12px 20px; display: flex; align-items: center; gap: 12px;
-    position: sticky; top: 0; z-index: 100;
+    padding: 12px 20px; display: flex; align-items: center; gap: 10px;
+    position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
   }
-  .logo { font-weight: 800; font-size: 19px; text-decoration: none; }
+  .logo { font-weight: 800; font-size: 19px; text-decoration: none; flex-shrink: 0; }
   .logo .w-studia  { color: var(--text); }
-  .logo .w-patente { color: var(--green); }
-  .logo .w-tld     { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .logo .w-patente { color: #15803d; }
+  [data-theme="dark"] .logo .w-patente { color: #4ade80; }
+  .logo .w-tld { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .lang-btn {
+    background: none; border: none; padding: 5px 9px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    color: var(--muted); transition: 0.15s; letter-spacing: 0.5px;
+  }
+  .lang-btn.active { background: var(--blue); color: white; }
+  .lang-btn:hover:not(.active) { background: var(--card2); color: var(--text); }
+  .theme-btn {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 5px 10px; cursor: pointer; font-size: 12px; color: var(--text); line-height: 1;
+  }
   .back-btn {
-    margin-left: auto; background: none; border: 1px solid var(--border);
-    color: var(--muted); padding: 6px 14px; border-radius: 8px;
-    cursor: pointer; font-size: 13px; text-decoration: none;
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); padding: 5px 12px; border-radius: 8px;
+    cursor: pointer; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap;
   }
   .back-btn:hover { border-color: var(--green); color: var(--green); }
   main { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
-  h1 { font-size: 28px; margin-bottom: 8px; }
+  h1 { font-size: clamp(22px,4vw,28px); margin-bottom: 8px; }
   .subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
-  h2 { font-size: 18px; margin: 32px 0 12px; color: var(--green); }
+  h2 { font-size: 17px; margin: 32px 0 12px; color: var(--green); }
   p { margin-bottom: 14px; }
-  .card {
+  .contact-card {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 14px; padding: 24px; margin-bottom: 20px;
   }
-  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .card p { margin-bottom: 8px; color: var(--muted); font-size: 14px; }
-  .card a {
+  .contact-card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .contact-card p { margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+  .contact-card .email-btn {
     display: inline-block; background: var(--green); color: #000;
     font-weight: 700; font-size: 14px; padding: 10px 20px;
     border-radius: 8px; text-decoration: none; margin-top: 8px;
   }
-  .card a:hover { opacity: 0.85; }
+  [data-theme="dark"] .contact-card .email-btn { color: #0f172a; }
+  .contact-card .email-btn:hover { opacity: 0.85; }
   .faq-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
   .faq-item:last-child { border-bottom: none; }
-  .faq-q { font-weight: 600; margin-bottom: 8px; cursor: pointer; }
+  .faq-q { font-weight: 600; margin-bottom: 8px; }
   .faq-a { color: var(--muted); font-size: 14px; }
   a.link { color: var(--green); text-decoration: none; }
   a.link:hover { text-decoration: underline; }
-  .theme-btn {
-    background: none; border: 1px solid var(--border); border-radius: 8px;
-    padding: 6px 10px; cursor: pointer; font-size: 16px; color: var(--text);
-  }
   footer {
     text-align: center; padding: 24px; color: var(--muted);
     font-size: 13px; border-top: 1px solid var(--border);
+  }
+  @media (max-width: 480px) {
+    nav { flex-wrap: wrap; gap: 8px; }
+    .back-btn { display: none; }
+  }
+  @media (max-width: 768px) {
+    main { padding: 28px 16px 60px; }
   }
 </style>
 </head>
@@ -72,81 +98,205 @@
   <a class="logo" href="index.html">
     <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span>
   </a>
-  <button class="theme-btn" onclick="toggleTheme()">🌙</button>
-  <a class="back-btn" href="index.html">← Назад</a>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn" id="ln-it" onclick="setLang('it')">IT</button>
+      <button class="lang-btn" id="ln-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="ln-ru" onclick="setLang('ru')">RU</button>
+    </div>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☾</button>
+    <a class="back-btn" href="index.html" id="s-back">← Назад</a>
+  </div>
 </nav>
 
 <main>
-  <h1>Поддержка</h1>
-  <p class="subtitle">Мы здесь, чтобы помочь вам подготовиться к экзамену</p>
+  <h1 id="s-title">Поддержка</h1>
+  <p class="subtitle" id="s-subtitle">Мы здесь, чтобы помочь вам подготовиться к экзамену</p>
 
-  <h2>Связаться с нами</h2>
-
-  <div class="card">
-    <div class="card-title">📧 Email</div>
-    <p>Напишите нам по любым вопросам: технические проблемы, ошибки в вопросах, предложения по улучшению.</p>
-    <p>Мы отвечаем в течение 1–2 рабочих дней.</p>
-    <a href="mailto:support@studiapatente.it">support@studiapatente.it</a>
+  <h2 id="s-contact-h">Связаться с нами</h2>
+  <div class="contact-card">
+    <div class="contact-card-title" id="s-email-title">📧 Email</div>
+    <p id="s-email-desc1">Напишите нам по любым вопросам: технические проблемы, ошибки в вопросах, предложения по улучшению.</p>
+    <p id="s-email-desc2">Мы отвечаем в течение 1–2 рабочих дней.</p>
+    <a class="email-btn" href="mailto:support@studiapatente.it">support@studiapatente.it</a>
   </div>
 
-  <h2>Часто задаваемые вопросы</h2>
+  <h2 id="s-faq-h">Часто задаваемые вопросы</h2>
 
   <div class="faq-item">
-    <div class="faq-q">📱 Приложение работает без интернета?</div>
-    <div class="faq-a">Нет, приложению требуется подключение к интернету для загрузки вопросов и изображений дорожных знаков.</div>
-  </div>
-
-  <div class="faq-item">
-    <div class="faq-q">🌍 На каких языках доступны вопросы?</div>
-    <div class="faq-a">Вопросы доступны на трёх языках: русском 🇷🇺, итальянском 🇮🇹 и английском 🇬🇧. Выберите язык кнопками RU / IT / EN в верхней панели.</div>
+    <div class="faq-q" id="s-faq1-q">📱 Приложение работает без интернета?</div>
+    <div class="faq-a" id="s-faq1-a">Нет, приложению требуется подключение к интернету для загрузки вопросов и изображений дорожных знаков.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">💾 Сохраняется ли прогресс?</div>
-    <div class="faq-a">Да, ваш прогресс автоматически сохраняется на устройстве. При повторном открытии приложения вы продолжите с того места, где остановились.</div>
+    <div class="faq-q" id="s-faq2-q">🌍 На каких языках доступны вопросы?</div>
+    <div class="faq-a" id="s-faq2-a">Вопросы доступны на трёх языках: русском 🇷🇺, итальянском 🇮🇹 и английском 🇬🇧. Выберите язык кнопками RU / IT / EN в верхней панели.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">❓ Вопросы соответствуют реальному экзамену?</div>
-    <div class="faq-a">База содержит официальные вопросы с экзамена на права категории B в Италии (6832 вопроса). Это неофициальный учебный ресурс — для официальной информации обращайтесь на сайт <a class="link" href="https://www.mit.gov.it" target="_blank">MIT.gov.it</a>.</div>
+    <div class="faq-q" id="s-faq3-q">💾 Сохраняется ли прогресс?</div>
+    <div class="faq-a" id="s-faq3-a">Да, ваш прогресс автоматически сохраняется на устройстве. При повторном открытии приложения вы продолжите с того места, где остановились.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">🔤 Почему некоторые вопросы отображаются на итальянском?</div>
-    <div class="faq-a">Перевод охватывает более 87% вопросов. Часть специфических технических формулировок пока показывается на итальянском языке. Мы продолжаем работу над полным переводом.</div>
+    <div class="faq-q" id="s-faq4-q">❓ Вопросы соответствуют реальному экзамену?</div>
+    <div class="faq-a" id="s-faq4-a">База содержит официальные вопросы с экзамена на права категории B в Италии (6832 вопроса). Это неофициальный учебный ресурс — для официальной информации обращайтесь на сайт <a class="link" href="https://www.mit.gov.it" target="_blank">MIT.gov.it</a>.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">🔒 Мои данные в безопасности?</div>
-    <div class="faq-a">Да. Приложение не собирает никаких персональных данных. Ваши настройки и прогресс хранятся только на вашем устройстве. Подробнее — в <a class="link" href="privacy.html">Политике конфиденциальности</a>.</div>
+    <div class="faq-q" id="s-faq5-q">🔤 Почему некоторые вопросы отображаются на итальянском?</div>
+    <div class="faq-a" id="s-faq5-a">Перевод охватывает более 87% вопросов. Часть специфических технических формулировок пока показывается на итальянском языке. Мы продолжаем работу над полным переводом.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">🐛 Нашёл ошибку в вопросе, что делать?</div>
-    <div class="faq-a">Напишите нам на <a class="link" href="mailto:support@studiapatente.it">support@studiapatente.it</a>, указав номер вопроса (ID в формате B_NNNNN) и описание ошибки. Мы исправим в ближайшем обновлении.</div>
+    <div class="faq-q" id="s-faq6-q">🔒 Мои данные в безопасности?</div>
+    <div class="faq-a" id="s-faq6-a">Да. Приложение не собирает никаких персональных данных. Ваши настройки и прогресс хранятся только на вашем устройстве. Подробнее — в <a class="link" href="privacy.html" id="s-faq6-link">Политике конфиденциальности</a>.</div>
   </div>
 
+  <div class="faq-item">
+    <div class="faq-q" id="s-faq7-q">🐛 Нашёл ошибку в вопросе, что делать?</div>
+    <div class="faq-a" id="s-faq7-a">Напишите нам на <a class="link" href="mailto:support@studiapatente.it">support@studiapatente.it</a>, указав номер вопроса (ID в формате B_NNNNN) и описание ошибки. Мы исправим в ближайшем обновлении.</div>
+  </div>
 </main>
 
 <footer>
   <strong><span style="color:var(--text)">Studia</span><span style="color:var(--green)">Patente</span><span style="color:var(--muted);font-size:0.9em">.it</span></strong>
-  &nbsp;·&nbsp; Неофициальный учебный ресурс
-  &nbsp;·&nbsp; <a class="link" href="privacy.html">Конфиденциальность</a>
+  &nbsp;·&nbsp; <span id="s-footer-legal">Неофициальный учебный ресурс</span>
+  &nbsp;·&nbsp; <a class="link" href="privacy.html" id="s-footer-privacy">Конфиденциальность</a>
 </footer>
 
 <script>
-  function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+const SUPPORT_LANGS = {
+  ru: {
+    title: 'Поддержка',
+    subtitle: 'Мы здесь, чтобы помочь вам подготовиться к экзамену',
+    'contact-h': 'Связаться с нами',
+    'email-title': '📧 Email',
+    'email-desc1': 'Напишите нам по любым вопросам: технические проблемы, ошибки в вопросах, предложения по улучшению.',
+    'email-desc2': 'Мы отвечаем в течение 1–2 рабочих дней.',
+    'faq-h': 'Часто задаваемые вопросы',
+    'faq1-q': '📱 Приложение работает без интернета?',
+    'faq1-a': 'Нет, приложению требуется подключение к интернету для загрузки вопросов и изображений дорожных знаков.',
+    'faq2-q': '🌍 На каких языках доступны вопросы?',
+    'faq2-a': 'Вопросы доступны на трёх языках: русском 🇷🇺, итальянском 🇮🇹 и английском 🇬🇧. Выберите язык кнопками RU / IT / EN в верхней панели.',
+    'faq3-q': '💾 Сохраняется ли прогресс?',
+    'faq3-a': 'Да, ваш прогресс автоматически сохраняется на устройстве. При повторном открытии приложения вы продолжите с того места, где остановились.',
+    'faq4-q': '❓ Вопросы соответствуют реальному экзамену?',
+    'faq4-a': 'База содержит официальные вопросы с экзамена на права категории B в Италии (6832 вопроса). Это неофициальный учебный ресурс — для официальной информации обращайтесь на сайт <a class="link" href="https://www.mit.gov.it" target="_blank">MIT.gov.it</a>.',
+    'faq5-q': '🔤 Почему некоторые вопросы отображаются на итальянском?',
+    'faq5-a': 'Перевод охватывает более 87% вопросов. Часть специфических технических формулировок пока показывается на итальянском языке.',
+    'faq6-q': '🔒 Мои данные в безопасности?',
+    'faq6-a': 'Да. Приложение не собирает никаких персональных данных. Ваши настройки и прогресс хранятся только на вашем устройстве. Подробнее — в <a class="link" href="privacy.html">Политике конфиденциальности</a>.',
+    'faq7-q': '🐛 Нашёл ошибку в вопросе, что делать?',
+    'faq7-a': 'Напишите нам на <a class="link" href="mailto:support@studiapatente.it">support@studiapatente.it</a>, указав номер вопроса (ID в формате B_NNNNN) и описание ошибки.',
+    back: '← Назад',
+    'footer-legal': 'Неофициальный учебный ресурс',
+    'footer-privacy': 'Конфиденциальность',
+    'page-title': 'Поддержка — Studiapatente.it',
+  },
+  it: {
+    title: 'Supporto',
+    subtitle: 'Siamo qui per aiutarti a prepararti all\'esame',
+    'contact-h': 'Contattaci',
+    'email-title': '📧 Email',
+    'email-desc1': 'Scrivici per qualsiasi domanda: problemi tecnici, errori nelle domande, suggerimenti per miglioramenti.',
+    'email-desc2': 'Rispondiamo entro 1–2 giorni lavorativi.',
+    'faq-h': 'Domande frequenti',
+    'faq1-q': '📱 L\'app funziona offline?',
+    'faq1-a': 'No, l\'applicazione richiede una connessione internet per caricare le domande e le immagini dei segnali stradali.',
+    'faq2-q': '🌍 In quali lingue sono disponibili le domande?',
+    'faq2-a': 'Le domande sono disponibili in tre lingue: russo 🇷🇺, italiano 🇮🇹 e inglese 🇬🇧. Seleziona la lingua con i pulsanti RU / IT / EN nella barra superiore.',
+    'faq3-q': '💾 I progressi vengono salvati?',
+    'faq3-a': 'Sì, i tuoi progressi vengono salvati automaticamente sul dispositivo. Alla riapertura dell\'app riprenderai da dove hai lasciato.',
+    'faq4-q': '❓ Le domande corrispondono al vero esame?',
+    'faq4-a': 'Il database contiene le domande ufficiali dell\'esame di patente di guida categoria B in Italia (6832 domande). Questa è una risorsa didattica non ufficiale — per informazioni ufficiali, visita <a class="link" href="https://www.mit.gov.it" target="_blank">MIT.gov.it</a>.',
+    'faq5-q': '🔤 Perché alcune domande sono in italiano?',
+    'faq5-a': 'La traduzione copre oltre l\'87% delle domande. Alcune formulazioni tecniche specifiche sono ancora visualizzate in italiano. Stiamo lavorando alla traduzione completa.',
+    'faq6-q': '🔒 I miei dati sono al sicuro?',
+    'faq6-a': 'Sì. L\'app non raccoglie alcun dato personale. Le tue impostazioni e i progressi sono salvati solo sul tuo dispositivo. Per ulteriori informazioni consulta la <a class="link" href="privacy.html">Privacy Policy</a>.',
+    'faq7-q': '🐛 Ho trovato un errore, cosa faccio?',
+    'faq7-a': 'Scrivici a <a class="link" href="mailto:support@studiapatente.it">support@studiapatente.it</a> indicando il numero della domanda (ID nel formato B_NNNNN) e la descrizione dell\'errore.',
+    back: '← Indietro',
+    'footer-legal': 'Risorsa didattica non ufficiale',
+    'footer-privacy': 'Privacy',
+    'page-title': 'Supporto — Studiapatente.it',
+  },
+  en: {
+    title: 'Support',
+    subtitle: 'We\'re here to help you prepare for your exam',
+    'contact-h': 'Contact us',
+    'email-title': '📧 Email',
+    'email-desc1': 'Write to us for any questions: technical issues, question errors, improvement suggestions.',
+    'email-desc2': 'We reply within 1–2 business days.',
+    'faq-h': 'Frequently asked questions',
+    'faq1-q': '📱 Does the app work offline?',
+    'faq1-a': 'No, the application requires an internet connection to load questions and road sign images.',
+    'faq2-q': '🌍 In what languages are the questions available?',
+    'faq2-a': 'Questions are available in three languages: Russian 🇷🇺, Italian 🇮🇹 and English 🇬🇧. Select the language using the RU / IT / EN buttons in the top bar.',
+    'faq3-q': '💾 Is my progress saved?',
+    'faq3-a': 'Yes, your progress is automatically saved on your device. When you reopen the app you will continue from where you left off.',
+    'faq4-q': '❓ Do the questions match the real exam?',
+    'faq4-a': 'The database contains the official questions from the Italian category B driving test (6832 questions). This is an unofficial educational resource — for official information visit <a class="link" href="https://www.mit.gov.it" target="_blank">MIT.gov.it</a>.',
+    'faq5-q': '🔤 Why are some questions in Italian?',
+    'faq5-a': 'The translation covers over 87% of questions. Some specific technical phrasings are still shown in Italian. We are working on a complete translation.',
+    'faq6-q': '🔒 Is my data safe?',
+    'faq6-a': 'Yes. The app collects no personal data. Your settings and progress are stored only on your device. See the <a class="link" href="privacy.html">Privacy Policy</a> for details.',
+    'faq7-q': '🐛 I found an error in a question, what should I do?',
+    'faq7-a': 'Email us at <a class="link" href="mailto:support@studiapatente.it">support@studiapatente.it</a> with the question ID (B_NNNNN format) and a description of the error.',
+    back: '← Back',
+    'footer-legal': 'Unofficial educational resource',
+    'footer-privacy': 'Privacy',
+    'page-title': 'Support — Studiapatente.it',
   }
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    if (savedTheme === 'light') document.querySelector('.theme-btn').textContent = '☀️';
+};
+
+let currentLang = 'ru';
+
+function applyLang() {
+  const T = SUPPORT_LANGS[currentLang] || SUPPORT_LANGS.ru;
+  const keys = ['title','subtitle','contact-h','email-title','email-desc1','email-desc2',
+    'faq-h','faq1-q','faq1-a','faq2-q','faq2-a','faq3-q','faq3-a',
+    'faq4-q','faq4-a','faq5-q','faq5-a','faq6-q','faq6-a','faq7-q','faq7-a',
+    'back','footer-legal','footer-privacy'];
+  for (const key of keys) {
+    const el = document.getElementById('s-' + key);
+    if (el && T[key] !== undefined) el.innerHTML = T[key];
   }
+  ['ru','it','en'].forEach(l => {
+    const btn = document.getElementById('ln-' + l);
+    if (btn) btn.classList.toggle('active', l === currentLang);
+  });
+  document.documentElement.lang = currentLang;
+  document.title = T['page-title'] || document.title;
+}
+
+function setLang(l) {
+  currentLang = l;
+  try { localStorage.setItem('lang', l); } catch(e) {}
+  applyLang();
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  document.getElementById('theme-btn').textContent = isDark ? '☀' : '☾';
+  try { localStorage.setItem('theme', newTheme); } catch(e) {}
+}
+
+// Init
+(function() {
+  try {
+    const t = localStorage.getItem('theme');
+    if (t) {
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('theme-btn').textContent = t === 'light' ? '☀' : '☾';
+    }
+    const l = localStorage.getItem('lang');
+    if (l && ['ru','it','en'].includes(l)) currentLang = l;
+  } catch(e) {}
+  applyLang();
+})();
 </script>
 </body>
 </html>
