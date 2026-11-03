@@ -232,6 +232,9 @@
   .exam-timer.warn { color: var(--orange, #f97316); }
   .exam-timer.danger { color: var(--red); animation: blink 1s step-end infinite; }
   @keyframes blink { 50% { opacity: 0.4; } }
+  .exam-err-counter { font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .exam-err-counter.warn1 { color: var(--orange, #f97316); }
+  .exam-err-counter.danger { color: var(--red); animation: blink 1s step-end infinite; }
   .progress-bar-wrap { background: var(--border); border-radius: 4px; height: 5px;
     margin-bottom: 18px; overflow: hidden; }
   .progress-bar { height: 100%; background: var(--green); transition: width 0.3s; }
@@ -252,11 +255,28 @@
   .answers { display: flex; flex-direction: column; gap: 10px; }
   .ans-btn { background: var(--card); border: 2px solid var(--border);
     border-radius: 12px; padding: 14px 16px; font-size: 15px; font-weight: 500;
-    cursor: pointer; color: var(--text); transition: 0.15s; text-align: left; }
+    cursor: pointer; color: var(--text); transition: 0.15s; text-align: left;
+    min-height: 48px; /* Apple/Google touch target */ }
   .ans-btn:hover:not(.disabled) { border-color: var(--blue); background: #1e40af20; }
   .ans-btn.correct { border-color: var(--green); background: #16a34a20; color: var(--green); }
   .ans-btn.wrong   { border-color: var(--red);   background: #dc262620; color: var(--red); }
   .ans-btn.disabled { cursor: default; }
+
+  /* WRONG ANSWERS REVIEW — detailed results screen */
+  .wrong-review { margin-top: 18px; }
+  .wrong-review h3 { font-size: 14px; font-weight: 700; color: var(--red); margin-bottom: 12px; }
+  .wrong-item { background: var(--card); border: 1px solid #dc262640;
+    border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .wrong-item .wi-num { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .wrong-item .wi-q { font-size: 13px; font-weight: 500; margin-bottom: 6px; line-height: 1.5; }
+  .wrong-item .wi-ans { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+  .wrong-item .wi-yours { color: var(--red); }
+  .wrong-item .wi-correct { color: var(--green); }
+  .wrong-item .wi-exp { font-size: 12px; color: var(--muted); margin-top: 6px;
+    line-height: 1.5; border-top: 1px solid var(--border); padding-top: 6px; }
+
+  /* RETRY ERRORS button */
+  .action-btn.retry-errors { background: #dc262615; border-color: var(--red); color: var(--red); }
 
   /* EXPLANATION — free: first part only; premium: full */
   .explanation { background: var(--bg); border: 1px solid var(--border);
@@ -444,6 +464,7 @@
     <button class="back-btn" id="back-btn" onclick="goHome()">← Назад</button>
     <div class="quiz-title" id="quiz-title">Тема</div>
     <div class="q-counter" id="q-counter">1 / 30</div>
+    <div class="exam-err-counter" id="exam-err-counter" style="display:none">❌ <span id="err-display">0/3</span></div>
     <div class="exam-timer" id="exam-timer" style="display:none">⏱ <span id="timer-display">30:00</span></div>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
@@ -499,7 +520,12 @@
     <div class="action-btn" id="btn-repeat" onclick="repeatSession()">🔄 Повторить</div>
     <div class="action-btn" id="btn-home" onclick="goHome()">🏠 Главная</div>
     <div class="action-btn primary" id="btn-more-exam" onclick="startExam()">🎯 Ещё экзамен</div>
-    <div class="action-btn" id="btn-premium-stats" onclick="showPremiumModal('stats')">👑 Premium</div>
+    <div class="action-btn retry-errors" id="btn-retry-errors" onclick="retryErrors()" style="display:none">🔁 Только ошибки</div>
+  </div>
+  <!-- WRONG ANSWERS DETAILED REVIEW -->
+  <div class="wrong-review" id="wrong-review" style="display:none">
+    <h3 id="wrong-review-title">❌ Разбор ошибок</h3>
+    <div id="wrong-items-list"></div>
   </div>
 </div>
 
@@ -581,6 +607,7 @@ const T = {
     btnHome: '🏠 Главная',
     btnMoreExam: '🎯 Ещё экзамен',
     btnPremium: '👑 Premium',
+    btnRetryErrors: '🔁 Только ошибки',
     modalTitle: '👑 Studiapatente Premium',
     modalSub: 'Полноценная подготовка к итальянским правам. 6 832 вопроса, объяснения на трёх языках, без ограничений.',
     feat1: 'Все вопросы без дневного лимита',
@@ -666,6 +693,7 @@ const T = {
     btnHome: '🏠 Home',
     btnMoreExam: '🎯 Altro esame',
     btnPremium: '👑 Premium',
+    btnRetryErrors: '🔁 Ripassa errori',
     modalTitle: '👑 Studiapatente Premium',
     modalSub: 'Preparazione completa per l\'esame patente B. 6.832 domande, spiegazioni in 3 lingue, senza limiti.',
     feat1: 'Tutte le domande senza limite giornaliero',
@@ -751,6 +779,7 @@ const T = {
     btnHome: '🏠 Home',
     btnMoreExam: '🎯 New exam',
     btnPremium: '👑 Premium',
+    btnRetryErrors: '🔁 Retry errors',
     modalTitle: '👑 Studiapatente Premium',
     modalSub: 'Full preparation for the Italian driving test. 6,832 questions, explanations in 3 languages, no limits.',
     feat1: 'All questions without daily limit',
@@ -2158,6 +2187,18 @@ function applyI18n() {
   setText('btn-home', tr('btnHome'));
   setText('btn-more-exam', tr('btnMoreExam'));
   setText('btn-premium-stats', tr('btnPremium'));
+  // Retry errors button label (count updated dynamically in showStats)
+  const retryBtn = document.getElementById('btn-retry-errors');
+  if (retryBtn && retryBtn.style.display !== 'none') {
+    const cnt = session.wrongItems ? session.wrongItems.length : 0;
+    retryBtn.textContent = tr('btnRetryErrors') + (cnt > 0 ? ` (${cnt})` : '');
+  }
+  // Wrong review title
+  const wrt = document.getElementById('wrong-review-title');
+  if (wrt && session.wrongItems && session.wrongItems.length > 0) {
+    const n = session.wrongItems.length;
+    wrt.textContent = currentLang === 'it' ? `❌ Analisi degli errori (${n})` : currentLang === 'en' ? `❌ Error review (${n})` : `❌ Разбор ошибок (${n})`;
+  }
 
   // Premium modal
   setText('modal-title', tr('modalTitle'));
@@ -2209,7 +2250,7 @@ function renderHome() {
 }
 
 // ===== QUIZ STATE =====
-let session = { qs: [], idx: 0, correct: 0, wrong: 0, started: 0, title: '', limitHit: false };
+let session = { qs: [], idx: 0, correct: 0, wrong: 0, started: 0, title: '', limitHit: false, wrongItems: [] };
 
 function shuffleArr(a) {
   for (let i = a.length-1; i > 0; i--) {
@@ -2283,10 +2324,17 @@ function clearExamTimer() {
 
 function beginSession(qs, title, isExam) {
   clearExamTimer();
-  session = { qs, idx: 0, correct: 0, wrong: 0, started: Date.now(), title, limitHit: false, isExam: !!isExam };
+  session = { qs, idx: 0, correct: 0, wrong: 0, started: Date.now(), title, limitHit: false, isExam: !!isExam, wrongItems: [] };
   document.getElementById('quiz-title').textContent = title;
   document.getElementById('quiz-content').style.display = '';
   document.getElementById('limit-overlay').style.display = 'none';
+  // Show/hide error counter for exam mode
+  const errEl = document.getElementById('exam-err-counter');
+  if (errEl) {
+    errEl.style.display = isExam ? '' : 'none';
+    errEl.className = 'exam-err-counter';
+    document.getElementById('err-display').textContent = '0/3';
+  }
   showScreen('s-quiz');
   if (isExam) startExamTimer();
   renderQ();
@@ -2366,6 +2414,17 @@ function pick(sel) {
   if (!isRight) {
     document.getElementById(selId).classList.add('wrong');
     session.wrong++;
+    // Store wrong answer for review
+    session.wrongItems.push({ q, userAns: sel });
+    // Update exam error counter
+    if (session.isExam) {
+      const errEl = document.getElementById('exam-err-counter');
+      const errDisp = document.getElementById('err-display');
+      if (errEl && errDisp) {
+        errDisp.textContent = `${session.wrong}/3`;
+        errEl.className = session.wrong >= 2 ? 'exam-err-counter danger' : 'exam-err-counter warn1';
+      }
+    }
   } else {
     session.correct++;
     if (q.id) { progress[q.id] = (progress[q.id]||0)+1; saveProgress(); }
@@ -2433,14 +2492,80 @@ function showStats(timeUp) {
     ? (currentLang === 'it' ? '⏱ Tempo scaduto' : currentLang === 'en' ? '⏱ Time up' : '⏱ Время вышло')
     : (mins || '<1');
   document.getElementById('r-time').textContent = timeLabel;
+
+  // Show "Retry errors" button if there were mistakes
+  const retryBtn = document.getElementById('btn-retry-errors');
+  if (retryBtn) {
+    retryBtn.style.display = session.wrongItems.length > 0 ? '' : 'none';
+    retryBtn.textContent = currentLang === 'it'
+      ? `🔁 Ripassa errori (${session.wrongItems.length})`
+      : currentLang === 'en'
+      ? `🔁 Retry errors (${session.wrongItems.length})`
+      : `🔁 Только ошибки (${session.wrongItems.length})`;
+  }
+
+  // Render wrong answers review
+  const reviewEl = document.getElementById('wrong-review');
+  const listEl = document.getElementById('wrong-items-list');
+  const reviewTitle = document.getElementById('wrong-review-title');
+  if (reviewEl && listEl && session.wrongItems.length > 0) {
+    reviewEl.style.display = '';
+    if (reviewTitle) reviewTitle.textContent = currentLang === 'it'
+      ? `❌ Analisi degli errori (${session.wrongItems.length})`
+      : currentLang === 'en'
+      ? `❌ Error review (${session.wrongItems.length})`
+      : `❌ Разбор ошибок (${session.wrongItems.length})`;
+    listEl.innerHTML = session.wrongItems.map(({q, userAns}) => {
+      const qText = translateQ(q.t, currentLang);
+      const correctAns = q.c === 'vero'
+        ? (currentLang === 'it' ? '✅ VERO' : currentLang === 'en' ? '✅ TRUE' : '✅ ВЕРНО')
+        : (currentLang === 'it' ? '❌ FALSO' : currentLang === 'en' ? '❌ FALSE' : '❌ ЛОЖНО');
+      const userAnsLabel = userAns === 'vero'
+        ? (currentLang === 'it' ? 'VERO' : currentLang === 'en' ? 'TRUE' : 'ВЕРНО')
+        : (currentLang === 'it' ? 'FALSO' : currentLang === 'en' ? 'FALSE' : 'ЛОЖНО');
+      const expText = getExplanation(q, currentLang, false) || '';
+      const youLabel = currentLang === 'it' ? 'Tu:' : currentLang === 'en' ? 'You:' : 'Ваш ответ:';
+      const corrLabel = currentLang === 'it' ? 'Corretto:' : currentLang === 'en' ? 'Correct:' : 'Правильно:';
+      return `<div class="wrong-item">
+        <div class="wi-num">ID: ${q.n || q.id}</div>
+        <div class="wi-q">${qText}</div>
+        <div class="wi-ans">
+          <span class="wi-yours">${youLabel} ${userAnsLabel}</span>
+          <span>·</span>
+          <span class="wi-correct">${corrLabel} ${correctAns}</span>
+        </div>
+        ${expText ? `<div class="wi-exp">${expText}</div>` : ''}
+      </div>`;
+    }).join('');
+  } else if (reviewEl) {
+    reviewEl.style.display = 'none';
+  }
+
   showScreen('s-stats');
 }
 
 function repeatSession() {
-  beginSession(shuffleArr([...session.qs]), session.title);
+  beginSession(shuffleArr([...session.qs]), session.title, session.isExam);
 }
 
-function goHome() { clearExamTimer(); renderHome(); showScreen('s-home'); }
+function retryErrors() {
+  if (!session.wrongItems || session.wrongItems.length === 0) return;
+  const errorQs = session.wrongItems.map(wi => wi.q);
+  const retryTitle = currentLang === 'it'
+    ? `🔁 Ripasso errori (${errorQs.length})`
+    : currentLang === 'en'
+    ? `🔁 Retry errors (${errorQs.length})`
+    : `🔁 Работа над ошибками (${errorQs.length})`;
+  beginSession(shuffleArr([...errorQs]), retryTitle);
+}
+
+function goHome() {
+  clearExamTimer();
+  const errEl = document.getElementById('exam-err-counter');
+  if (errEl) errEl.style.display = 'none';
+  renderHome();
+  showScreen('s-home');
+}
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
