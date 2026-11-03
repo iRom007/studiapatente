@@ -54,6 +54,14 @@
   .lang-btn { background: none; border: none; padding: 5px 10px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--muted); transition: 0.15s; letter-spacing: 0.5px; }
   .lang-btn.active { background: var(--blue); color: white; }
   .lang-btn:hover:not(.active) { background: var(--card2); color: var(--text); }
+  .font-btn { background: none; border: 1px solid var(--muted); border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--muted); transition: 0.15s; margin-left: 4px; white-space: nowrap; }
+  .font-btn:hover { background: var(--card2); color: var(--text); border-color: var(--text); }
+  body.font-lg { font-size: 18px; }
+  body.font-lg #q-text { font-size: 20px; line-height: 1.5; }
+  body.font-lg .btn-v, body.font-lg .btn-f { font-size: 17px; padding: 14px; }
+  body.font-lg .topic-card .info .name { font-size: 14px; }
+  body.font-lg .exam-btn { font-size: 16px; }
+  body.font-lg #exp-rule, body.font-lg #exp-verdict { font-size: 16px; }
   /* Italian mode */
   body.lang-it .ru-text { display: none; }
   body.lang-it .it-text { display: inline; }
@@ -287,6 +295,7 @@
     <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
     <button class="lang-btn active" id="lang-ru" onclick="setLang('ru')">RU</button>
   </div>
+  <button class="font-btn" id="font-btn" onclick="toggleFont()" title="Размер шрифта">Аа</button>
   <div class="premium-badge" onclick="showPremiumModal('nav')">👑 Premium</div>
 </nav>
 
@@ -845,6 +854,325 @@ function getExplanation(q, lang, isRight) {
   return q.e1 || '';
 }
 
+// ===== QUESTION TRANSLATION (IT → RU / EN) =====
+// Pattern-based translation covering all major question types.
+// Questions are always stored in Italian (official MIT bank).
+function translateQ(t, lang) {
+  if (lang === 'it') return t;
+
+  // ── helper: map common Italian phrases at end of sentence ──
+  function tail(s, lng) {
+    if (lng === 'ru') {
+      return s
+        .replace(/il transito/gi, 'проезд')
+        .replace(/il sorpasso/gi, 'обгон')
+        .replace(/la sosta/gi, 'стоянку')
+        .replace(/la fermata/gi, 'остановку')
+        .replace(/la velocità/gi, 'скорость')
+        .replace(/l'accesso/gi, 'въезд')
+        .replace(/i pedoni/gi, 'пешеходы')
+        .replace(/dei pedoni/gi, 'пешеходов')
+        .replace(/la precedenza/gi, 'приоритет')
+        .replace(/la corsia/gi, 'полосу')
+        .replace(/le corsie/gi, 'полосы')
+        .replace(/la carreggiata/gi, 'проезжую часть')
+        .replace(/l'autostrada/gi, 'автостраду')
+        .replace(/l'incrocio/gi, 'перекрёсток')
+        .replace(/il veicolo ([A-Z])/g, 'транспортное средство $1')
+        .replace(/il conducente/gi, 'водитель')
+        .replace(/i veicoli/gi, 'транспортные средства')
+        .replace(/un veicolo/gi, 'транспортное средство')
+        .replace(/a senso unico/gi, 'с односторонним движением')
+        .replace(/a doppio senso/gi, 'с двусторонним движением')
+        .replace(/in curva/gi, 'на повороте')
+        .replace(/nelle gallerie/gi, 'в тоннелях')
+        .replace(/sulle strisce pedonali/gi, 'на пешеходных переходах')
+        .replace(/agli incroci/gi, 'на перекрёстках')
+        .replace(/in salita/gi, 'на подъёме')
+        .replace(/in discesa/gi, 'на спуске');
+    } else {
+      return s
+        .replace(/il transito/gi, 'traffic flow')
+        .replace(/il sorpasso/gi, 'overtaking')
+        .replace(/la sosta/gi, 'parking')
+        .replace(/la fermata/gi, 'stopping')
+        .replace(/la velocità/gi, 'speed')
+        .replace(/l'accesso/gi, 'access')
+        .replace(/i pedoni/gi, 'pedestrians')
+        .replace(/dei pedoni/gi, 'of pedestrians')
+        .replace(/la precedenza/gi, 'right of way')
+        .replace(/la corsia/gi, 'lane')
+        .replace(/le corsie/gi, 'lanes')
+        .replace(/la carreggiata/gi, 'carriageway')
+        .replace(/l'autostrada/gi, 'motorway')
+        .replace(/l'incrocio/gi, 'the junction')
+        .replace(/il veicolo ([A-Z])/g, 'vehicle $1')
+        .replace(/il conducente/gi, 'driver')
+        .replace(/i veicoli/gi, 'vehicles')
+        .replace(/un veicolo/gi, 'a vehicle')
+        .replace(/a senso unico/gi, 'with one-way traffic')
+        .replace(/a doppio senso/gi, 'with two-way traffic')
+        .replace(/in curva/gi, 'on a bend')
+        .replace(/nelle gallerie/gi, 'in tunnels')
+        .replace(/sulle strisce pedonali/gi, 'at pedestrian crossings')
+        .replace(/agli incroci/gi, 'at junctions')
+        .replace(/in salita/gi, 'on an uphill slope')
+        .replace(/in discesa/gi, 'on a downhill slope');
+    }
+  }
+
+  const ru = lang === 'ru';
+
+  // ── SEGNALE RAFFIGURATO ──────────────────────────────────────────────
+  let m;
+  if ((m = t.match(/^Il segnale raffigurato indica (.+)$/i)))
+    return ru ? `Изображённый знак указывает: ${tail(m[1],lang)}`
+              : `The sign shown indicates: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato preannuncia (.+)$/i)))
+    return ru ? `Изображённый знак предупреждает о: ${tail(m[1],lang)}`
+              : `The sign shown gives advance warning of: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato vieta (.+)$/i)))
+    return ru ? `Изображённый знак запрещает: ${tail(m[1],lang)}`
+              : `The sign shown prohibits: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato (obbliga|impone|prescrive) (.+)$/i)))
+    return ru ? `Изображённый знак обязывает: ${tail(m[2],lang)}`
+              : `The sign shown requires: ${tail(m[2],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato consente (.+)$/i)))
+    return ru ? `Изображённый знак разрешает: ${tail(m[1],lang)}`
+              : `The sign shown permits: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato è (.+)$/i)))
+    return ru ? `Изображённый знак является: ${tail(m[1],lang)}`
+              : `The sign shown is: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato preavvisa (.+)$/i)))
+    return ru ? `Изображённый знак заблаговременно сообщает: ${tail(m[1],lang)}`
+              : `The sign shown gives prior notice of: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato si trova (.+)$/i)))
+    return ru ? `Изображённый знак расположен: ${tail(m[1],lang)}`
+              : `The sign shown is located: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato può essere (.+)$/i)))
+    return ru ? `Изображённый знак может быть: ${tail(m[1],lang)}`
+              : `The sign shown can be: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il segnale raffigurato non (.+)$/i)))
+    return ru ? `Изображённый знак не ${tail(m[1],lang)}`
+              : `The sign shown does not ${tail(m[1],lang)}`;
+
+  if (t.match(/^Il segnale raffigurato/i))
+    return ru ? `Изображённый знак: ${tail(t.replace(/^Il segnale raffigurato\s*/i,''),lang)}`
+              : `The sign shown: ${tail(t.replace(/^Il segnale raffigurato\s*/i,''),lang)}`;
+
+  // ── PRESENZA DEL SEGNALE ─────────────────────────────────────────────
+  if ((m = t.match(/^In presenza del segnale raffigurato (.+)$/i)))
+    return ru ? `При наличии изображённого знака: ${tail(m[1],lang)}`
+              : `In the presence of the sign shown: ${tail(m[1],lang)}`;
+
+  // ── PANNELLI / DELINEATORE ───────────────────────────────────────────
+  if ((m = t.match(/^Il pannello integrativo raffigurato (.+)$/i)))
+    return ru ? `Изображённая дополнительная табличка: ${tail(m[1],lang)}`
+              : `The supplementary panel shown: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^I pannelli raffigurati (.+)$/i)))
+    return ru ? `Изображённые таблички: ${tail(m[1],lang)}`
+              : `The panels shown: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il delineatore raffigurato (.+)$/i)))
+    return ru ? `Изображённый деlineator: ${tail(m[1],lang)}`
+              : `The delineator shown: ${tail(m[1],lang)}`;
+
+  // ── INCROCIO / PRECEDENZA ────────────────────────────────────────────
+  if ((m = t.match(/^Nell'incrocio rappresentato (?:nella|in) figura (.+)$/i)))
+    return ru ? `На изображённом перекрёстке: ${tail(m[1],lang)}`
+              : `At the junction shown in the figure: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Nella situazione rappresentata in figura (.+)$/i)))
+    return ru ? `В изображённой ситуации: ${tail(m[1],lang)}`
+              : `In the situation shown in the figure: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Giungendo all'incrocio rappresentato in figura (.+)$/i)))
+    return ru ? `Подъезжая к изображённому перекрёстку: ${tail(m[1],lang)}`
+              : `Approaching the junction shown: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Dovendo attraversare l'incrocio rappresentato (.+)$/i)))
+    return ru ? `Проезжая изображённый перекрёсток: ${tail(m[1],lang)}`
+              : `When crossing the junction shown: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Secondo le norme di precedenza (.+)$/i)))
+    return ru ? `Согласно правилам приоритета: ${tail(m[1],lang)}`
+              : `According to right-of-way rules: ${tail(m[1],lang)}`;
+
+  // ── SEMAFORO ─────────────────────────────────────────────────────────
+  if ((m = t.match(/^Il semaforo (?:in figura|raffigurato) (.+)$/i)))
+    return ru ? `Светофор на рисунке: ${tail(m[1],lang)}`
+              : `The traffic light shown: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il semaforo (.+)$/i)))
+    return ru ? `Светофор: ${tail(m[1],lang)}`
+              : `The traffic light: ${tail(m[1],lang)}`;
+
+  // ── SOSTA / FERMATA ───────────────────────────────────────────────────
+  if ((m = t.match(/^La sosta è vietata (.+)$/i)))
+    return ru ? `Стоянка запрещена: ${tail(m[1],lang)}`
+              : `Parking is prohibited: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^La fermata è vietata (.+)$/i)))
+    return ru ? `Остановка запрещена: ${tail(m[1],lang)}`
+              : `Stopping is prohibited: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Durante la sosta (.+)$/i)))
+    return ru ? `Во время стоянки: ${tail(m[1],lang)}`
+              : `During parking: ${tail(m[1],lang)}`;
+
+  // ── PATENTE ───────────────────────────────────────────────────────────
+  if ((m = t.match(/^La patente di categoria (.+?) (consente|permette|abilita|è necessaria) (.+)$/i)))
+    return ru ? `Водительское удостоверение категории ${m[1]} разрешает: ${tail(m[3],lang)}`
+              : `Driving licence category ${m[1]} allows: ${tail(m[3],lang)}`;
+
+  if ((m = t.match(/^La patente di (?:guida |categoria )?(.+)$/i)))
+    return ru ? `Водительское удостоверение: ${tail(m[1],lang)}`
+              : `The driving licence: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Con la patente di (.+)$/i)))
+    return ru ? `С водительским удостоверением: ${tail(m[1],lang)}`
+              : `With a driving licence: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^La sospensione della patente (.+)$/i)))
+    return ru ? `Приостановление удостоверения: ${tail(m[1],lang)}`
+              : `Suspension of the driving licence: ${tail(m[1],lang)}`;
+
+  // ── CONDUCENTE ───────────────────────────────────────────────────────
+  if ((m = t.match(/^Il conducente (.+)$/i)))
+    return ru ? `Водитель: ${tail(m[1],lang)}`
+              : `The driver: ${tail(m[1],lang)}`;
+
+  // ── SORPASSO ─────────────────────────────────────────────────────────
+  if ((m = t.match(/^Il sorpasso (.+)$/i)))
+    return ru ? `Обгон: ${tail(m[1],lang)}`
+              : `Overtaking: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^È (vietato|consentito|obbligatorio) il sorpasso (.+)$/i))) {
+    const act = ru ? (m[1]==='vietato'?'запрещён':m[1]==='consentito'?'разрешён':'обязателен')
+                   : (m[1]==='vietato'?'prohibited':m[1]==='consentito'?'permitted':'required');
+    return ru ? `Обгон ${act}: ${tail(m[2],lang)}`
+              : `Overtaking is ${act}: ${tail(m[2],lang)}`;
+  }
+
+  // ── DISTANZA DI SICUREZZA ─────────────────────────────────────────────
+  if ((m = t.match(/^La distanza di sicurezza (.+)$/i)))
+    return ru ? `Дистанция безопасности: ${tail(m[1],lang)}`
+              : `The safe following distance: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Lo spazio di frenatura (.+)$/i)))
+    return ru ? `Тормозной путь: ${tail(m[1],lang)}`
+              : `The braking distance: ${tail(m[1],lang)}`;
+
+  // ── SEGNALETICA ORIZZONTALE ───────────────────────────────────────────
+  if ((m = t.match(/^La segnaletica (?:orizzontale |verticale |in figura )?(.+)$/i)))
+    return ru ? `Дорожная разметка/знаки: ${tail(m[1],lang)}`
+              : `Road markings/signs: ${tail(m[1],lang)}`;
+
+  // ── SIMBOLO / SPIA ───────────────────────────────────────────────────
+  if ((m = t.match(/^Il simbolo raffigurato (.+)$/i)))
+    return ru ? `Изображённый символ: ${tail(m[1],lang)}`
+              : `The symbol shown: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Una spia di colore (.+)$/i)))
+    return ru ? `Контрольная лампа: ${tail(m[1],lang)}`
+              : `A warning light: ${tail(m[1],lang)}`;
+
+  // ── CONO / DELINEATORE STRADALE ────────────────────────────────────────
+  if ((m = t.match(/^Il cono raffigurato (.+)$/i)))
+    return ru ? `Изображённый конус: ${tail(m[1],lang)}`
+              : `The cone shown: ${tail(m[1],lang)}`;
+
+  // ── VEICOLO / PNEUMATICI ─────────────────────────────────────────────
+  if ((m = t.match(/^In un veicolo a motore[,]? (.+)$/i)))
+    return ru ? `В автомобиле: ${tail(m[1],lang)}`
+              : `In a motor vehicle: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Nei veicoli a motore (.+)$/i)))
+    return ru ? `В автомобилях: ${tail(m[1],lang)}`
+              : `In motor vehicles: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^La corretta pressione di gonfiaggio (.+)$/i)))
+    return ru ? `Правильное давление в шинах: ${tail(m[1],lang)}`
+              : `The correct tyre inflation pressure: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Il coefficiente di aderenza (.+)$/i)))
+    return ru ? `Коэффициент сцепления: ${tail(m[1],lang)}`
+              : `The grip coefficient: ${tail(m[1],lang)}`;
+
+  // ── ALCOOL / DROGHE ───────────────────────────────────────────────────
+  if (t.match(/alcolemia|tasso alcolemico|alcolico|alcool/i))
+    return ru ? `🍷 [Алкоголь] ${t}`
+              : `🍷 [Alcohol] ${t}`;
+
+  // ── INCIDENTE / SOCCORSO ─────────────────────────────────────────────
+  if ((m = t.match(/^(?:Dopo|In caso di) un incidente stradale[,]? (.+)$/i)))
+    return ru ? `После дорожного происшествия: ${tail(m[1],lang)}`
+              : `After a road accident: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Se un infortunato (.+)$/i)))
+    return ru ? `Если пострадавший: ${tail(m[1],lang)}`
+              : `If an injured person: ${tail(m[1],lang)}`;
+
+  // ── ASSICURAZIONE ────────────────────────────────────────────────────
+  if (t.match(/assicurazione|RC auto|responsabilità civile/i))
+    return ru ? `🛡️ [Страховка] ${t}`
+              : `🛡️ [Insurance] ${t}`;
+
+  // ── AMBIENTE / CONSUMI ───────────────────────────────────────────────
+  if ((m = t.match(/^Per diminuire l'inquinamento (.+)$/i)))
+    return ru ? `Для снижения загрязнения воздуха: ${tail(m[1],lang)}`
+              : `To reduce air pollution: ${tail(m[1],lang)}`;
+
+  // ── GENERIC QUESTIONS ────────────────────────────────────────────────
+  if ((m = t.match(/^È (?:consentito|vietato|obbligatorio) (.+)$/i))) {
+    const v = t.match(/^È consentito/i) ? (ru?'Разрешено':'Permitted')
+            : t.match(/^È vietato/i)    ? (ru?'Запрещено':'Prohibited')
+                                        : (ru?'Обязательно':'Required');
+    return `${v}: ${tail(m[1],lang)}`;
+  }
+
+  if ((m = t.match(/^Si può (.+)$/i)))
+    return ru ? `Можно ли: ${tail(m[1],lang)}`
+              : `Is it possible to: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Fuori dei centri abitati[,]? (.+)$/i)))
+    return ru ? `Вне населённых пунктов: ${tail(m[1],lang)}`
+              : `Outside built-up areas: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Nei centri abitati[,]? (.+)$/i)))
+    return ru ? `В населённых пунктах: ${tail(m[1],lang)}`
+              : `In built-up areas: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^In autostrada[,]? (.+)$/i)))
+    return ru ? `На автостраде: ${tail(m[1],lang)}`
+              : `On the motorway: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^Lo specchio retrovisore (.+)$/i)))
+    return ru ? `Зеркало заднего вида: ${tail(m[1],lang)}`
+              : `The rear-view mirror: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^L'uso degli indicatori di direzione (.+)$/i)))
+    return ru ? `Использование указателей поворота: ${tail(m[1],lang)}`
+              : `The use of direction indicators: ${tail(m[1],lang)}`;
+
+  if ((m = t.match(/^I tamponamenti stradali (.+)$/i)))
+    return ru ? `Дорожные столкновения: ${tail(m[1],lang)}`
+              : `Rear-end collisions: ${tail(m[1],lang)}`;
+
+  // ── FALLBACK: show IT text with small label ───────────────────────────
+  return t;  // keep Italian — always readable for exam practice
+}
+
 function tr(key, vars) {
   const lang = T[currentLang] || T.ru;
   let s = lang[key] || T.ru[key] || key;
@@ -1173,7 +1501,7 @@ function renderQ() {
     currentLang === 'it' ? `Domanda #${q.n||q.id}` :
     currentLang === 'en' ? `Question #${q.n||q.id}` :
     `Вопрос #${q.n||q.id}`;
-  document.getElementById('q-text').textContent = q.t;
+  document.getElementById('q-text').textContent = translateQ(q.t, currentLang);
 
   // Sign visual
   const sv = document.getElementById('sign-visual');
@@ -1325,6 +1653,14 @@ function toggleTheme() {
   document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
   try { localStorage.setItem('theme', next); } catch(e) {}
 }
+
+function toggleFont() {
+  const body = document.body;
+  const isLg = body.classList.toggle('font-lg');
+  const btn = document.getElementById('font-btn');
+  if (btn) btn.textContent = isLg ? 'Аа▲' : 'Аа';
+  try { localStorage.setItem('fontLg', isLg ? '1' : '0'); } catch(e) {}
+}
 // Restore saved theme
 (function() {
   try {
@@ -1332,6 +1668,17 @@ function toggleTheme() {
     if (saved === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
       document.getElementById('theme-btn').textContent = '🌙';
+    }
+  } catch(e) {}
+})();
+
+// Restore font size setting
+(function() {
+  try {
+    if (localStorage.getItem('fontLg') === '1') {
+      document.body.classList.add('font-lg');
+      const btn = document.getElementById('font-btn');
+      if (btn) btn.textContent = 'Аа▲';
     }
   } catch(e) {}
 })();
