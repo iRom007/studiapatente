@@ -68,11 +68,11 @@
     font-weight: 800;
     font-size: 19px;
     letter-spacing: -0.3px;
-    flex: 1;
   }
   .logo .w-studia  { color: var(--text); }
-  .logo .w-patente { color: #16a34a; }
+  .logo .w-patente { color: #15803d; }
   .logo .w-tld     { color: var(--muted); font-weight: 500; font-size: 15px; }
+  [data-theme="dark"] .logo .w-patente { color: #4ade80; }
   .nav-controls { display: flex; align-items: center; gap: 8px; }
   .lang-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .lang-btn {
@@ -412,7 +412,6 @@
 
 <!-- ===== NAV ===== -->
 <nav>
-  <div class="logo"><span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span></div>
   <div class="nav-controls">
     <div class="lang-switcher">
       <button class="lang-btn" id="ln-ru" onclick="setLang('ru')">RU</button>
@@ -422,6 +421,7 @@
     <button class="font-btn" id="font-size-btn" onclick="cycleFont()" title="Размер шрифта">A</button>
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
   </div>
+  <div class="logo"><span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span></div>
 </nav>
 
 <!-- ===== HERO ===== -->
@@ -647,10 +647,15 @@
 <!-- ===== FOOTER ===== -->
 <footer>
   <div style="margin-bottom:6px">
-    <strong>Studiapatente.it</strong> — <span id="t-foot-desc">Неофициальный учебный ресурс</span>
+    <strong><span style="color:var(--text)">Studia</span><span style="color:#15803d">Patente</span><span style="color:var(--muted);font-weight:500;font-size:0.9em">.it</span></strong> — <span id="t-foot-desc">Неофициальный учебный ресурс</span>
   </div>
   <div id="t-foot-legal" style="font-size:11px;opacity:0.6">
     Вопросы из официальной базы MIT (Ministero delle Infrastrutture e dei Trasporti) · Только для учебных целей
+  </div>
+  <div style="margin-top:8px;font-size:12px">
+    <a href="privacy.html" style="color:var(--muted)">Политика конфиденциальности</a>
+    &nbsp;·&nbsp;
+    <a href="support.html" style="color:var(--muted)">Поддержка</a>
   </div>
 </footer>
 

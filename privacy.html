@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Политика конфиденциальности — Studiapatente.it</title>
+<style>
+  :root, [data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --green: #4ade80;
+  }
+  [data-theme="light"] {
+    --bg: #f1f5f9; --card: #ffffff; --border: #94a3b8;
+    --text: #0a1628; --muted: #374151; --green: #15803d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+    line-height: 1.7;
+  }
+  nav {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-weight: 800; font-size: 19px; text-decoration: none; }
+  .logo .w-studia  { color: var(--text); }
+  .logo .w-patente { color: var(--green); }
+  .logo .w-tld     { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .back-btn {
+    margin-left: auto; background: none; border: 1px solid var(--border);
+    color: var(--muted); padding: 6px 14px; border-radius: 8px;
+    cursor: pointer; font-size: 13px; text-decoration: none;
+  }
+  .back-btn:hover { border-color: var(--green); color: var(--green); }
+  main { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
+  h2 { font-size: 18px; margin: 32px 0 12px; color: var(--green); }
+  p { margin-bottom: 14px; color: var(--text); }
+  .highlight {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+  }
+  .highlight .big { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .highlight p { margin: 0; color: var(--muted); }
+  a { color: var(--green); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  footer {
+    text-align: center; padding: 24px; color: var(--muted);
+    font-size: 13px; border-top: 1px solid var(--border);
+  }
+  .theme-btn {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; font-size: 16px; color: var(--text);
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">
+    <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span>
+  </a>
+  <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+  <a class="back-btn" href="index.html">← Назад</a>
+</nav>
+
+<main>
+  <h1>Политика конфиденциальности</h1>
+  <p class="subtitle">Последнее обновление: ноябрь 2024 г.</p>
+
+  <div class="highlight">
+    <div class="big">✅ Данные не собираются</div>
+    <p>Studiapatente.it не собирает, не хранит и не передаёт никаких персональных данных пользователей.</p>
+  </div>
+
+  <h2>1. Общие положения</h2>
+  <p>Настоящая Политика конфиденциальности описывает, как приложение <strong>Studiapatente.it</strong> обращается с данными пользователей. Мы разработали это приложение с уважением к вашей конфиденциальности.</p>
+
+  <h2>2. Сбор данных</h2>
+  <p>Мы <strong>не собираем</strong> никаких персональных данных. Приложение не требует регистрации, не запрашивает имя, email, номер телефона или любую другую личную информацию.</p>
+  <p>Мы не используем системы веб-аналитики, счётчики посещений, рекламные сети или трекеры третьих сторон.</p>
+
+  <h2>3. Локальное хранилище (localStorage)</h2>
+  <p>Для обеспечения удобства использования приложение сохраняет следующие данные <strong>исключительно на вашем устройстве</strong> с помощью браузерного localStorage:</p>
+  <ul style="padding-left: 24px; margin-bottom: 14px;">
+    <li style="margin-bottom: 6px;">Выбранный язык интерфейса (русский / итальянский / английский)</li>
+    <li style="margin-bottom: 6px;">Тема оформления (светлая / тёмная)</li>
+    <li style="margin-bottom: 6px;">Размер шрифта</li>
+    <li style="margin-bottom: 6px;">Прогресс прохождения тестов</li>
+  </ul>
+  <p>Эти данные хранятся только на вашем устройстве и <strong>никогда не передаются</strong> на серверы или третьим лицам. Вы можете удалить их в любой момент через настройки браузера.</p>
+
+  <h2>4. Файлы Cookie</h2>
+  <p>Приложение не использует файлы Cookie для отслеживания пользователей.</p>
+
+  <h2>5. Передача данных третьим лицам</h2>
+  <p>Мы не продаём, не обмениваем и не передаём какие-либо данные третьим лицам, поскольку мы их не собираем.</p>
+
+  <h2>6. Данные детей</h2>
+  <p>Наше приложение не собирает данные пользователей любого возраста, включая детей до 13 лет.</p>
+
+  <h2>7. Изменения в политике</h2>
+  <p>Мы можем обновлять данную Политику конфиденциальности. Об изменениях будет сообщено на данной странице с указанием даты обновления.</p>
+
+  <h2>8. Контакт</h2>
+  <p>Если у вас есть вопросы относительно данной политики, напишите нам:</p>
+  <p><a href="mailto:support@studiapatente.it">support@studiapatente.it</a></p>
+</main>
+
+<footer>
+  <strong><span style="color:var(--text)">Studia</span><span style="color:var(--green)">Patente</span><span style="color:var(--muted);font-size:0.9em">.it</span></strong>
+  &nbsp;·&nbsp; Неофициальный учебный ресурс
+</footer>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  }
+  // Apply saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'light') document.querySelector('.theme-btn').textContent = '☀️';
+  }
+</script>
+</body>
+</html>

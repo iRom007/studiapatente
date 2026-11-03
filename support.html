@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Поддержка — Studiapatente.it</title>
+<style>
+  :root, [data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --green: #4ade80;
+  }
+  [data-theme="light"] {
+    --bg: #f1f5f9; --card: #ffffff; --border: #94a3b8;
+    --text: #0a1628; --muted: #374151; --green: #15803d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+    line-height: 1.7;
+  }
+  nav {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-weight: 800; font-size: 19px; text-decoration: none; }
+  .logo .w-studia  { color: var(--text); }
+  .logo .w-patente { color: var(--green); }
+  .logo .w-tld     { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .back-btn {
+    margin-left: auto; background: none; border: 1px solid var(--border);
+    color: var(--muted); padding: 6px 14px; border-radius: 8px;
+    cursor: pointer; font-size: 13px; text-decoration: none;
+  }
+  .back-btn:hover { border-color: var(--green); color: var(--green); }
+  main { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
+  h2 { font-size: 18px; margin: 32px 0 12px; color: var(--green); }
+  p { margin-bottom: 14px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+  }
+  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .card p { margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+  .card a {
+    display: inline-block; background: var(--green); color: #000;
+    font-weight: 700; font-size: 14px; padding: 10px 20px;
+    border-radius: 8px; text-decoration: none; margin-top: 8px;
+  }
+  .card a:hover { opacity: 0.85; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { font-weight: 600; margin-bottom: 8px; cursor: pointer; }
+  .faq-a { color: var(--muted); font-size: 14px; }
+  a.link { color: var(--green); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+  .theme-btn {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; font-size: 16px; color: var(--text);
+  }
+  footer {
+    text-align: center; padding: 24px; color: var(--muted);
+    font-size: 13px; border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">
+    <span class="w-studia">Studia</span><span class="w-patente">Patente</span><span class="w-tld">.it</span>
+  </a>
+  <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+  <a class="back-btn" href="index.html">← Назад</a>
+</nav>
+
+<main>
+  <h1>Поддержка</h1>
+  <p class="subtitle">Мы здесь, чтобы помочь вам подготовиться к экзамену</p>
+
+  <h2>Связаться с нами</h2>
+
+  <div class="card">
+    <div class="card-title">📧 Email</div>
+    <p>Напишите нам по любым вопросам: технические проблемы, ошибки в вопросах, предложения по улучшению.</p>
+    <p>Мы отвечаем в течение 1–2 рабочих дней.</p>
+    <a href="mailto:support@studiapatente.it">support@studiapatente.it</a>
+  </div>
+
+  <h2>Часто задаваемые вопросы</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">📱 Приложение работает без интернета?</div>
+    <div class="faq-a">Нет, приложению требуется подключение к интернету для загрузки вопросов и изображений дорожных знаков.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">🌍 На каких языках доступны вопросы?</div>
+    <div class="faq-a">Вопросы доступны на трёх языках: русском 🇷🇺, итальянском 🇮🇹 и английском 🇬🇧. Выберите язык кнопками RU / IT / EN в верхней панели.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">💾 Сохраняется ли прогресс?</div>
+    <div class="faq-a">Да, ваш прогресс автоматически сохраняется на устройстве. При повторном открытии приложения вы продолжите с того места, где остановились.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">❓ Вопросы соответствуют реальному экзамену?</div>
+    <div class="faq-a">База содержит официальные вопросы с экзамена на права категории B в Италии (6832 вопроса). Это неофициальный учебный ресурс — для официальной информации обращайтесь на сайт <a class="link" href="https://www.mit.gov.it" target="_blank">MIT.gov.it</a>.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">🔤 Почему некоторые вопросы отображаются на итальянском?</div>
+    <div class="faq-a">Перевод охватывает более 87% вопросов. Часть специфических технических формулировок пока показывается на итальянском языке. Мы продолжаем работу над полным переводом.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">🔒 Мои данные в безопасности?</div>
+    <div class="faq-a">Да. Приложение не собирает никаких персональных данных. Ваши настройки и прогресс хранятся только на вашем устройстве. Подробнее — в <a class="link" href="privacy.html">Политике конфиденциальности</a>.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">🐛 Нашёл ошибку в вопросе, что делать?</div>
+    <div class="faq-a">Напишите нам на <a class="link" href="mailto:support@studiapatente.it">support@studiapatente.it</a>, указав номер вопроса (ID в формате B_NNNNN) и описание ошибки. Мы исправим в ближайшем обновлении.</div>
+  </div>
+
+</main>
+
+<footer>
+  <strong><span style="color:var(--text)">Studia</span><span style="color:var(--green)">Patente</span><span style="color:var(--muted);font-size:0.9em">.it</span></strong>
+  &nbsp;·&nbsp; Неофициальный учебный ресурс
+  &nbsp;·&nbsp; <a class="link" href="privacy.html">Конфиденциальность</a>
+</footer>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  }
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'light') document.querySelector('.theme-btn').textContent = '☀️';
+  }
+</script>
+</body>
+</html>
