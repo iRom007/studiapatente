@@ -506,6 +506,13 @@ footer a:hover{color:var(--green);}
       <div class="mode-desc">Salva le domande importanti e ripassale quando vuoi.</div>
       <span class="mode-badge">PREMIUM</span>
     </a>
+    <a href="signs.html" class="mode-card">
+      <span class="mode-icon">🚦</span>
+      <div class="mode-name">Segnaletica</div>
+      <div class="mode-name-tr" id="mn-segnaletica">Справочник знаков</div>
+      <div class="mode-desc">400 segnali con immagini, descrizioni in italiano e russo.</div>
+      <span class="mode-badge free">GRATIS</span>
+    </a>
   </div>
 </section>
 
@@ -686,7 +693,7 @@ const I18N = {
   it: {
     heroTr: null,
     modesSub: 'Scegli la modalità più adatta al tuo livello',
-    mnSchede: '', mnEsame: '', mnArgomenti: '', mnErrori: '', mnPreferiti: '',
+    mnSchede: '', mnEsame: '', mnArgomenti: '', mnErrori: '', mnPreferiti: '', mnSegnaletica: '',
     topicsSub: 'Studia ogni categoria separatamente',
     featsSub: 'Strumenti pensati per chi studia seriamente',
     eqTr: null,
@@ -699,7 +706,7 @@ const I18N = {
     modesSub: 'Выбери режим для своего уровня',
     mnSchede: 'Экзаменационные билеты',
     mnEsame: 'Симуляция экзамена', mnArgomenti: 'По темам',
-    mnErrori: 'Мои ошибки', mnPreferiti: 'Избранное',
+    mnErrori: 'Мои ошибки', mnPreferiti: 'Избранное', mnSegnaletica: 'Справочник знаков',
     topicsSub: 'Изучай каждую категорию отдельно',
     featsSub: 'Всё необходимое для серьёзной подготовки',
     eqTr: 'Водитель на перекрёстке с правилом приоритета должен уступить право проезда?',
@@ -712,7 +719,7 @@ const I18N = {
     modesSub: 'Choose the mode that fits your level',
     mnSchede: 'Exam cards',
     mnEsame: 'Exam simulation', mnArgomenti: 'By topics',
-    mnErrori: 'My errors', mnPreferiti: 'Favourites',
+    mnErrori: 'My errors', mnPreferiti: 'Favourites', mnSegnaletica: 'Signs Reference',
     topicsSub: 'Study each category separately',
     featsSub: 'Tools built for serious learners',
     eqTr: 'At an intersection governed by right-of-way signs, must the driver yield to vehicles from the right?',
@@ -741,6 +748,7 @@ document.getElementById('mn-schede').textContent = T.mnSchede;
   document.getElementById('mn-argomenti').textContent = T.mnArgomenti;
   document.getElementById('mn-errori').textContent = T.mnErrori;
   document.getElementById('mn-preferiti').textContent = T.mnPreferiti;
+  document.getElementById('mn-segnaletica').textContent = T.mnSegnaletica;
 
   document.getElementById('topics-sub').textContent = T.topicsSub;
   document.getElementById('feats-sub').textContent = T.featsSub;

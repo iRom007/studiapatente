@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segnaletica Stradale — Справочник знаков | StudiaPatente</title>
+<meta name="description" content="Справочник итальянских дорожных знаков. 400 знаков с изображениями, описанием и переводом на русский язык.">
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --border: #e9ecef;
+  --text: #212529;
+  --muted: #6c757d;
+  --primary: #2563eb;
+  --primary-light: #eff6ff;
+  --accent: #dc2626;
+  --success: #16a34a;
+  --warning: #d97706;
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --primary: #3b82f6;
+  --primary-light: #1e3a5f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* NAV */
+.nav {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo { font-weight: 800; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
+.nav-logo span { color: var(--accent); }
+.nav-sep { color: var(--border); }
+.nav-title { font-size: .95rem; color: var(--muted); flex: 1; }
+.nav-back { text-decoration: none; color: var(--primary); font-size: .9rem; font-weight: 600; padding: 6px 14px; border: 1.5px solid var(--primary); border-radius: 8px; white-space: nowrap; }
+.nav-back:hover { background: var(--primary-light); }
+.nav-theme { background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px 8px; border-radius: 8px; color: var(--text); }
+.nav-lang { display: flex; gap: 4px; }
+.nav-lang button { background: none; border: 1.5px solid var(--border); border-radius: 6px; padding: 3px 8px; font-size: .78rem; cursor: pointer; color: var(--muted); font-weight: 600; }
+.nav-lang button.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #0ea5e9 100%);
+  color: white;
+  padding: 32px 20px 24px;
+  text-align: center;
+}
+.hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
+.hero p { opacity: .85; font-size: 1rem; }
+.hero-stats { display: flex; justify-content: center; gap: 24px; margin-top: 16px; }
+.hero-stat { text-align: center; }
+.hero-stat strong { display: block; font-size: 1.5rem; font-weight: 800; }
+.hero-stat span { font-size: .8rem; opacity: .8; }
+
+/* CONTROLS */
+.controls {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-wrap input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: .95rem;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+.search-wrap input:focus { border-color: var(--primary); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 1rem; pointer-events: none; }
+.filter-wrap { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 7px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--bg);
+  color: var(--muted);
+  white-space: nowrap;
+  transition: all .15s;
+}
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.filter-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+.results-count { font-size: .85rem; color: var(--muted); white-space: nowrap; margin-left: auto; }
+
+/* GRID */
+.main { padding: 24px 20px; max-width: 1400px; margin: 0 auto; }
+.signs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.sign-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  position: relative;
+}
+.sign-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.12); border-color: var(--primary); }
+.sign-card.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.2); }
+.sign-img-wrap {
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
+  padding: 16px;
+}
+[data-theme="dark"] .sign-img-wrap { background: #1a2332; }
+.sign-img-wrap img { max-height: 90px; max-width: 100%; object-fit: contain; }
+.sign-img-wrap .no-img { font-size: 2.5rem; opacity: .3; }
+.sign-info { padding: 10px 12px; }
+.sign-tid-badge {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.sign-label { font-size: .82rem; color: var(--text); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sign-label-ru { font-size: .78rem; color: var(--muted); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--card);
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  transform: scale(.95);
+  transition: transform .2s;
+}
+.modal-overlay.open .modal { transform: scale(1); }
+.modal-img-wrap {
+  background: #f0f4f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  min-height: 200px;
+}
+[data-theme="dark"] .modal-img-wrap { background: #1a2332; }
+.modal-img-wrap img { max-height: 160px; max-width: 100%; object-fit: contain; }
+.modal-body { padding: 24px; }
+.modal-tid { display: inline-block; font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.modal-title-it { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 10px; }
+.modal-title-ru { font-size: .95rem; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 10px; }
+.modal-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; cursor: pointer; font-size: .9rem; font-weight: 600; }
+.modal-btn-primary { background: var(--primary); color: white; }
+.modal-btn-primary:hover { opacity: .9; }
+.modal-btn-close { background: var(--border); color: var(--text); }
+.modal-btn-close:hover { background: var(--muted); color: white; }
+.modal-nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-top: 1px solid var(--border); }
+.modal-nav-btn { background: none; border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 14px; cursor: pointer; color: var(--text); font-size: .9rem; }
+.modal-nav-btn:hover { border-color: var(--primary); color: var(--primary); }
+.modal-nav-btn:disabled { opacity: .3; cursor: default; }
+.modal-counter { font-size: .85rem; color: var(--muted); }
+
+/* EMPTY */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state span { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+/* CAT COLORS */
+.tid-segnali-pericolo       { background: #fef3c7; color: #92400e; }
+.tid-segnali-divieto        { background: #fee2e2; color: #991b1b; }
+.tid-segnali-obbligo        { background: #dbeafe; color: #1e40af; }
+.tid-segnali-indicazione    { background: #d1fae5; color: #065f46; }
+.tid-precedenza-incroci     { background: #f3f4f6; color: #374151; }
+.tid-pannelli-integrativi   { background: #ede9fe; color: #5b21b6; }
+.tid-segnaletica-orizzontale{ background: #fce7f3; color: #9d174d; }
+.tid-segnalazioni-semaforiche{background: #ecfdf5; color: #064e3b; }
+.tid-segnali-complementari  { background: #fff7ed; color: #9a3412; }
+.tid-norme-circolazione     { background: #f0fdf4; color: #14532d; }
+.tid-luci-dispositivi       { background: #fdf4ff; color: #6b21a8; }
+.tid-definizioni-doveri     { background: #f8fafc; color: #334155; }
+[data-theme="dark"] .tid-segnali-pericolo       { background: #451a03; color: #fcd34d; }
+[data-theme="dark"] .tid-segnali-divieto        { background: #450a0a; color: #fca5a5; }
+[data-theme="dark"] .tid-segnali-obbligo        { background: #1e3a5f; color: #93c5fd; }
+[data-theme="dark"] .tid-segnali-indicazione    { background: #052e16; color: #6ee7b7; }
+[data-theme="dark"] .tid-precedenza-incroci     { background: #1e293b; color: #cbd5e1; }
+[data-theme="dark"] .tid-pannelli-integrativi   { background: #2e1065; color: #c4b5fd; }
+[data-theme="dark"] .tid-segnaletica-orizzontale{ background: #500724; color: #fbcfe8; }
+[data-theme="dark"] .tid-segnalazioni-semaforiche{background: #022c22; color: #6ee7b7; }
+[data-theme="dark"] .tid-segnali-complementari  { background: #431407; color: #fdba74; }
+[data-theme="dark"] .tid-norme-circolazione     { background: #052e16; color: #86efac; }
+[data-theme="dark"] .tid-luci-dispositivi       { background: #2e1065; color: #d8b4fe; }
+[data-theme="dark"] .tid-definizioni-doveri     { background: #0f172a; color: #94a3b8; }
+
+@media (max-width: 600px) {
+  .signs-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .sign-img-wrap { height: 110px; }
+  .hero h1 { font-size: 1.4rem; }
+  .hero-stats { gap: 16px; }
+  .controls { padding: 12px 16px; }
+  .main { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Studia<span>Patente</span></a>
+  <span class="nav-sep">›</span>
+  <span class="nav-title" id="nav-title">Справочник знаков</span>
+  <div class="nav-lang">
+    <button onclick="setLang('it')" id="btn-it">IT</button>
+    <button onclick="setLang('ru')" id="btn-ru">RU</button>
+    <button onclick="setLang('en')" id="btn-en">EN</button>
+  </div>
+  <button class="nav-theme" onclick="toggleTheme()" title="Тема" id="theme-btn">🌙</button>
+  <a href="app.html" class="nav-back" id="nav-back-btn">← Domande</a>
+</nav>
+
+<div class="hero">
+  <h1 id="hero-title">🚦 Segnaletica Stradale Italiana</h1>
+  <p id="hero-sub">Tutti i segnali stradali con spiegazione in italiano e russo</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>400</strong><span id="stat-signs">segnali</span></div>
+    <div class="hero-stat"><strong>12</strong><span id="stat-cats">categorie</span></div>
+    <div class="hero-stat"><strong>2</strong><span id="stat-langs">lingue</span></div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="search-input" placeholder="Cerca segnale..." oninput="filterSigns()">
+  </div>
+  <div class="filter-wrap" id="filter-wrap">
+    <button class="filter-btn active" data-tid="all" onclick="setFilter('all')">Tutti</button>
+    <button class="filter-btn" data-tid="segnali-pericolo" onclick="setFilter('segnali-pericolo')">⚠️ Pericolo</button>
+    <button class="filter-btn" data-tid="segnali-divieto" onclick="setFilter('segnali-divieto')">🚫 Divieto</button>
+    <button class="filter-btn" data-tid="segnali-obbligo" onclick="setFilter('segnali-obbligo')">🔵 Obbligo</button>
+    <button class="filter-btn" data-tid="segnali-indicazione" onclick="setFilter('segnali-indicazione')">🟦 Indicazione</button>
+    <button class="filter-btn" data-tid="precedenza-incroci" onclick="setFilter('precedenza-incroci')">✋ Precedenza</button>
+    <button class="filter-btn" data-tid="pannelli-integrativi" onclick="setFilter('pannelli-integrativi')">📋 Pannelli</button>
+    <button class="filter-btn" data-tid="segnaletica-orizzontale" onclick="setFilter('segnaletica-orizzontale')">🛣️ Orizzontale</button>
+    <button class="filter-btn" data-tid="segnalazioni-semaforiche" onclick="setFilter('segnalazioni-semaforiche')">🚦 Semafori</button>
+    <button class="filter-btn" data-tid="segnali-complementari" onclick="setFilter('segnali-complementari')">ℹ️ Complementari</button>
+    <button class="filter-btn" data-tid="norme-circolazione" onclick="setFilter('norme-circolazione')">📖 Norme</button>
+    <button class="filter-btn" data-tid="luci-dispositivi" onclick="setFilter('luci-dispositivi')">💡 Luci</button>
+    <button class="filter-btn" data-tid="definizioni-doveri" onclick="setFilter('definizioni-doveri')">📝 Definizioni</button>
+  </div>
+  <span class="results-count" id="results-count">400 segnali</span>
+</div>
+
+<main class="main">
+  <div class="signs-grid" id="signs-grid"></div>
+  <div class="empty-state" id="empty-state" style="display:none">
+    <span>🔍</span>
+    <p id="empty-text">Nessun segnale trovato</p>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-img-wrap">
+      <img id="modal-img" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <div class="modal-tid" id="modal-tid"></div>
+      <div class="modal-title-it" id="modal-title-it"></div>
+      <div class="modal-title-ru" id="modal-title-ru"></div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="practiceSign()" id="modal-practice-btn">📝 Allenati</button>
+        <button class="modal-btn modal-btn-close" onclick="closeModal()">✕ Chiudi</button>
+      </div>
+    </div>
+    <div class="modal-nav">
+      <button class="modal-nav-btn" id="modal-prev" onclick="navModal(-1)">← Precedente</button>
+      <span class="modal-counter" id="modal-counter"></span>
+      <button class="modal-nav-btn" id="modal-next" onclick="navModal(1)">Successivo →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const IMGBASE = 'https://raw.githubusercontent.com/iRom007/studiapatente/main';
+
+// ── i18n ──────────────────────────────────────────────────────────────────────
+const T = {
+  it: {
+    navTitle: 'Tutti i segnali',
+    heroTitle: '🚦 Segnaletica Stradale Italiana',
+    heroSub: 'Tutti i segnali stradali con spiegazione in italiano e russo',
+    statSigns: 'segnali', statCats: 'categorie', statLangs: 'lingue',
+    searchPlaceholder: 'Cerca segnale...',
+    resultsCount: n => `${n} segnali`,
+    emptyText: 'Nessun segnale trovato',
+    practiceBtn: '📝 Allenati',
+    prevBtn: '← Precedente', nextBtn: 'Successivo →',
+    backBtn: '← Domande',
+    catNames: {
+      'all':'Tutti','segnali-pericolo':'⚠️ Pericolo','segnali-divieto':'🚫 Divieto',
+      'segnali-obbligo':'🔵 Obbligo','segnali-indicazione':'🟦 Indicazione',
+      'precedenza-incroci':'✋ Precedenza','pannelli-integrativi':'📋 Pannelli',
+      'segnaletica-orizzontale':'🛣️ Orizzontale','segnalazioni-semaforiche':'🚦 Semafori',
+      'segnali-complementari':'ℹ️ Complementari','norme-circolazione':'📖 Norme',
+      'luci-dispositivi':'💡 Luci','definizioni-doveri':'📝 Definizioni'
+    }
+  },
+  ru: {
+    navTitle: 'Справочник знаков',
+    heroTitle: '🚦 Итальянские дорожные знаки',
+    heroSub: 'Все дорожные знаки с описанием на итальянском и русском',
+    statSigns: 'знаков', statCats: 'категорий', statLangs: 'языка',
+    searchPlaceholder: 'Поиск знака...',
+    resultsCount: n => `${n} знаков`,
+    emptyText: 'Знаки не найдены',
+    practiceBtn: '📝 Тренироваться',
+    prevBtn: '← Назад', nextBtn: 'Вперёд →',
+    backBtn: '← Вопросы',
+    catNames: {
+      'all':'Все','segnali-pericolo':'⚠️ Опасность','segnali-divieto':'🚫 Запрещающие',
+      'segnali-obbligo':'🔵 Предписывающие','segnali-indicazione':'🟦 Указательные',
+      'precedenza-incroci':'✋ Приоритет','pannelli-integrativi':'📋 Доп. таблички',
+      'segnaletica-orizzontale':'🛣️ Разметка','segnalazioni-semaforiche':'🚦 Светофоры',
+      'segnali-complementari':'ℹ️ Дополнительные','norme-circolazione':'📖 Нормы',
+      'luci-dispositivi':'💡 Световые сигналы','definizioni-doveri':'📝 Определения'
+    }
+  },
+  en: {
+    navTitle: 'Signs Reference',
+    heroTitle: '🚦 Italian Road Signs',
+    heroSub: 'All road signs with explanation in Italian and Russian',
+    statSigns: 'signs', statCats: 'categories', statLangs: 'languages',
+    searchPlaceholder: 'Search sign...',
+    resultsCount: n => `${n} signs`,
+    emptyText: 'No signs found',
+    practiceBtn: '📝 Practice',
+    prevBtn: '← Previous', nextBtn: 'Next →',
+    backBtn: '← Questions',
+    catNames: {
+      'all':'All','segnali-pericolo':'⚠️ Danger','segnali-divieto':'🚫 Prohibition',
+      'segnali-obbligo':'🔵 Mandatory','segnali-indicazione':'🟦 Information',
+      'precedenza-incroci':'✋ Priority','pannelli-integrativi':'📋 Panels',
+      'segnaletica-orizzontale':'🛣️ Road markings','segnalazioni-semaforiche':'🚦 Traffic lights',
+      'segnali-complementari':'ℹ️ Supplementary','norme-circolazione':'📖 Rules',
+      'luci-dispositivi':'💡 Lights','definizioni-doveri':'📝 Definitions'
+    }
+  }
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let lang = localStorage.getItem('sp_lang') || 'ru';
+let theme = localStorage.getItem('sp_theme') || 'light';
+let activeFilter = 'all';
+let activeIndex = 0;
+let filteredSigns = [];
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+</script>
+<script>
+
+const SIGNS = [
+  {img:'/img_sign/1.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia una strada in cattivo stato',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/2.png',tid:'segnali-pericolo',it:'Il segnale raffigurato vieta il transito degli autobus',ru:'Il segnale raffigurato preannuncia un tratto di strada pericoloso per limitata v... — утверждение правильное'},
+  {img:'/img_sign/4.png',tid:'segnali-pericolo',it:', posto su una strada a doppio senso di circolazione, impone di portarsi sulla p',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/5.png',tid:'segnali-pericolo',it:'Impone l\'obbligo di mantenere la sinistra',ru:'Il segnale raffigurato preannuncia un tratto di strada pericoloso per ridotta vi... — утверждение правильное'},
+  {img:'/img_sign/6.png',tid:'segnali-pericolo',it:'Può essere integrato con un pannello indicante tornanti',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/7.png',tid:'segnali-pericolo',it:'In presenza del segnale raffigurato è consentito effettuare la fermata in corris',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/8.png',tid:'segnali-pericolo',it:'Impone di dare la precedenza ai veicoli della polizia penitenziaria in uscita da',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/9.png',tid:'segnali-pericolo',it:'Indica la presenza di una stazione ferroviaria a 150 metri',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/10.png',tid:'segnali-pericolo',it:'Indica che la sede ferroviaria ha un solo binario',ru:'La figura rappresenta un segnale di pericolo... — утверждение правильное'},
+  {img:'/img_sign/11.png',tid:'segnali-pericolo',it:'Indica che la linea ferroviaria ha solo un binario',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/13.png',tid:'segnali-pericolo',it:'I pannelli raffigurati servono ad indicare che ci si sta avvicinando al passaggi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/14.png',tid:'segnali-pericolo',it:'In presenza del segnale raffigurato si deve fare attenzione agli eventuali pedon',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/15.png',tid:'segnali-pericolo',it:'Impone di usare i dispositivi di segnalazione acustica per far spostare i pedoni',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/16.png',tid:'segnali-pericolo',it:'Indica che si sta svolgendo una gara ciclistica',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/17.png',tid:'segnali-pericolo',it:'Indica che non è consentito superare la velocità di 10 km/h',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/18.png',tid:'segnali-pericolo',it:'Il segnale raffigurato è posto prima di una salita ripida',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/19.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia una strada a senso unico',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/20.png',tid:'segnali-pericolo',it:'Impone di moderare la velocità e, se occorre, arrestarsi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/21.png',tid:'segnali-pericolo',it:'Indica di disporsi su due file',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/22.png',tid:'segnali-pericolo',it:'Può essere integrato con pannello indicante gli orari di manovra o di funzioname',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/23.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia un tratto di strada con banchina pericolosa',ru:'Il segnale raffigurato preannuncia un tratto di strada con banchina pericolosa... — утверждение правильное'},
+  {img:'/img_sign/24.png',tid:'segnali-pericolo',it:'Il segnale raffigurato invita a diminuire la distanza di sicurezza',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/25.png',tid:'segnali-pericolo',it:'Indica la fermata di uno scuolabus',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/26.png',tid:'segnali-pericolo',it:'Il segnale raffigurato invita a fare attenzione per la probabile presenza di ani',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/27.png',tid:'segnali-pericolo',it:'Indica l\'ingresso di un parco nazionale',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/28.png',tid:'segnali-pericolo',it:'Indica che, poco oltre, occorrerà usare maggiore prudenza',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/29.png',tid:'segnali-pericolo',it:'Preannuncia un incrocio di più strade regolato con circolazione nel senso indica',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/30.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia lo sbocco della strada sull\'argine di un cana',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/31.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia la presenza di banchine cedevoli',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/32.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia un tratto di strada deformata',ru:'In presenza del segnale raffigurato è consigliabile evitare lunghe soste nel tra... — утверждение правильное'},
+  {img:'/img_sign/33.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia possibili grandinate',ru:'Il segnale raffigurato preannuncia un tratto di strada ove esiste il pericolo di... — утверждение правильное'},
+  {img:'/img_sign/34.png',tid:'segnali-pericolo',it:'In presenza del segnale raffigurato bisogna moderare la velocità per potersi all',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/35.png',tid:'segnali-pericolo',it:'Indica che bisogna moderare la velocità per potersi all\'occorrenza fermare',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/36.png',tid:'segnali-pericolo',it:'Il segnale raffigurato vieta l\'accesso agli aeroporti',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/37.png',tid:'segnali-pericolo',it:'Presegnala un tratto di strada soggetto a forti raffiche di vento laterale',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/38.png',tid:'segnali-pericolo',it:'Indica che ci si sta avvicinando ad un bosco facilmente infiammabile',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/39.png',tid:'segnali-pericolo',it:'Può essere usato senza pannelli integrativi per indicare un pericolo generico in',ru:'Il segnale raffigurato preannuncia un pericolo diverso da quelli per cui sono pr... — утверждение правильное'},
+  {img:'/img_sign/45.png',tid:'segnali-pericolo',it:'Impone di dare la precedenza nei sensi unici alternati',ru:'Il segnale raffigurato è un segnale di pericolo... — утверждение правильное'},
+  {img:'/img_sign/52.png',tid:'segnali-pericolo',it:'Indica che si ha la precedenza fino all\'uscita del centro abitato',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/56.png',tid:'segnali-pericolo',it:'Il segnale raffigurato preannuncia una strettoia',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/62.png',tid:'segnali-pericolo',it:'Indica un\'area urbana riservata a parco giochi e divertimenti',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/116.png',tid:'segnali-pericolo',it:'Il segnale raffigurato è posto nelle vicinanze di una scuola di equitazione',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/142.png',tid:'segnali-pericolo',it:'Il pannello integrativo in figura indica che il segnale posto sopra vale per la ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/901.png',tid:'segnali-pericolo',it:'Indica un tratto di strada deformata lungo 380 metri',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/902.png',tid:'segnali-pericolo',it:'Indica un tratto di strada deformata lungo 320 metri',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это знак опасности (треугольный с красной рамкой). Знаки опасности — треугольные, с красной рамкой. Они предупреждают водителя об о'},
+  {img:'/img_sign/905.png',tid:'segnali-pericolo',it:'Il segnale con il pannello in figura preannuncia un tratto di strada lungo 3,8 k',ru:'Вопрос утверждает что это знак опасности, но это не так. На картинке изображён знак опасности (треугольный с красной рамкой). Знаки опасности — треугольные, с красной рамкой. Они предупреждают водител'},
+  {img:'/img_sign/906.png',tid:'segnali-pericolo',it:'Il segnale raffigurato può essere integrato con il pannello in figura',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/908.png',tid:'segnali-pericolo',it:'Il segnale (A) può essere abbinato al segnale (B)',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/909.png',tid:'segnali-pericolo',it:'Il segnale (A) si trova dopo il segnale (B)',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это знак опасности (треугольный с красной рамкой). Знаки опасности — треугольные, с красной рамкой. Они предупреждают водителя об о'},
+  {img:'/img_sign/910.png',tid:'segnali-pericolo',it:'Il pannello con tre barre rosse (A) è posto sotto il segnale (B)',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/911.png',tid:'segnali-pericolo',it:'Nel caso di attraversamento ferroviario senza barriere, i pannelli (A) sono post',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/912.png',tid:'segnali-pericolo',it:'Dopo il segnale (A) si può trovare il segnale (B)',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/917.png',tid:'segnali-pericolo',it:'Il segnale (A), se abbinato con il pannello (B), preannuncia un tratto di strada',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/918.png',tid:'segnali-pericolo',it:'Il segnale (A), abbinato con il pannello (B), preannuncia una strada con superfi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/920.png',tid:'segnali-pericolo',it:'Il segnale (A), integrato con il pannello (B), preannuncia la presenza di binari',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/921.png',tid:'segnali-pericolo',it:'Il segnale (A), integrato con il pannello (B), preannuncia la possibile presenza',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/922.png',tid:'segnali-pericolo',it:'Il segnale (A), integrato con il pannello (B), preannuncia la presenza di veicol',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это знак опасности (треугольный с красной рамкой). Знаки опасности — треугольные, с красной рамкой. Они предупреждают водителя об о'},
+  {img:'/img_sign/923.png',tid:'segnali-pericolo',it:'Il segnale (A), integrato con il pannello (B), preannuncia la possibilità di for',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/54.png',tid:'segnali-divieto',it:'Indica che la circolazione è a senso unico',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/55.png',tid:'segnali-divieto',it:'Il segnale raffigurato è posto su una strada a senso unico',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/57.png',tid:'segnali-divieto',it:'Indica la distanza massima da mantenere esclusivamente nei tratti di strada dove',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/58.png',tid:'segnali-divieto',it:'Impone ai veicoli che non sono in grado di superare gli 80 km/h di marciare sull',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/59.png',tid:'segnali-divieto',it:'Indica la fine del divieto di segnalazioni acustiche',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/60.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato, un autocarro non può sorpassare veicoli a m',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/61.png',tid:'segnali-divieto',it:'Indica una strada riservata ai carri agricoli',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/63.png',tid:'segnali-divieto',it:'Indica un parcheggio per le biciclette',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/64.png',tid:'segnali-divieto',it:'Il segnale raffigurato consente il transito ai motocicli',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/65.png',tid:'segnali-divieto',it:'Indica una strada riservata ai venditori ambulanti',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/66.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato è permesso il transito ai motocicli',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/67.png',tid:'segnali-divieto',it:'Segnala una corsia riservata agli autobus',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/68.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato è consentito il transito agli autotreni di m',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/69.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato è vietato il transito di autocarri se sulla ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/70.png',tid:'segnali-divieto',it:'Indica che gli autotreni debbono procedere ad una distanza di almeno 100 metri t',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/71.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato è consentito il transito alle macchine agric',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/72.png',tid:'segnali-divieto',it:'Il segnale raffigurato vieta il transito ai veicoli che trasportano merci deperi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/73.png',tid:'segnali-divieto',it:'Prescrive di fare attenzione al transito di veicoli che trasportano esplosivo',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/74.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato è consentito il transito alle autocisterne c',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/75.png',tid:'segnali-divieto',it:'Indica la distanza minima di sicurezza tra due autoveicoli in transito su quella',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/76.png',tid:'segnali-divieto',it:'Indica la distanza di sicurezza da tenere dal veicolo che precede',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/77.png',tid:'segnali-divieto',it:'Indica un\'area di parcheggio per autocarri lunghi al massimo 10 metri',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/78.png',tid:'segnali-divieto',it:'In presenza del segnale raffigurato è consentito il transito ai veicoli il cui a',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/79.png',tid:'segnali-divieto',it:'Vieta il transito ai veicoli aventi sull\'asse più caricato una massa effettiva s',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/80.png',tid:'segnali-divieto',it:'Indica la fine del pericolo precedentemente segnalato',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/81.png',tid:'segnali-divieto',it:'Indica la fine dell\'obbligo di mantenere una distanza di sicurezza di almeno 50 ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/82.png',tid:'segnali-divieto',it:'Indica il punto in cui termina il divieto di sorpasso',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/83.png',tid:'segnali-divieto',it:'Indica la fine del divieto di sorpasso per veicoli merci di massa a pieno carico',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/84.png',tid:'segnali-divieto',it:', lungo strade extraurbane, indica divieto permanente di sosta in assenza di ind',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/85.png',tid:'segnali-divieto',it:'Lungo le strade urbane, il segnale raffigurato indica che il divieto di fermata ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/86.png',tid:'segnali-divieto',it:'Indica un\'area di parcheggio e può essere integrato con un pannello che indica l',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/89.png',tid:'segnali-divieto',it:'Il segnale raffigurato preannuncia una zona di parcheggio procedendo nel senso d',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/90.png',tid:'segnali-divieto',it:', per essere valido, deve contenere l\'indicazione dell\'ente che ha concesso l\'au',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/91.png',tid:'segnali-divieto',it:'È un divieto di sosta per i veicoli al servizio di invalidi, ed indica il più vi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/92.png',tid:'segnali-divieto',it:'Indica una zona destinata al parcheggio con impiego del disco orario',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/148.png',tid:'segnali-divieto',it:'Indica presenza di un deposito con probabile uscita di mezzi per pulizia meccani',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/151.png',tid:'segnali-divieto',it:'Indica un itinerario obbligatorio per gli autoveicoli delle categorie rappresent',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/225.png',tid:'segnali-divieto',it:'Fa parte dei segnali di indicazione',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/297.png',tid:'segnali-divieto',it:'Il segnale raffigurato preavvisa l\'accesso al pontile d\'imbarco delle navi tragh',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/932.png',tid:'segnali-divieto',it:'Il segnale (A) può essere ripetuto dopo ogni incrocio con pannello integrativo (',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/946.png',tid:'segnali-divieto',it:'Il segnale (A), integrato con il pannello (B), vieta la sosta soltanto nei giorn',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/947.png',tid:'segnali-divieto',it:'Il segnale (A) con il pannello (B) vieta la sosta solo nei giorni lavorativi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/948.png',tid:'segnali-divieto',it:'Il segnale (A), integrato con il pannello (B), consente la sosta agli autobus',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/949.png',tid:'segnali-divieto',it:'Il segnale (A), se integrato con il pannello (B), è divieto di sosta permanente',ru:'Вопрос утверждает что это знак запрета, но это не так. На картинке изображён знак запрета (круглый с красной рамкой). Знаки запрета — круглые, с красной рамкой. Они запрещают определённые действия: въ'},
+  {img:'/img_sign/950.png',tid:'segnali-divieto',it:'Il segnale (a), se integrato con pannello (b), indica una zona in cui vige divie',ru:'Il segnale (A), se integrato con pannello (B), indica una zona in cui vige divie... — утверждение правильное'},
+  {img:'/img_sign/955.png',tid:'segnali-divieto',it:'Il segnale (a), se integrato con il pannello (b), indica la fine del divieto di ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки запрета — круглые, с красной рамкой'},
+  {img:'/img_sign/3.png',tid:'segnali-obbligo',it:'Indica una banchina cedevole',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки опасности — треугольные, с красной рамкой'},
+  {img:'/img_sign/46.png',tid:'segnali-obbligo',it:'È un segnale di indicazione',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/93.png',tid:'segnali-obbligo',it:'Impone la marcia in unica fila',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/94.png',tid:'segnali-obbligo',it:'Indica che è obbligatorio passare a sinistra di un ostacolo posto sulla carreggi',ru:'Il segnale raffigurato indica l\'obbligo di svoltare a sinistra... — утверждение правильное'},
+  {img:'/img_sign/95.png',tid:'segnali-obbligo',it:'Indica l\'obbligo di svoltare a destra',ru:'Il segnale raffigurato indica l\'obbligo di svoltare a destra... — утверждение правильное'},
+  {img:'/img_sign/96.png',tid:'segnali-obbligo',it:'Può essere integrato con un pannello che indica la distanza dal punto in cui vig',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/97.png',tid:'segnali-obbligo',it:'Indica che è obbligatorio passare a sinistra dell\'ostacolo',ru:'Il segnale raffigurato è preavviso dell\'obbligo di svoltare a sinistra... — утверждение правильное'},
+  {img:'/img_sign/98.png',tid:'segnali-obbligo',it:'Indica l\'impossibilità di proseguire diritto',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/99.png',tid:'segnali-obbligo',it:'Indica che è consentito soltanto svoltare a destra',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/100.png',tid:'segnali-obbligo',it:'Indica che non si deve svoltare a destra',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/101.png',tid:'segnali-obbligo',it:'Indica che bisogna superare il salvagente lasciandolo alla propria sinistra',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/102.png',tid:'segnali-obbligo',it:'Indica che non è possibile proseguire su quella strada',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/103.png',tid:'segnali-obbligo',it:'Indica i passaggi consentiti a destra e a sinistra di un\'isola di traffico',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/104.png',tid:'segnali-obbligo',it:'Prescrive un obbligo di rotatoria solo per le autovetture',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/105.png',tid:'segnali-obbligo',it:'Obbliga i veicoli a mantenere almeno la velocità indicata',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/106.png',tid:'segnali-obbligo',it:'Indica la fine del limite massimo di velocità',ru:'Il segnale raffigurato indica che non si ha più l\'obbligo di circolare ad una ve... — утверждение правильное'},
+  {img:'/img_sign/107.png',tid:'segnali-obbligo',it:', con pannello integrativo, indica la distanza a cui si trova un\'officina per mo',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/108.png',tid:'segnali-obbligo',it:'Indica l\'inizio di un viale pedonale',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/109.png',tid:'segnali-obbligo',it:'Indica che da lì in poi i pedoni non circolano più su un percorso riservato',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/110.png',tid:'segnali-obbligo',it:'Il segnale raffigurato è posto in corrispondenza di una pista riservata alle bic',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/111.png',tid:'segnali-obbligo',it:'Indica un divieto di sosta per le biciclette',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/112.png',tid:'segnali-obbligo',it:'Il segnale raffigurato è posto in corrispondenza della fine delle corsie riserva',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/113.png',tid:'segnali-obbligo',it:'Il segnale raffigurato è posto in corrispondenza di un viale misto, riservato si',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/114.png',tid:'segnali-obbligo',it:'Il segnale raffigurato vieta il transito a tutti i veicoli a due ruote',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/115.png',tid:'segnali-obbligo',it:'Il segnale raffigurato vieta il transito delle biciclette condotte a mano',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/118.png',tid:'segnali-obbligo',it:'Indica che bisogna rallentare e fermarsi alla dogana',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/119.png',tid:'segnali-obbligo',it:'Impone di fermarsi e dare precedenza ai mezzi della polizia',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/120.png',tid:'segnali-obbligo',it:'Segnala una stazione autostradale alla quale è obbligatorio fermarsi',ru:'Il segnale raffigurato impone l\'obbligo di rallentare e fermarsi per le operazio... — утверждение правильное'},
+  {img:'/img_sign/971.png',tid:'segnali-obbligo',it:'Il segnale di figura (A) su strade extraurbane è preceduto dal segnale di perico',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/117.png',tid:'segnali-indicazione',it:'Il segnale raffigurato è posto in vicinanza di un ippodromo',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/163.png',tid:'segnali-indicazione',it:'È posto dietro al veicolo per indicare che può circolare solo in uno stato dell\'',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/164.png',tid:'segnali-indicazione',it:'È posto dietro al veicolo, per indicare che esso appartiene ad un cittadino dell',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/166.png',tid:'segnali-indicazione',it:'Indica di proseguire diritto per raggiungere sora',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/167.png',tid:'segnali-indicazione',it:'Indica che non è possibile svoltare a sinistra al primo incrocio',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/168.png',tid:'segnali-indicazione',it:'Indica una strada interrotta',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/169.png',tid:'segnali-indicazione',it:'Indica che la corsia centrale è chiusa',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/170.png',tid:'segnali-indicazione',it:'Indica una stazione balneare a sinistra',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/171.png',tid:'segnali-indicazione',it:'Indica al conducente diretto a bari di spostarsi sulla corsia di sinistra',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/172.png',tid:'segnali-indicazione',it:'Indica che terni si trova 500 metri dopo aver effettuato la svolta',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/173.png',tid:'segnali-indicazione',it:'Indica che manca un chilometro per arrivare a bologna',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/182.png',tid:'segnali-indicazione',it:'Indica che lo svincolo di uscita per frosinone è a 500 metri',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/183.png',tid:'segnali-indicazione',it:'Indica che per s. cesareo mancano 7 chilometri',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/184.png',tid:'segnali-indicazione',it:'Indica che mancano 180 chilometri per firenze',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/186.png',tid:'segnali-indicazione',it:'Indica un\'area riservata solo alle persone diversamente abili',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/187.png',tid:'segnali-indicazione',it:'Indica l\'inizio di una zona a traffico limitato',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/189.png',tid:'segnali-indicazione',it:'Indica che è necessario transitare solo con catene o pneumatici invernali',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/193.png',tid:'segnali-indicazione',it:'Indica che i veicoli per poter transitare debbono avere a bordo le catene',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/194.png',tid:'segnali-indicazione',it:'Indica la vicinanza di un sottopassaggio per i veicoli',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/197.png',tid:'segnali-indicazione',it:'Indica in 130 km /h il limite massimo di velocità sulle autostrade',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/199.png',tid:'segnali-indicazione',it:'Indica la velocità massima da tenere su quella strada',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/200.png',tid:'segnali-indicazione',it:'Abbinato ad una freccia, indica la direzione per un casello autostradale',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/201.png',tid:'segnali-indicazione',it:'Indica una strada sdrucciolevole per 2 chilometri',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/203.png',tid:'segnali-indicazione',it:'Indica, su strada urbana, il numero del cavalcavia',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/206.png',tid:'segnali-indicazione',it:'Indica cha mancano 54 chilometri dallo svincolo d\'uscita per piacenza',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/207.png',tid:'segnali-indicazione',it:'Indica l\'inizio di un centro abitato',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/210.png',tid:'segnali-indicazione',it:'Indica una farmacia',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/214.png',tid:'segnali-indicazione',it:'Indica la vicinanza di un hotel',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/216.png',tid:'segnali-indicazione',it:'Indica una strada con curve in successione',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/217.png',tid:'segnali-indicazione',it:'Indica un posto dove si possono richiedere informazioni sugli alberghi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/218.png',tid:'segnali-indicazione',it:'Indica un attraversamento pedonale non regolato',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/219.png',tid:'segnali-indicazione',it:'Può indicare la fermata di un autobus per trasporto scolari',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/220.png',tid:'segnali-indicazione',it:'Indica una zona ospedaliera',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/224.png',tid:'segnali-indicazione',it:'Indica una strada senza sbocco per i veicoli',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/226.png',tid:'segnali-indicazione',it:'Indica la distanza di sicurezza da mantenere dal veicolo che sta davanti',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/228.png',tid:'segnali-indicazione',it:'Indica un parcheggio per le sole autovetture',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/230.png',tid:'segnali-indicazione',it:'Indica una galleria non illuminata',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/231.png',tid:'segnali-indicazione',it:'Indica l\'inizio di una galleria',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/236.png',tid:'segnali-indicazione',it:'Indica una pista ciclabile',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/238.png',tid:'segnali-indicazione',it:'Indica il percorso degli autobus che hanno fermate nelle vicinanze',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/239.png',tid:'segnali-indicazione',it:', se su fondo verde, indica, su un\'autostrada, la presenza di un cavalcavia per ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/240.png',tid:'segnali-indicazione',it:'Indica che la sosta è consentita solo per 3 ore',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/242.png',tid:'segnali-indicazione',it:'Indica che la corsia di sinistra è vietata agli autocarri che superano la massa ',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/245.png',tid:'segnali-indicazione',it:'Indica una pista ciclabile sulla destra',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/247.png',tid:'segnali-indicazione',it:'Indica un cambiamento del numero di corsie disponibili',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/248.png',tid:'segnali-indicazione',it:'Indica una riduzione da tre a due corsie',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/250.png',tid:'segnali-indicazione',it:'Indica agli autocarri la direzione per il centro cittadino',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/252.png',tid:'segnali-indicazione',it:'Indica che a breve distanza è possibile trovare un\'officina meccanica per veicol',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/253.png',tid:'segnali-indicazione',it:'Indica la possibilità, a breve distanza, di poter telefonare da un telefono pubb',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/254.png',tid:'segnali-indicazione',it:'Indica che nelle vicinanze vi è un posto di distribuzione carburante',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/256.png',tid:'segnali-indicazione',it:'Indica una corsia riservata agli autobus',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/260.png',tid:'segnali-indicazione',it:'Indica un\'officina di riparazione veicoli da campeggio nelle vicinanze',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/265.png',tid:'segnali-indicazione',it:'Indica il numero (8 e 45) degli autobus pubblici che hanno fermate nelle vicinan',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/270.png',tid:'segnali-indicazione',it:'Indica un\'area riservata alla sosta delle autocaravan',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/272.png',tid:'segnali-indicazione',it:'Indica un\'area contrassegnata da strisce gialle con la scritta taxi',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/273.png',tid:'segnali-indicazione',it:'Indica impianti che consentono, ai veicoli che hanno i servizi igienico-sanitari',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/274.png',tid:'segnali-indicazione',it:'Indica una zona riservata al parcheggio dei veicoli della polizia',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/279.png',tid:'segnali-indicazione',it:'Indica il lato dal quale il veicolo su cui è posto deve essere sorpassato',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/282.png',tid:'segnali-indicazione',it:'Indica che non è assolutamente possibile raggiungere novara',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/283.png',tid:'segnali-indicazione',it:'Indica, a tutti i veicoli, che non è possibile proseguire diritto per lucca',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/284.png',tid:'segnali-indicazione',it:'Consiglia a tutti i veicoli di seguire la direzione indicata dalla freccia',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/291.png',tid:'segnali-indicazione',it:'Il delineatore raffigurato è posto al centro della carreggiata per indicare un o',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/40.png',tid:'precedenza-incroci',it:'Impone l\'uso della massima prudenza al fine di evitare incidenti',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/41.png',tid:'precedenza-incroci',it:'Impone di arrestarsi e dare la precedenza prima di impegnare l\'incrocio',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/43.png',tid:'precedenza-incroci',it:'Il segnale raffigurato preannuncia la presenza di una barriera doganale',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/44.png',tid:'precedenza-incroci',it:'Presegnala un passaggio a livello custodito con barriere',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/47.png',tid:'precedenza-incroci',it:'Il segnale raffigurato preannuncia un incrocio con precedenza rispetto ai veicol',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/48.png',tid:'precedenza-incroci',it:'Indica una piazzola di sosta a destra',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/49.png',tid:'precedenza-incroci',it:'Prescrive di usare prudenza perché ci si sta avvicinando ad un incrocio',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/50.png',tid:'precedenza-incroci',it:'Indica che abbiamo la precedenza sui veicoli che si immettono da destra',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/51.png',tid:'precedenza-incroci',it:'Prescrive di dare la precedenza ai veicoli provenienti da sinistra',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/53.png',tid:'precedenza-incroci',it:'In presenza del segnale raffigurato si può percorrere la strettoia accertandosi ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/243.png',tid:'precedenza-incroci',it:'Indica le velocità consigliate',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/553.png',tid:'precedenza-incroci',it:'Nella segnaletica in figura la striscia bianca continua, che delimita la corsia ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/604.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura il veicolo R passa per primo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/606.png',tid:'precedenza-incroci',it:'Dovendo attraversare l\'incrocio rappresentato in figura i veicoli M ed E transit',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/607.png',tid:'precedenza-incroci',it:'Nell\'intersezione in figura i veicoli transitano nel seguente ordine: T, M, P',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/608.png',tid:'precedenza-incroci',it:'Nella situazione rappresentata in figura il veicolo B passa per primo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/613.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/614.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato nella figura il veicolo T transita prima degli altri',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/615.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/616.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura il veicolo S transita per ultimo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/617.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato nella figura il veicolo N attraversa per primo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/618.png',tid:'precedenza-incroci',it:'E\' consentito attraversare l\'incrocio in figura secondo l\'ordine il veicolo L, i',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/620.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura i veicoli t',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/631.png',tid:'precedenza-incroci',it:'Nell\'intersezione di figura il veicolo D transita prima del veicolo F',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/632.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/633.png',tid:'precedenza-incroci',it:'Nell\'intersezione di figura il veicolo A può transitare prima del veicolo R, ma ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/634.png',tid:'precedenza-incroci',it:'Giungendo all\'incrocio rappresentato in figura il veicolo A passa per primo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/636.png',tid:'precedenza-incroci',it:'Dovendo attraversare l\'incrocio rappresentato in figura i veicoli devono transit',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/637.png',tid:'precedenza-incroci',it:'Nell\'attraversare l\'incrocio in figura il veicolo A ha la precedenza sul veicolo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/638.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/639.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato nella figura il veicolo A ha la precedenza rispetto ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/640.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza possono impegnare l\'incrocio rappresentato in fig',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/642.png',tid:'precedenza-incroci',it:'Nella situazione rappresentata in figura il veicolo O deve attendere che passino',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/643.png',tid:'precedenza-incroci',it:'Giungendo all\'incrocio rappresentato in figura il veicolo B deve attendere il tr',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/644.png',tid:'precedenza-incroci',it:'Giungendo all\'incrocio rappresentato in figura i veicoli D e L passano contempor',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/646.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura il veicolo d è il primo ad impegnare l\'inc',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/647.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/648.png',tid:'precedenza-incroci',it:'Nella situazione rappresentata in figura il veicolo P transita subito dopo il ve',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/650.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato nella figura il conducente del veicolo E passa dopo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/651.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato nella figura il conducente del veicolo A deve dare l',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/652.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio in figura il veicolo L deve transit',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/654.png',tid:'precedenza-incroci',it:'Nella situazione rappresentata in figura il veicolo A deve attendere il transito',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/655.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/657.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/659.png',tid:'precedenza-incroci',it:'Secondo le norme di precedenza nell\'incrocio rappresentato in figura il veicolo ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/660.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura il veicolo D deve attendere che il veicolo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/662.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura il veicolo A non deve dare la precedenza a',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/663.png',tid:'precedenza-incroci',it:'Nell\'intersezione di figura il veicolo T passa per ultimo',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/664.png',tid:'precedenza-incroci',it:'Nell\'intersezione di figura l\'ordine di transito dei veicoli è: S, B, D e L cont',ru:'Утверждение не соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа. Трамваи, транспорт на главной дороге и тот, кто уже въехал — имеют преимущество.'},
+  {img:'/img_sign/665.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura i veicoli disimpegnano l\'incrocio nel segu',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/667.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato in figura il veicolo P passa prima del veicolo C',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/668.png',tid:'precedenza-incroci',it:'Nell\'incrocio rappresentato nella figura i veicoli passano nel seguente ordine: ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/669.png',tid:'precedenza-incroci',it:'Dovendo attraversare l\'incrocio rappresentato in figura il veicolo E deve dare l',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/695.png',tid:'precedenza-incroci',it:'Il simbolo raffigurato ricorda al conducente che deve spegnere le luci di posizi',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/696.png',tid:'precedenza-incroci',it:'Il simbolo raffigurato indica il comando per azionare l\'indicatore di direzione ',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/972.png',tid:'precedenza-incroci',it:'Il segnale di figura (A) può essere ripetuto in formato piccolo e integrato con ',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/121.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato, posto sotto un segnale di pericolo, indica ',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/122.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato, posto sotto un segnale di pericolo, indica ',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/123.png',tid:'pannelli-integrativi',it:'Il pannello integrativo rappresentato in figura b indica le ore di tutti i giorn',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/124.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica l\'orario d\'ingresso nel cimitero',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/125.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato, posto sotto un segnale, ne limita la validi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/126.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica una stazione di rifornimento per soli',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/128.png',tid:'pannelli-integrativi',it:'Il pannello raffigurato (a) indica una strada in salita',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/129.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato (a), posto sotto un segnale di pericolo, ne ',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/130.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato (a) indica l\'unica direzione consentita',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это дополнительная табличка (прямоугольная табличка под знаком). Дополнительные таблички устанавливаются под основным знаком и уточ'},
+  {img:'/img_sign/131.png',tid:'pannelli-integrativi',it:'Indica una strada chiusa',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/132.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica una strada sdrucciolevole',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/133.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica un passaggio a livello con due binari',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/134.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica la presenza di macchine sgombraneve a',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/135.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica una strada che in caso di forte piogg',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/136.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica la possibilità di trovare veicoli fer',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/137.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica divieto di transito a tutti i veicoli',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/138.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica la presenza nelle vicinanze di una st',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/139.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica la presenza di una stazione meteorolo',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/140.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica un tratto di strada in ripida salita ',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/141.png',tid:'pannelli-integrativi',it:'Il pannello integrativo raffigurato indica l\'imbarco delle autovetture sui treni',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/143.png',tid:'pannelli-integrativi',it:'Il pannello integrativo di figura b indica quanti veicoli contemporaneamente pos',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/145.png',tid:'pannelli-integrativi',it:'Il pannello integrativo in figura, posto sotto il segnale divieto di sosta, indi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/146.png',tid:'pannelli-integrativi',it:'I pannelli integrativi in figura indicano una intersezione, distinguendo la stra',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/150.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato preannuncia un\'area di parcheggio riservata agli autocarr',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки обязанности — круглые, синие'},
+  {img:'/img_sign/157.png',tid:'pannelli-integrativi',it:'Il semaforo in figura indica l\'entrata di una struttura sportiva',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/903.png',tid:'pannelli-integrativi',it:'Indica la fine della strada deformata',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/904.png',tid:'pannelli-integrativi',it:'Indica che la strada si può allagare in caso di forte pioggia',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/907.png',tid:'pannelli-integrativi',it:'Indica la lunghezza di un tratto stradale con curve pericolose in successione',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/915.png',tid:'pannelli-integrativi',it:'Indica la fine della strada sdrucciolevole',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/916.png',tid:'pannelli-integrativi',it:'Indica strada sdrucciolevole per ghiaccio, in caso di bassa temperatura',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/919.png',tid:'pannelli-integrativi',it:'Indica l\'attraversamento di binari di manovra',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/924.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato vieta il transito dalle ore 7.30 alle 19.00',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/925.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato vieta il transito dalle ore 8.00 alle ore 20.00 dei giorn',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/926.png',tid:'pannelli-integrativi',it:'Prescrive che possono transitare gli autoarticolati',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/927.png',tid:'pannelli-integrativi',it:'Il segnale in figura permette di transitare solo agli autobus',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/928.png',tid:'pannelli-integrativi',it:'Vieta il transito nella fascia oraria indicata, dei giorni lavorativi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/930.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato conferma la continuazione del divieto di sorpasso',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/936.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato consente il transito dei motocicli la domenica dalle ore ',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это дополнительная табличка (прямоугольная табличка под знаком). Дополнительные таблички устанавливаются под основным знаком и уточ'},
+  {img:'/img_sign/937.png',tid:'pannelli-integrativi',it:'Vieta il transito agli autocarri di massa complessiva superiore a 3,5 t. nell\'or',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/938.png',tid:'pannelli-integrativi',it:'Vieta la sosta nella fascia oraria indicata, dei giorni festivi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/939.png',tid:'pannelli-integrativi',it:'Indica che il divieto di sosta continua',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/940.png',tid:'pannelli-integrativi',it:'Indica che il divieto di sosta ha inizio in quel punto',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/941.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato consente la sosta agli autoarticolati',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/942.png',tid:'pannelli-integrativi',it:'Indica che il veicolo può essere spostato in una depositeria comunale',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/944.png',tid:'pannelli-integrativi',it:'Indica il punto nel quale termina il divieto di sosta',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/945.png',tid:'pannelli-integrativi',it:'Vieta la sosta nella fascia oraria indicata dei giorni lavorativi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/951.png',tid:'pannelli-integrativi',it:'Indica che la fermata è vietata sia prima che dopo il segnale',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/952.png',tid:'pannelli-integrativi',it:'Indica il punto dove termina il divieto di fermata',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/953.png',tid:'pannelli-integrativi',it:'il segnale raffigurato evidenzia il punto d\'inizio del divieto di fermata',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/954.png',tid:'pannelli-integrativi',it:'Vieta la sosta ai veicoli indicati',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/956.png',tid:'pannelli-integrativi',it:'Indica la fine della zona destinata al parcheggio',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это дополнительная табличка (прямоугольная табличка под знаком). Дополнительные таблички устанавливаются под основным знаком и уточ'},
+  {img:'/img_sign/957.png',tid:'pannelli-integrativi',it:'Indica la fine dell\'area destinata al parcheggio',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/958.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato evidenzia l\'inizio dell\'area dove è possibile parcheggiar',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/959.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato evidenzia il punto in cui finisce l\'area destinata al par',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это дополнительная табличка (прямоугольная табличка под знаком). Дополнительные таблички устанавливаются под основным знаком и уточ'},
+  {img:'/img_sign/960.png',tid:'pannelli-integrativi',it:'Indica che si può parcheggiare tutti i giorni nella fascia oraria indicata',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это дополнительная табличка (прямоугольная табличка под знаком). Дополнительные таблички устанавливаются под основным знаком и уточ'},
+  {img:'/img_sign/961.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato è riservato ai veicoli per il soccorso stradale',ru:'Утверждение о знаке не соответствует ПДД Италии. Изображённый знак — это дополнительная табличка (прямоугольная табличка под знаком). Дополнительные таблички устанавливаются под основным знаком и уточ'},
+  {img:'/img_sign/963.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato evidenzia il punto d\'inizio del viale pedonale',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/964.png',tid:'pannelli-integrativi',it:'Consente il transito nei giorni festivi e nelle fasce orarie indicate ai soli pe',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/965.png',tid:'pannelli-integrativi',it:'Il segnale raffigurato consente il transito dalle ore 8.00 alle ore 20.00 dei gi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/966.png',tid:'pannelli-integrativi',it:'Il pannello integrativo (a), posto sotto il segnale (b), vieta il transito ai pe',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/967.png',tid:'pannelli-integrativi',it:'Il segnale in figura consente l\'accesso solo agli autobus',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/970.png',tid:'pannelli-integrativi',it:'Indica la fine del cantiere stradale',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные таблички устанавливаются под основным знаком и уточняют его действие: расстояние, время, тип транспорта.'},
+  {img:'/img_sign/385.png',tid:'segnaletica-orizzontale',it:'La posizione del vigile con un braccio alzato come in figura è una indicazione r',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/445.png',tid:'segnaletica-orizzontale',it:'Le strisce gialle in figura delimitano un\'area di parcheggio riservata ai taxi',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/501.png',tid:'segnaletica-orizzontale',it:'Nella carreggiata a doppio senso di circolazione la striscia di mezzo in figura,',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/502.png',tid:'segnaletica-orizzontale',it:'In una strada a doppio senso di circolazione con la segnaletica indicata in figu',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/506.png',tid:'segnaletica-orizzontale',it:'Le strisce bianche discontinue sull\'intersezione in figura sono strisce di guida',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/509.png',tid:'segnaletica-orizzontale',it:'La doppia striscia continua in figura indica che si può viaggiare per file paral',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/512.png',tid:'segnaletica-orizzontale',it:'La striscia bianca laterale discontinua in figura individua il bordo della strad',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/513.png',tid:'segnaletica-orizzontale',it:'La striscia bianca laterale discontinua in figura significa che la sosta non è p',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/515.png',tid:'segnaletica-orizzontale',it:'La striscia trasversale continua in figura indica il punto dove occorre arrestar',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/517.png',tid:'segnaletica-orizzontale',it:'La segnaletica in figura indica, sia dentro che fuori dei centri abitati, un att',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/528.png',tid:'segnaletica-orizzontale',it:'L\'iscrizione in figura indica la velocità consigliata',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/531.png',tid:'segnaletica-orizzontale',it:'La segnaletica rappresentata in figura serve ad indicare che a 150 metri vi è un',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/534.png',tid:'segnaletica-orizzontale',it:'Quando si incontrano le strisce di figura dipinte sulla pavimentazione occorre m',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/535.png',tid:'segnaletica-orizzontale',it:'L\'elemento in figura individua un attraversamento pedonale',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/537.png',tid:'segnaletica-orizzontale',it:'La striscia bianca laterale discontinua in figura divide la carreggiata da una c',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/543.png',tid:'segnaletica-orizzontale',it:'Le strisce di guida in figura servono ad effettuare la svolta in modo corretto, ',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/545.png',tid:'segnaletica-orizzontale',it:'Un attraversamento pedonale può essere preceduto sulla destra da una striscia gi',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/547.png',tid:'segnaletica-orizzontale',it:'Le frecce direzionali in figura indicano ai conducenti le direzioni consentite a',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/563.png',tid:'segnaletica-orizzontale',it:'La striscia trasversale continua in figura indica il punto in cui dobbiamo arres',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/564.png',tid:'segnaletica-orizzontale',it:'Con la segnaletica indicata in figura è consentito al conducente cambiare corsia',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/565.png',tid:'segnaletica-orizzontale',it:'In presenza della segnaletica in figura è consentito cambiare corsia fino a che ',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/566.png',tid:'segnaletica-orizzontale',it:'Rispetto al veicolo che procede nel senso della freccia, la striscia discontinua',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/567.png',tid:'segnaletica-orizzontale',it:'Rispetto al veicolo che procede nel senso della freccia, la striscia continua ce',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/568.png',tid:'segnaletica-orizzontale',it:'La striscia trasversale continua in figura indica il punto in cui dobbiamo sempr',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/574.png',tid:'segnaletica-orizzontale',it:'La corsia di destra rappresentata in figura consente al conducente solo di svolt',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/595.png',tid:'segnaletica-orizzontale',it:'L\'isola di traffico in figura indica una zona dove è possibile la sosta dei veic',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/596.png',tid:'segnaletica-orizzontale',it:'In presenza delle strisce di guida in figura il veicolo A deve andare diritto',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/144.png',tid:'segnalazioni-semaforiche',it:'Il pannello raffigurato indica i chilometri da fare per poter tornare indietro',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/154.png',tid:'segnalazioni-semaforiche',it:'Nel semaforo la luce gialla lampeggiante impone l\'arresto sempre prima dell\'incr',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/155.png',tid:'segnalazioni-semaforiche',it:'Nel semaforo in figura le frecce verdi accese, rivolte verso l\'alto, indicano ch',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/156.png',tid:'segnalazioni-semaforiche',it:'Il semaforo in figura indica la vicinanza di una stazione ferroviaria',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/158.png',tid:'segnalazioni-semaforiche',it:'Il semaforo in figura indica che ci sono lavori in corso per la costruzione di u',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/159.png',tid:'segnalazioni-semaforiche',it:'Il semaforo di corsie reversibili in figura indica la corsia per i veicoli lenti',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/160.png',tid:'segnalazioni-semaforiche',it:'La luce gialla lampeggiante, del tipo b in figura, indica la presenza di un vial',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/161.png',tid:'segnalazioni-semaforiche',it:'Il semaforo in figura impone al conducente di mantenere dal veicolo che lo prece',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/162.png',tid:'segnalazioni-semaforiche',it:'Le luci rosse accese lampeggianti in figura indicano che sta per accendersi la l',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/295.png',tid:'segnalazioni-semaforiche',it:'Il delineatore raffigurato indica una curva pericolosa a destra',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/383.png',tid:'segnalazioni-semaforiche',it:'Quando il vigile si dispone con le braccia aperte verso la nostra direzione come',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/384.png',tid:'segnalazioni-semaforiche',it:'La posizione di profilo del vigile con le braccia aperte come in figura, per le ',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/386.png',tid:'segnalazioni-semaforiche',it:'Il vigile disposto con le braccia ad angolo retto come in figura consente di svo',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/505.png',tid:'segnalazioni-semaforiche',it:'La striscia bianca laterale discontinua in figura delimita l\'accesso ad una pist',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/661.png',tid:'segnalazioni-semaforiche',it:'Nell\'incrocio rappresentato in figura i veicoli disimpegnano l\'incrocio nel segu',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/697.png',tid:'segnalazioni-semaforiche',it:'Il simbolo raffigurato indica il comando per accendere le luci di posizione',ru:'Утверждение соответствует ПДД Италии. Сигналы светофора: красный — стоп, жёлтый — приготовиться/завершить манёвр, зелёный — можно ехать'},
+  {img:'/img_sign/42.png',tid:'segnali-complementari',it:'Indica la distanza dall\'incrocio in cui dobbiamo dare precedenza',ru:'Утверждение соответствует ПДД Италии. На перекрёстках без знаков уступают дорогу тому, кто справа'},
+  {img:'/img_sign/152.png',tid:'segnali-complementari',it:'Indica che si deve marciare per file parallele',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/153.png',tid:'segnali-complementari',it:'Indica che si viaggia per file parallele',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/174.png',tid:'segnali-complementari',it:'Indica di svoltare a destra per raggiungere un centro commerciale',ru:'Утверждение о знаке соответствует ПДД Италии. Знаки указания — прямоугольные или квадратные, синие или зелёные'},
+  {img:'/img_sign/251.png',tid:'segnali-complementari',it:'Indica la categoria di veicoli a cui è consigliata la svolta',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/275.png',tid:'segnali-complementari',it:'Può essere integrato da pannello che indica la lunghezza del cantiere',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/276.png',tid:'segnali-complementari',it:'La barriera raffigurata segnala un parcheggio riservato ai veicoli per lavori st',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/278.png',tid:'segnali-complementari',it:'Il cono raffigurato indica un ostacolo posto fuori della carreggiata',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/280.png',tid:'segnali-complementari',it:'Indica una diminuzione da tre a due corsie',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/285.png',tid:'segnali-complementari',it:'Indica una diminuzione da due a una corsia di marcia',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/288.png',tid:'segnali-complementari',it:'Viene utilizzato per indicare l\'uso delle corsie',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/289.png',tid:'segnali-complementari',it:'I delineatori raffigurati sono posti per indicare un\'area di sosta riservata',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/290.png',tid:'segnali-complementari',it:'I delineatori raffigurati sono dei segnali complementari',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/292.png',tid:'segnali-complementari',it:'Il delineatore raffigurato indica un divieto di sosta',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/293.png',tid:'segnali-complementari',it:'Il delineatore raffigurato, se di colore bianco e rosso, indica una curva provvi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/294.png',tid:'segnali-complementari',it:'Il delineatore raffigurato indica una curva a senso unico',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/299.png',tid:'segnali-complementari',it:'Il delineatore raffigurato presegnala una corsia riservata agli autobus o taxi',ru:'Утверждение о знаке соответствует ПДД Италии. Дополнительные знаки (конусы, барьеры, временные знаки) используются на стройках, при ремонте дороги и для временной разметки.'},
+  {img:'/img_sign/302.png',tid:'norme-circolazione',it:'Il pannello raffigurato deve essere messo all\'estremità del carico che sporge di',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/511.png',tid:'norme-circolazione',it:'In una carreggiata come in figura in caso di intenso traffico, ciclomotori e mot',ru:'Утверждение не соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/536.png',tid:'norme-circolazione',it:'Su strada a doppio senso di marcia con due corsie, come in figura, i veicoli che',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/550.png',tid:'norme-circolazione',it:'Su strade con almeno due corsie per senso di marcia, come in figura, qualora il ',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/554.png',tid:'norme-circolazione',it:'Su strada a doppio senso di marcia con tre corsie, come in figura, i veicoli pos',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/558.png',tid:'norme-circolazione',it:'Su strada a due carreggiate separate, come in figura, i veicoli che percorrono u',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/559.png',tid:'norme-circolazione',it:'Su una strada a due carreggiate separate, in figura, si deve percorrere la carre',ru:'Утверждение не соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/570.png',tid:'norme-circolazione',it:'In vicinanza degli incroci, come in figura si può sempre cambiare corsia fino al',ru:'Утверждение не соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/572.png',tid:'norme-circolazione',it:'Viaggiando su semicarreggiata a tre corsie, come in figura, per svoltare a sinis',ru:'Утверждение не соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/599.png',tid:'norme-circolazione',it:'In una carreggiata a doppio senso di circolazione per svoltare a sinistra bisogn',ru:'Утверждение не соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/601.png',tid:'norme-circolazione',it:'Per svoltare a sinistra bisogna, di norma, lasciare il centro dell\'incrocio alla',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/602.png',tid:'norme-circolazione',it:'In una carreggiata a doppio senso di circolazione per svoltare a sinistra bisogn',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/676.png',tid:'norme-circolazione',it:'Il veicolo s, muovendosi in retromarcia per immettersi nella circolazione, deve ',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'},
+  {img:'/img_sign/610.png',tid:'luci-dispositivi',it:'Nell\'incrocio rappresentato nella figura il veicolo T transita per primo',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/670.png',tid:'luci-dispositivi',it:'Il bordo del marciapiede dipinto come in figura indica la presenza di lavori in ',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/698.png',tid:'luci-dispositivi',it:'Il simbolo raffigurato indica un dispositivo da usare in casi di emergenza',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/704.png',tid:'luci-dispositivi',it:'Il simbolo raffigurato è posto su una spia che, se accesa, indica che la tempera',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/705.png',tid:'luci-dispositivi',it:'Una spia di colore rosso contrassegnata dal simbolo di figura, se accesa durante',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/706.png',tid:'luci-dispositivi',it:'Una spia di colore rosso contrassegnata dal simbolo di figura, se accesa durante',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/707.png',tid:'luci-dispositivi',it:'Il simbolo raffigurato è posto su una spia di colore rosso che, se accesa durant',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/721.png',tid:'luci-dispositivi',it:'Una spia di colore rosso contrassegnata dal simbolo di figura, se accesa durante',ru:'Утверждение соответствует ПДД Италии. Дневные ходовые огни — обязательны'},
+  {img:'/img_sign/303.png',tid:'definizioni-doveri',it:'Il pannello in figura segnala il trasporto di merci pericolose',ru:'Утверждение соответствует ПДД Италии. Водитель обязан соблюдать ПДД, уступать дорогу пешеходам на переходах, не пользоваться телефоном без гарнитуры, поддерживать ТС в исправном состоянии.'},
+  {img:'/img_sign/304.png',tid:'definizioni-doveri',it:'Il pannello in figura è installato posteriormente ai rimorchi o semirimorchi con',ru:'Утверждение соответствует ПДД Италии. Водитель обязан соблюдать ПДД, уступать дорогу пешеходам на переходах, не пользоваться телефоном без гарнитуры, поддерживать ТС в исправном состоянии.'},
+  {img:'/img_sign/305.png',tid:'definizioni-doveri',it:'Il conducente che vede i pannelli in figura sta seguendo un rimorchio o semirimo',ru:'Утверждение соответствует ПДД Италии. Водитель обязан соблюдать ПДД, уступать дорогу пешеходам на переходах, не пользоваться телефоном без гарнитуры, поддерживать ТС в исправном состоянии.'},
+  {img:'/img_sign/546.png',tid:'definizioni-doveri',it:'La segnaletica in figura indica una zona per la fermata degli autobus in servizi',ru:'Утверждение соответствует ПДД Италии. Горизонтальная разметка — линии и надписи на дороге'},
+  {img:'/img_sign/552.png',tid:'definizioni-doveri',it:'La strada rappresentata è composta da tre corsie per ogni senso di marcia',ru:'Утверждение соответствует ПДД Италии. Водитель обязан соблюдать ПДД, уступать дорогу пешеходам на переходах, не пользоваться телефоном без гарнитуры, поддерживать ТС в исправном состоянии.'},
+  {img:'/img_sign/562.png',tid:'definizioni-doveri',it:'La strada rappresentata, di norma, ha due carreggiate a doppio senso di circolaz',ru:'Утверждение соответствует ПДД Италии. Основные правила движения в Италии: скоростные режимы, полосы движения, права различных категорий водителей.'}
+];
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+applyTheme();
+applyLang();
+filterSigns();
+
+// ── Theme ─────────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  theme = theme === 'light' ? 'dark' : 'light';
+  localStorage.setItem('sp_theme', theme);
+  applyTheme();
+}
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('theme-btn').textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+
+// ── Lang ──────────────────────────────────────────────────────────────────────
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('sp_lang', l);
+  applyLang();
+  filterSigns();
+}
+function applyLang() {
+  const t = T[lang];
+  document.getElementById('nav-title').textContent = t.navTitle;
+  document.getElementById('hero-title').textContent = t.heroTitle;
+  document.getElementById('hero-sub').textContent = t.heroSub;
+  document.getElementById('stat-signs').textContent = t.statSigns;
+  document.getElementById('stat-cats').textContent = t.statCats;
+  document.getElementById('stat-langs').textContent = t.statLangs;
+  document.getElementById('search-input').placeholder = t.searchPlaceholder;
+  document.getElementById('modal-practice-btn').textContent = t.practiceBtn;
+  document.getElementById('modal-prev').textContent = t.prevBtn;
+  document.getElementById('modal-next').textContent = t.nextBtn;
+  document.getElementById('nav-back-btn').textContent = t.backBtn;
+  // Update filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const tid = btn.dataset.tid;
+    if (t.catNames[tid]) btn.textContent = t.catNames[tid];
+  });
+  // Update active lang buttons
+  ['it','ru','en'].forEach(l => {
+    document.getElementById('btn-'+l).classList.toggle('active', l === lang);
+  });
+  updateResultsCount();
+}
+
+// ── Filter ────────────────────────────────────────────────────────────────────
+function setFilter(tid) {
+  activeFilter = tid;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tid === tid);
+  });
+  filterSigns();
+}
+
+function filterSigns() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  filteredSigns = SIGNS.filter(s => {
+    const matchCat = activeFilter === 'all' || s.tid === activeFilter;
+    if (!matchCat) return false;
+    if (!q) return true;
+    return s.it.toLowerCase().includes(q) || s.ru.toLowerCase().includes(q) || s.tid.includes(q);
+  });
+  renderGrid();
+  updateResultsCount();
+}
+
+function updateResultsCount() {
+  const t = T[lang];
+  document.getElementById('results-count').textContent = t.resultsCount(filteredSigns.length);
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('signs-grid');
+  const empty = document.getElementById('empty-state');
+  if (filteredSigns.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = '';
+    document.getElementById('empty-text').textContent = T[lang].emptyText;
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = filteredSigns.map((s, i) => {
+    const label = lang === 'ru' ? s.ru : s.it;
+    const sub   = lang !== 'ru' ? s.ru : '';
+    return `<div class="sign-card" onclick="openModal(${i})">
+      <div class="sign-img-wrap">
+        <img src="${IMGBASE}${s.img}" alt="" loading="lazy" onerror="this.outerHTML='<span class=no-img>🚦</span>'">
+      </div>
+      <div class="sign-info">
+        <span class="sign-tid-badge tid-${s.tid}">${tidShort(s.tid)}</span>
+        <div class="sign-label">${escHtml(label)}</div>
+        ${sub ? `<div class="sign-label-ru">${escHtml(sub.substring(0,80))}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tidShort(tid) {
+  const map = {
+    'segnali-pericolo':'⚠️','segnali-divieto':'🚫','segnali-obbligo':'🔵',
+    'segnali-indicazione':'🟦','precedenza-incroci':'✋','pannelli-integrativi':'📋',
+    'segnaletica-orizzontale':'🛣️','segnalazioni-semaforiche':'🚦',
+    'segnali-complementari':'ℹ️','norme-circolazione':'📖',
+    'luci-dispositivi':'💡','definizioni-doveri':'📝'
+  };
+  return map[tid] || tid;
+}
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal(idx) {
+  activeIndex = idx;
+  renderModal();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.addEventListener('keydown', handleKey);
+}
+
+function renderModal() {
+  const s = filteredSigns[activeIndex];
+  if (!s) return;
+  const t = T[lang];
+  document.getElementById('modal-img').src = IMGBASE + s.img;
+  document.getElementById('modal-tid').textContent = t.catNames[s.tid] || s.tid;
+  document.getElementById('modal-tid').className = `modal-tid tid-${s.tid}`;
+  document.getElementById('modal-title-it').textContent = s.it;
+  document.getElementById('modal-title-ru').textContent = s.ru;
+  document.getElementById('modal-counter').textContent = `${activeIndex + 1} / ${filteredSigns.length}`;
+  document.getElementById('modal-prev').disabled = activeIndex === 0;
+  document.getElementById('modal-next').disabled = activeIndex === filteredSigns.length - 1;
+}
+
+function navModal(dir) {
+  const newIdx = activeIndex + dir;
+  if (newIdx < 0 || newIdx >= filteredSigns.length) return;
+  activeIndex = newIdx;
+  renderModal();
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.removeEventListener('keydown', handleKey);
+}
+
+function handleKey(e) {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight') navModal(1);
+  if (e.key === 'ArrowLeft') navModal(-1);
+}
+
+function practiceSign() {
+  const s = filteredSigns[activeIndex];
+  if (s) window.location.href = `app.html?topic=${s.tid}`;
+}
+</script>
+</body>
+</html>
