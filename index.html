@@ -471,14 +471,7 @@ footer a:hover{color:var(--green);}
   <h2 class="section-title">Come vuoi <span>studiare?</span></h2>
   <p class="section-sub" id="modes-sub">Scegli la modalità più adatta al tuo livello</p>
   <div class="modes-grid">
-    <a href="app.html?mode=zen" class="mode-card">
-      <span class="mode-icon">🧘</span>
-      <div class="mode-name">ZEN</div>
-      <div class="mode-name-tr" id="mn-zen">Свободная практика</div>
-      <div class="mode-desc">Domande casuali senza pressione. Impara al tuo ritmo.</div>
-      <span class="mode-badge free">GRATIS</span>
-    </a>
-    <a href="app.html?mode=schede" class="mode-card">
+<a href="app.html?mode=schede" class="mode-card">
       <span class="mode-icon">🃏</span>
       <div class="mode-name">Schede</div>
       <div class="mode-name-tr" id="mn-schede">Экзаменационные билеты</div>
@@ -693,7 +686,7 @@ const I18N = {
   it: {
     heroTr: null,
     modesSub: 'Scegli la modalità più adatta al tuo livello',
-    mnZen: '', mnSchede: '', mnEsame: '', mnArgomenti: '', mnErrori: '', mnPreferiti: '',
+    mnSchede: '', mnEsame: '', mnArgomenti: '', mnErrori: '', mnPreferiti: '',
     topicsSub: 'Studia ogni categoria separatamente',
     featsSub: 'Strumenti pensati per chi studia seriamente',
     eqTr: null,
@@ -704,7 +697,7 @@ const I18N = {
   ru: {
     heroTr: '🇷🇺 Готовься к итальянским правам. Итальянский — основной язык обучения.',
     modesSub: 'Выбери режим для своего уровня',
-    mnZen: 'Свободная практика', mnSchede: 'Экзаменационные билеты',
+    mnSchede: 'Экзаменационные билеты',
     mnEsame: 'Симуляция экзамена', mnArgomenti: 'По темам',
     mnErrori: 'Мои ошибки', mnPreferiti: 'Избранное',
     topicsSub: 'Изучай каждую категорию отдельно',
@@ -717,7 +710,7 @@ const I18N = {
   en: {
     heroTr: '🇬🇧 Prepare for your Italian driving licence. Italian is the main study language.',
     modesSub: 'Choose the mode that fits your level',
-    mnZen: 'Free practice', mnSchede: 'Exam cards',
+    mnSchede: 'Exam cards',
     mnEsame: 'Exam simulation', mnArgomenti: 'By topics',
     mnErrori: 'My errors', mnPreferiti: 'Favourites',
     topicsSub: 'Study each category separately',
@@ -743,8 +736,7 @@ function setLang(l) {
   else { heroTr.style.display = 'none'; }
 
   document.getElementById('modes-sub').textContent = T.modesSub;
-  document.getElementById('mn-zen').textContent = T.mnZen;
-  document.getElementById('mn-schede').textContent = T.mnSchede;
+document.getElementById('mn-schede').textContent = T.mnSchede;
   document.getElementById('mn-esame').textContent = T.mnEsame;
   document.getElementById('mn-argomenti').textContent = T.mnArgomenti;
   document.getElementById('mn-errori').textContent = T.mnErrori;
