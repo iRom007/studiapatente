@@ -694,6 +694,30 @@
     <div class="action-btn primary" id="btn-more-exam" onclick="startExam()">🎯 Ещё экзамен</div>
     <div class="action-btn retry-errors" id="btn-retry-errors" onclick="retryErrors()" style="display:none">🔁 Только ошибки</div>
   </div>
+  <!-- XP / GAMIFICATION BLOCK -->
+  <div id="xp-block" style="display:none;margin:16px 0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;">
+    <div id="xp-level-row" style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <span id="xp-badge" style="font-size:28px;"></span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;" id="xp-level-name"></div>
+        <div style="font-size:12px;color:var(--muted);" id="xp-to-next"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:18px;font-weight:800;color:#f59e0b;" id="xp-gained">+0 XP</div>
+        <div style="font-size:11px;color:var(--muted);">questa sessione</div>
+      </div>
+    </div>
+    <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:12px;">
+      <div id="xp-bar" style="height:8px;background:linear-gradient(90deg,#f59e0b,#ef4444);border-radius:99px;transition:width .6s ease;width:0%"></div>
+    </div>
+    <div id="xp-streak-row" style="display:flex;align-items:center;gap:8px;padding:10px;background:rgba(245,158,11,.08);border-radius:10px;margin-bottom:10px;">
+      <span style="font-size:22px;">🔥</span>
+      <div style="flex:1;font-size:13px;font-weight:600;" id="xp-streak-text">Striscia: 1 giorno</div>
+      <span style="font-size:12px;color:var(--muted);" id="xp-streak-days"></span>
+    </div>
+    <div id="xp-achievements" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+  </div>
+
   <!-- WRONG ANSWERS DETAILED REVIEW -->
   <div class="wrong-review" id="wrong-review" style="display:none">
     <h3 id="wrong-review-title">❌ Разбор ошибок</h3>
@@ -4064,6 +4088,9 @@ function showStats(timeUp) {
     reviewEl.style.display = 'none';
   }
 
+  // Render XP / gamification block
+  renderXpBlock(session.correct, session.qs.length, session.isExam);
+
   showScreen('s-stats');
 }
 
@@ -4898,6 +4925,144 @@ function updateExpLang() {
     currentLang === 'it' ? '✅ VERO — Vero' : currentLang === 'en' ? '✅ VERO — True' : '✅ VERO — Верно';
   document.getElementById('btn-f').textContent =
     currentLang === 'it' ? '❌ FALSO — Falso' : currentLang === 'en' ? '❌ FALSO — False' : '❌ FALSO — Ложно';
+}
+
+// ═══════════════════════════════════════════════
+//  GAMIFICATION — XP, Levels, Daily Streak
+// ═══════════════════════════════════════════════
+const XP_LEVELS = [
+  { name: 'Principiante', badge: '🚗', xp: 0 },
+  { name: 'Allievo',      badge: '📚', xp: 100 },
+  { name: 'Studioso',     badge: '🎓', xp: 300 },
+  { name: 'Esperto',      badge: '🏅', xp: 700 },
+  { name: 'Professionista',badge: '🌟', xp: 1500 },
+  { name: 'Maestro',      badge: '🏆', xp: 3000 },
+  { name: 'Campione',     badge: '👑', xp: 6000 },
+];
+
+const ACHIEVEMENTS = [
+  { id: 'first',   emoji: '🎯', name: 'Prima sessione',   cond: s => s.sessions >= 1 },
+  { id: 'perfect', emoji: '💯', name: 'Sessione perfetta', cond: s => s.perfectSessions >= 1 },
+  { id: 'streak3', emoji: '🔥', name: '3 giorni di fila',  cond: s => s.maxDayStreak >= 3 },
+  { id: 'streak7', emoji: '🌟', name: '7 giorni di fila',  cond: s => s.maxDayStreak >= 7 },
+  { id: 'x100',    emoji: '📊', name: '100 domande',       cond: s => s.totalAnswered >= 100 },
+  { id: 'x500',    emoji: '💪', name: '500 domande',       cond: s => s.totalAnswered >= 500 },
+  { id: 'exam1',   emoji: '🎉', name: 'Esame superato',    cond: s => s.examsPassed >= 1 },
+  { id: 'level5',  emoji: '🏅', name: 'Livello 5',         cond: s => s.level >= 5 },
+];
+
+function getGStats() {
+  try { return JSON.parse(localStorage.getItem('sp_gstats') || '{}'); } catch { return {}; }
+}
+function saveGStats(s) {
+  try { localStorage.setItem('sp_gstats', JSON.stringify(s)); } catch {}
+}
+function getLevel(totalXp) {
+  let lv = 0;
+  for (let i = XP_LEVELS.length - 1; i >= 0; i--) {
+    if (totalXp >= XP_LEVELS[i].xp) { lv = i; break; }
+  }
+  return lv;
+}
+function getDayStreak() {
+  const gs = getGStats();
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (gs.lastDay === today) return gs.dayStreak || 1;
+  if (gs.lastDay === yesterday) return (gs.dayStreak || 0); // will +1 on update
+  return 0; // streak broken
+}
+function updateGStats(correct, total, isExam) {
+  const gs = getGStats();
+  // XP: 5 per correct, bonus for perfects, bonus for exam pass
+  const pct = total > 0 ? correct / total : 0;
+  let xpGained = correct * 5;
+  if (pct === 1) xpGained += 20;    // perfect bonus
+  if (isExam && pct >= 0.87) xpGained += 30;  // exam pass bonus
+  xpGained = Math.max(xpGained, total > 0 ? 2 : 0); // minimum for trying
+
+  gs.totalXp = (gs.totalXp || 0) + xpGained;
+  gs.sessions = (gs.sessions || 0) + 1;
+  gs.totalAnswered = (gs.totalAnswered || 0) + total;
+  if (pct === 1 && total >= 10) gs.perfectSessions = (gs.perfectSessions || 0) + 1;
+  if (isExam && pct >= 0.87) gs.examsPassed = (gs.examsPassed || 0) + 1;
+
+  // Day streak
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (gs.lastDay === today) {
+    // already played today, no change
+  } else if (gs.lastDay === yesterday) {
+    gs.dayStreak = (gs.dayStreak || 1) + 1;
+  } else {
+    gs.dayStreak = 1;
+  }
+  gs.lastDay = today;
+  gs.maxDayStreak = Math.max(gs.maxDayStreak || 0, gs.dayStreak || 1);
+  gs.level = getLevel(gs.totalXp);
+
+  // Check new achievements
+  gs.achievements = gs.achievements || [];
+  const newAch = [];
+  for (const a of ACHIEVEMENTS) {
+    if (!gs.achievements.includes(a.id) && a.cond(gs)) {
+      gs.achievements.push(a.id);
+      newAch.push(a);
+    }
+  }
+  gs.newAch = newAch;
+  saveGStats(gs);
+  return { gs, xpGained };
+}
+
+function renderXpBlock(correct, total, isExam) {
+  const block = document.getElementById('xp-block');
+  if (!block) return;
+  const { gs, xpGained } = updateGStats(correct, total, isExam);
+  block.style.display = '';
+
+  // Level
+  const lv = getLevel(gs.totalXp);
+  const lvData = XP_LEVELS[lv];
+  const nextLv = XP_LEVELS[lv + 1];
+  document.getElementById('xp-badge').textContent = lvData.badge;
+  document.getElementById('xp-level-name').textContent = `Livello ${lv + 1} — ${lvData.name}`;
+  document.getElementById('xp-gained').textContent = `+${xpGained} XP`;
+
+  if (nextLv) {
+    const progress = gs.totalXp - lvData.xp;
+    const range = nextLv.xp - lvData.xp;
+    const pct = Math.round(progress / range * 100);
+    document.getElementById('xp-bar').style.width = pct + '%';
+    document.getElementById('xp-to-next').textContent = `${gs.totalXp} / ${nextLv.xp} XP → ${nextLv.name}`;
+  } else {
+    document.getElementById('xp-bar').style.width = '100%';
+    document.getElementById('xp-to-next').textContent = `${gs.totalXp} XP — livello massimo!`;
+  }
+
+  // Streak
+  const streak = gs.dayStreak || 1;
+  document.getElementById('xp-streak-text').textContent =
+    streak === 1 ? 'Prima sessione oggi!' :
+    streak < 7 ? `Striscia: ${streak} giorni di fila! 🔥` :
+    `🌟 Striscia leggendaria: ${streak} giorni!`;
+  document.getElementById('xp-streak-days').textContent =
+    streak >= 3 ? `Massimo: ${gs.maxDayStreak} gg` : '';
+
+  // Achievements
+  const achEl = document.getElementById('xp-achievements');
+  if (gs.newAch && gs.newAch.length > 0) {
+    achEl.innerHTML = '<div style="font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:6px;width:100%">🏅 Nuovo trofeo!</div>' +
+      gs.newAch.map(a => `<div style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px"><span style="font-size:18px">${a.emoji}</span>${a.name}</div>`).join('');
+  } else {
+    // Show all unlocked
+    const unlocked = ACHIEVEMENTS.filter(a => gs.achievements && gs.achievements.includes(a.id));
+    achEl.innerHTML = unlocked.length > 0
+      ? unlocked.map(a => `<div title="${a.name}" style="font-size:22px;opacity:.7">${a.emoji}</div>`).join('')
+      : '';
+  }
+  gs.newAch = [];
+  saveGStats(gs);
 }
 
 // ===== INIT =====
