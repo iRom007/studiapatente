@@ -506,14 +506,7 @@ footer a:hover{color:var(--green);}
       <div class="mode-desc">Salva le domande importanti e ripassale quando vuoi.</div>
       <span class="mode-badge">PREMIUM</span>
     </a>
-    <a href="game.html" class="mode-card">
-      <span class="mode-icon">🎮</span>
-      <div class="mode-name">Indovina il Segnale</div>
-      <div class="mode-name-tr" id="mn-game">Игра «Угадай знак»</div>
-      <div class="mode-desc">Gioco veloce — riconosci i segnali a tempo.</div>
-      <span class="mode-badge free">GRATIS</span>
-    </a>
-    <a href="signs.html" class="mode-card">
+<a href="signs.html" class="mode-card">
       <span class="mode-icon">🚦</span>
       <div class="mode-name">Segnaletica</div>
       <div class="mode-name-tr" id="mn-segnaletica">Справочник знаков</div>
@@ -713,7 +706,7 @@ const I18N = {
     modesSub: 'Выбери режим для своего уровня',
     mnSchede: 'Экзаменационные билеты',
     mnEsame: 'Симуляция экзамена', mnArgomenti: 'По темам',
-    mnErrori: 'Мои ошибки', mnPreferiti: 'Избранное', mnSegnaletica: 'Справочник знаков', mnGame: 'Игра «Угадай знак»',
+    mnErrori: 'Мои ошибки', mnPreferiti: 'Избранное', mnSegnaletica: 'Справочник знаков',
     topicsSub: 'Изучай каждую категорию отдельно',
     featsSub: 'Всё необходимое для серьёзной подготовки',
     eqTr: 'Водитель на перекрёстке с правилом приоритета должен уступить право проезда?',
@@ -726,7 +719,7 @@ const I18N = {
     modesSub: 'Choose the mode that fits your level',
     mnSchede: 'Exam cards',
     mnEsame: 'Exam simulation', mnArgomenti: 'By topics',
-    mnErrori: 'My errors', mnPreferiti: 'Favourites', mnSegnaletica: 'Signs Reference', mnGame: 'Guess the Sign',
+    mnErrori: 'My errors', mnPreferiti: 'Favourites', mnSegnaletica: 'Signs Reference',
     topicsSub: 'Study each category separately',
     featsSub: 'Tools built for serious learners',
     eqTr: 'At an intersection governed by right-of-way signs, must the driver yield to vehicles from the right?',
@@ -756,7 +749,6 @@ document.getElementById('mn-schede').textContent = T.mnSchede;
   document.getElementById('mn-errori').textContent = T.mnErrori;
   document.getElementById('mn-preferiti').textContent = T.mnPreferiti;
   document.getElementById('mn-segnaletica').textContent = T.mnSegnaletica;
-  document.getElementById('mn-game').textContent = T.mnGame;
 
   document.getElementById('topics-sub').textContent = T.topicsSub;
   document.getElementById('feats-sub').textContent = T.featsSub;
